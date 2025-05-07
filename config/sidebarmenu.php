@@ -9,6 +9,16 @@ return [
             //'can' => 'permission',
             'active' => ['admin', 'admin/*']
         ],
+
+
+         [
+            'text' => 'Jobs',
+            'route' => 'jobs.index',
+            'icon' => ' ri-outlet-2-line',
+            //'can' => 'permission',
+            'active' => ['jobs', 'jobs/*']
+        ],
+
         [
             'text' => 'Settings',
             'icon' => ' ri-settings-2-line',

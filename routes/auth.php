@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RoleController;
@@ -20,4 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('roles', RoleController::class);
+
+      Route::resource('jobs', JobController::class);
 });
