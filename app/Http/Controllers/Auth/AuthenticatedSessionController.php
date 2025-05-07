@@ -11,11 +11,8 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller {
 
-    /**
-     * Display the dashboard view.
-     */
-    public function index(): View {
-        return view('auth.dashboard');
+    public function __construct() {
+        $this->middleware('guest')->except('destroy');
     }
 
     /**
