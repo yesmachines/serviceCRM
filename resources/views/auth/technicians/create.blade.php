@@ -5,10 +5,11 @@
     <div class="page-title-right">
         <ol class="breadcrumb m-0">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Technicians</li>
+            <li class="breadcrumb-item active">Employees</li>
         </ol>
     </div>
-    <h4 class="page-title">Technicians</h4>
+    <h4 class="page-title"> Employees</h4>
+    <!-- Technicians -->
     @endsection
 
     @section('content')
@@ -16,7 +17,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="header-title">Create Technician</h4>
+                    <h4 class="header-title">Create Employee</h4>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('technicians.store') }}" enctype="multipart/form-data">
@@ -312,7 +313,9 @@
     @endsection
 
     @section('js')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    
+
+               <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         document.getElementById('image').addEventListener('change', function(event) {
