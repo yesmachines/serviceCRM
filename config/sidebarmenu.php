@@ -10,6 +10,22 @@ return [
             'active' => ['admin', 'admin/*']
         ],
 
+          [
+            'text' => 'vehicles',
+            'route' => 'vehicles.index',
+            'icon' => ' ri-outlet-2-line',
+            //'can' => 'permission',
+            'active' => ['vehicles', 'vehicles/*']
+        ],
+
+           [
+            'text' => 'technicians',
+            'route' => 'technicians.index',
+            'icon' => ' ri-outlet-2-line',
+            //'can' => 'permission',
+            'active' => ['technicians', 'technicians/*']
+        ],
+
 
          [
             'text' => 'Jobs',

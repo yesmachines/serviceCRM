@@ -25,6 +25,18 @@ class User extends Authenticatable {
         'password',
     ];
 
+      // Relation to Technician (assuming user → hasOne technician)
+    public function technician()
+    {
+        return $this->hasOne(Technician::class);
+    }
+
+    // Relation to Employee (assuming user → hasOne employee)
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

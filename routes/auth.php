@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\HomeController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RoleController;
+use App\Http\Controllers\Auth\TechnicianController;
+use App\Http\Controllers\auth\VehicleController;
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
@@ -23,5 +25,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('roles', RoleController::class);
 
-      Route::resource('jobs', JobController::class);
+      Route::resource('jobs', JobController::class)->except('show');
+      Route::get('jobs/data', [JobController::class, 'getData'])->name('jobs.data');
+                Route::resource('vehicles', VehicleController::class)->except('show');
+                   Route::get('vehicles/data', [VehicleController::class, 'getData'])->name('vehicles.data');
+
+        Route::get('technicians/data', [TechnicianController::class, 'getData'])->name('technicians.data');
+        Route::resource('technicians', TechnicianController::class);
+      
 });
+
+
