@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
         Gate::before(function ($user, $ability) {
             return $user->hasRole('superadmin') ? true : null;
+            //return $user->hasAnyRole(['superadmin', 'servicemanager', 'servicecoordinator']) ? true : null;
         });
     }
 }

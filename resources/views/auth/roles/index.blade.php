@@ -29,7 +29,6 @@
                                 <thead>
                                     <tr>
                                         <th>Role</th>
-                                        <th>Permissions</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -37,9 +36,6 @@
                                     @foreach ($roles as $role)
                                     <tr>
                                         <td>{{ ucfirst($role->name) }}</td>
-                                        <td style="width: 70%;">
-                                            {!! '<span class="badge bg-info">'.implode('</span> <span class="badge bg-info">', $role->permissions()->pluck('name')->toArray()).'</span>' !!}
-                                        </td>
                                         <td style="width: 10%;">
                                             @if(auth()->user()->can('role_update'))
                                             <a href="{{ url('roles/'.$role->id.'/edit') }}" class="text-reset fs-16 px-1"> <i class=" ri-edit-2-fill"></i></a>
