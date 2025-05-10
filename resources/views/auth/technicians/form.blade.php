@@ -2,7 +2,7 @@
 <div class="row mb-3">
     <div class="col-md-4">
         <div class="mb-2" id="image-preview-container" style="{{ !empty($data->employee->image_url) ? '' : 'display: none;' }}">
-            <img id="image-preview" src="{{ isset($data->employee) ? asset('storage/' . optional($data->employee)->image_url) : asset('path/to/default/image.jpg') }}" alt="Image Preview" class="img-thumbnail" style="max-height: 200px;">
+            <img id="image-preview" src="{{ isset($data->employee) ? asset('storage/' . optional($data->employee)->image_url) : asset('cms/assets/images/profile.png') }}" alt="Image Preview" class="img-thumbnail" style="max-height: 200px;">
         </div>
         {{ html()->file('image')->class('form-control'.($errors->has('image') ? ' is-invalid' : ''))->accept("image/*") }}
         {!! $errors->first('image','<div class="invalid-feedback">:message</div>') !!}
