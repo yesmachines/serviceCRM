@@ -3,7 +3,13 @@
 return [
     'admin' => [
        
-       
+             [
+            'text' => 'Vehicles',
+            'route' => 'vehicles.index',
+            'icon' => 'ri-road-map-line',
+            //'can' => 'permission',
+            'active' => ['vehicles', 'vehicles/*']
+                ],
 
            [
             'text' => 'Employees',
@@ -34,13 +40,7 @@ return [
                     //'can' => 'role_read',
                     'active' => ['roles', 'roles/*']
                 ],
-                   [
-            'text' => 'Vehicles',
-            'route' => 'vehicles.index',
-            'icon' => 'ri-road-map-line',
-            //'can' => 'permission',
-            'active' => ['vehicles', 'vehicles/*']
-                ],
+             
                 
          [
             'text' => 'Job Types',
