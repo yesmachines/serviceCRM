@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enum\TechnicianLevel;
+use App\Enums\TechnicianLevel;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Technician;
@@ -12,116 +12,99 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\Enum;
+//use Illuminate\Validation\Rules\Enum;
 use Yajra\DataTables\Facades\DataTables;
 use Spatie\Permission\Models\Role;
 
-class TechnicianController extends Controller
-{
-    
-    public function index(Request $request)
-    {
+class TechnicianController extends Controller {
+
+    public function index(Request $request) {
         return view('auth.technicians.index');
     }
 
- public function getData(Request $request)
-{
-    // Define the target roles
-    $targetRoles = ['servicemanager', 'servicecoordinator', 'servicetechnician'];
+    public function getData(Request $request) {
+        // Define the target roles
+        $targetRoles = ['servicemanager', 'servicecoordinator', 'servicetechnician'];
 
-    // Query users with these roles
-    $query = User::with(['roles', 'employee', 'technician.vehicle'])
-        ->whereHas('roles', function ($q) use ($targetRoles) {
-            $q->whereIn('name', $targetRoles);
-        })
-        ->select('users.*');
+        // Query users with these roles
+        $query = User::with(['roles', 'employee', 'technician.vehicle'])
+                ->whereHas('roles', function ($q) use ($targetRoles) {
+                    $q->whereIn('name', $targetRoles);
+                })
+                ->select('users.*');
 
-    return DataTables::of($query)
-        ->addIndexColumn()
-        ->addColumn('user_name', function ($row) {
-            return $row->name ?? '-';
-        })
-        ->addColumn('role', function ($row) {
-            return $row->roles->count()
-                ? $row->roles->pluck('name')->join(', ')
-                : '-';
-        })
-        ->addColumn('email', function ($row) {
-            return $row->email ?? '-';
-        })
-        ->addColumn('phone', function ($row) {
-            return $row->employee
-                ? $row->employee->phone
-                : '-';
-        })
-        ->addColumn('designation', function ($row) {
-            return $row->employee
-                ? $row->employee->designation
-                : '-';
-        })
-       
-       ->addColumn('actions', function ($row) {
-            return view('auth.technicians.actions', [
-                'user_id'=> $row->id          
-            ])->render();
-        })
-
-        ->rawColumns(['actions'])
-        ->make(true);
-}
-
+        return DataTables::of($query)
+                        ->addIndexColumn()
+                        ->addColumn('user_name', function ($row) {
+                            return $row->name ?? '-';
+                        })
+                        ->addColumn('role', function ($row) {
+                            return $row->roles->count() ? $row->roles->pluck('name')->join(', ') : '-';
+                        })
+                        ->addColumn('email', function ($row) {
+                            return $row->email ?? '-';
+                        })
+                        ->addColumn('phone', function ($row) {
+                            return $row->employee ? $row->employee->phone : '-';
+                        })
+                        ->addColumn('designation', function ($row) {
+                            return $row->employee ? $row->employee->designation : '-';
+                        })
+                        ->addColumn('actions', function ($row) {
+                            return view('auth.technicians.actions', [
+                                'user_id' => $row->id
+                            ])->render();
+                        })
+                        ->rawColumns(['actions'])
+                        ->make(true);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-       $roles = DB::table('roles')
-        ->where('guard_name', 'web')
-        ->whereIn('name', ['servicemanager', 'servicecoordinator', 'servicetechnician'])
-        ->select('id','name')
-        ->get();
+    public function create() {
+        $roles = DB::table('roles')
+                ->where('guard_name', 'web')
+                ->whereIn('name', ['servicemanager', 'servicecoordinator', 'servicetechnician', 'dcm'])
+                ->pluck('name', 'id');
 
-        $users = User::all();
-        $vehicles = Vehicle::all();
-        return view('auth.technicians.create', compact('users', 'vehicles','roles'));
+        $vehicles = Vehicle::pluck('name', 'id')->prepend('---', '');
+        $techLevels = ['' => 'Choose'] + TechnicianLevel::keyValueArray();
+        return view('auth.technicians.create', compact('vehicles', 'roles', 'techLevels'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-           $validated = $request->validate([
-                'image'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'full_name'          => 'required|string|max:255',
-                'employee_id' => 'required|string|max:50|unique:employees,emp_num',
-                'email'              => 'required|email|unique:users,email',
-                'password' => 'required|string|min:6|confirmed',
-                'phone'              => 'nullable|string|max:20',
-                'division'           => 'required|string',
-                'designation'        => 'nullable|string|max:255',
-                'acl' => 'required|array',
-                'acl.*' => 'exists:roles,id', 
-                'status'             => 'required|in:1,0',
-                'vehicle_assigned'   => 'nullable|string|max:255',
-                'technician_level'   => 'nullable|string|max:255',
-                'standard_charge'    => 'nullable|numeric|min:0',
-                'additional_charge'  => 'nullable|numeric|min:0',
-            ]);
-      
-           
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'full_name' => 'required|string|max:255',
+            'employee_id' => 'required|string|max:50|unique:employees,emp_num',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
+            'phone' => 'required|string|max:20|unique:employees,phone',
+            'division' => 'required|string',
+            'designation' => 'nullable|string|max:255',
+            'acl' => 'required|array',
+            //'acl.*' => 'exists:roles,id', 
+            'status' => 'required|string',
+            //'vehicle_assigned'   => 'nullable|string|max:255',
+            'technician_level' => 'required|string',
+            'standard_charge' => 'nullable|numeric|min:0',
+            'additional_charge' => 'nullable|numeric|min:0',
+        ]);
 
         $imagePath = null;
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('employees', 'public');
-            }
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('employees', 'public');
+        }
 
         // Insert into users table and get user_id
         $userId = DB::table('users')->insertGetId([
-            'name'       => $validated['full_name'],
-            'email'      => $validated['email'],
-            'password'   => Hash::make($validated['password']),
+            'name' => $validated['full_name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -129,154 +112,141 @@ class TechnicianController extends Controller
         // dd( $userId);
         // Insert into employees table
         DB::table('employees')->insert([
-            'user_id'    => $userId,
-            'emp_num'    => $validated['employee_id'] ?? 0, // make sure employee_id is in the form
-            'phone'      => $validated['phone'],
-            'designation'=> $validated['designation'],
-            'division'   => $validated['division'],
-            'image_url'  => $imagePath,
-            'status'     => $validated['status'],
+            'user_id' => $userId,
+            'emp_num' => $validated['employee_id'] ?? 0, // make sure employee_id is in the form
+            'phone' => $validated['phone'],
+            'designation' => $validated['designation'],
+            'division' => $validated['division'],
+            'image_url' => $imagePath,
+            'status' => $validated['status'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        
-            if (in_array(8, $request['acl'])) {
-                // Insert into technicians table using Eloquent
+        if (in_array(8, $request['acl'])) {
+            // Insert into technicians table using Eloquent
             Technician::create([
-                    'user_id'           => $userId,
-                    'vehicle_assigned'  => $validated['vehicle_assigned'],
-                    'technician_level'  => $validated['technician_level'],
-                    'standard_charge'   => $validated['standard_charge'],
-                    'additional_charge' => $validated['additional_charge'],
-                ]);
-            }
+                'user_id' => $userId,
+                'vehicle_assigned' => $validated['vehicle_assigned'],
+                'technician_level' => $validated['technician_level'],
+                'standard_charge' => $validated['standard_charge'],
+                'additional_charge' => $validated['additional_charge'],
+            ]);
+        }
 
-    
-         $user = User::find($userId);
 
-       
-         $roleIds = Role::whereIn('id', $validated['acl'])->pluck('id')->toArray();
+        $user = User::find($userId);
 
-         $user->roles()->sync($roleIds); 
+        $roleIds = Role::whereIn('id', $validated['acl'])->pluck('id')->toArray();
 
-    
+        $user->roles()->sync($roleIds);
+
         return redirect()->route('technicians.index')->with('success', 'Technician created successfully.');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
-    {
-
+    public function edit($id) {
         $data = User::with(['roles', 'employee', 'technician.vehicle'])
-            ->findOrFail($id);
-        $roles = Role::whereIn('name', ['servicemanager', 'servicecoordinator', 'servicetechnician'])->get();
-        $assignedRoles = $data->roles->pluck('name')->toArray();
-        $users = User::all();
-        $vehicles = Vehicle::all();
-    
-        return view('auth.technicians.edit', compact('data', 'users', 'vehicles','assignedRoles','roles'));
+                ->findOrFail($id);
+         $roles = DB::table('roles')
+                ->where('guard_name', 'web')
+                ->whereIn('name', ['servicemanager', 'servicecoordinator', 'servicetechnician', 'dcm'])
+                ->pluck('name', 'id');
+
+        $vehicles = Vehicle::pluck('name', 'id')->prepend('---', '');
+        $techLevels = ['' => 'Choose'] + TechnicianLevel::keyValueArray();
+        $data->acl = $data->roles->pluck('id')->toArray();
+        return view('auth.technicians.edit', compact('data', 'vehicles', 'roles', 'techLevels'));
     }
 
+    public function update(Request $request, $id) {
+        $emp = Employee::where('user_id', $id)->firstOrFail();
+        $user = User::with('technician')->findOrFail($id);
 
-    public function update(Request $request, $id)
-{
-    $emp = Employee::where('user_id', $id)->firstOrFail();
-    $user = User::with('technician')->findOrFail($id);
+        // Validate input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'employee_id' => 'required|string|max:50|unique:employees,emp_num,' . $emp->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'phone' => 'required|string|max:20|unique:employees,phone,' . $emp->id,
+            'division' => 'required|string',
+            'designation' => 'required|string',
+            'acl' => 'required|array',
+            'status' => 'required|string',
+            'technician_level' => 'required|string',
+            'standard_charge' => 'nullable|numeric|min:0',
+            'additional_charge' => 'nullable|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-    // Validate input
-    $request->validate([
-        'full_name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $id,
-        'employee_id' => 'required|string|max:50|unique:employees,emp_num,' . $emp->id,
-        'password' => 'nullable|string|min:8|confirmed',
-        'phone' => 'nullable|string|max:20',
-        'division' => 'required|string|max:50',
-        'designation' => 'required|string|max:100',
-        'acl' => 'nullable|array',
-        'status' => 'required|boolean',
-        'vehicle_assigned' => 'nullable|exists:vehicles,id',
-        'technician_level' => 'nullable|string|max:50',
-        'standard_charge' => 'nullable|numeric|min:0',
-        'additional_charge' => 'nullable|numeric|min:0',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    ]);
+        // Update User table
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
 
-    // Update User table
-    $user->name = $request->input('full_name');
-    $user->email = $request->input('email');
-
-    if ($request->filled('password')) {
-        $user->password = Hash::make($request->input('password'));
-    }
-
-    // Update Employee table
-    $employee = $user->employee;
-    $employee->phone = $request->input('phone');
-    $employee->division = $request->input('division');
-    $employee->designation = $request->input('designation');
-    $employee->status = $request->input('status');
-    $employee->emp_num = $request->input('employee_id');
-
-    // Handle image upload if provided
-    if ($request->hasFile('image')) {
-        if ($employee->image_url && Storage::exists('public/' . $employee->image_url)) {
-            Storage::delete('public/' . $employee->image_url);
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
         }
-        $imagePath = $request->file('image')->store('employees', 'public');
-        $employee->image_url = $imagePath;
-    }
+
+        // Update Employee table
+        $employee = $user->employee;
+        $employee->phone = $request->input('phone');
+        $employee->division = $request->input('division');
+        $employee->designation = $request->input('designation');
+        $employee->status = $request->input('status');
+        $employee->emp_num = $request->input('employee_id');
+
+        // Handle image upload if provided
+        if ($request->hasFile('image')) {
+            if ($employee->image_url && Storage::exists('public/' . $employee->image_url)) {
+                Storage::delete('public/' . $employee->image_url);
+            }
+            $imagePath = $request->file('image')->store('employees', 'public');
+            $employee->image_url = $imagePath;
+        }
 
 
-    $aclRoles = $request->input('acl', []); // array of role IDs
+        $aclRoles = $request->input('acl', []); // array of role IDs
+        // Sync roles first
+        $user->roles()->sync($aclRoles);
 
-   
-    // Sync roles first
-    $user->roles()->sync($aclRoles);
+        // Check if technician role is among assigned roles
+        $technicianRoleId = Role::where('name', 'servicetechnician')->value('id');
+        $hasTechnicianRole = in_array($technicianRoleId, $aclRoles);
 
-    // Check if technician role is among assigned roles
-    $technicianRoleId = Role::where('name', 'servicetechnician')->value('id');
-    $hasTechnicianRole = in_array($technicianRoleId, $aclRoles);
+        if ($hasTechnicianRole) {
+            if ($user->technician) {
+                $technician = $user->technician;
+            } else {
+                // Create technician record if missing
+                $technician = new Technician();
+                $technician->user_id = $user->id;
+            }
 
-    if ($hasTechnicianRole) {
-        if ($user->technician) {
-            $technician = $user->technician;
+            $technician->technician_level = $request->input('technician_level');
+            $technician->standard_charge = $request->input('standard_charge');
+            $technician->additional_charge = $request->input('additional_charge');
+            $technician->vehicle_assigned = $request->input('vehicle_assigned');
+            $technician->save();
         } else {
-            // Create technician record if missing
-            $technician = new Technician();
-            $technician->user_id = $user->id;
+            // Optional: if technician role is removed, delete technician record
+            if ($user->technician) {
+                $user->technician->delete();
+            }
         }
+        $user->save();
+        $employee->save();
 
-        $technician->technician_level = $request->input('technician_level');
-        $technician->standard_charge = $request->input('standard_charge');
-        $technician->additional_charge = $request->input('additional_charge');
-        $technician->vehicle_assigned = $request->input('vehicle_assigned');
-        $technician->save();
-    } else {
-        // Optional: if technician role is removed, delete technician record
-        if ($user->technician) {
-            $user->technician->delete();
-        }
+        return redirect()->route('technicians.index')->with('success', 'Technician updated successfully.');
     }
-    $user->save();
-    $employee->save();
-
-   
-
-    return redirect()->route('technicians.index')->with('success', 'Technician updated successfully.');
-}
-
-
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Technician $technician)
-    {
+    public function destroy(Technician $technician) {
         $technician->delete();
         return response()->json(['status' => true, 'message' => 'Technician deleted successfully.']);
     }
 }
-

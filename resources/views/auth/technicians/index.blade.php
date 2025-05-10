@@ -48,8 +48,12 @@
 
     @endsection
 
-    @section('js')
-      <script src="{{asset('cms/assets/vendor/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+    @section('pre-css')
+    <link href="{{asset('cms/assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('cms/assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    @endsection      
+    @section('pre-js')
+   <script src="{{asset('cms/assets/vendor/datatables.net/js/jquery.dataTables.min.js')}}"></script>
     <script>
         $(document).ready(function() {
             $('#technicians-datatable').DataTable({
@@ -58,11 +62,11 @@
                 ajax: '{{ route('technicians.data') }}',
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'user_name', name: 'user.name' },
-                    { data: 'role', name: 'role.name' },
+                    { data: 'user_name', name: 'name' },
+                    { data: 'role', name: 'roles.name' },
                     { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone' },
-                    { data: 'designation', name: 'designation' },
+                    { data: 'phone', name: 'employee.phone' },
+                    { data: 'designation', name: 'employee.designation' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false },
                 ],
                 responsive: true
