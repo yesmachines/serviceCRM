@@ -206,52 +206,10 @@
     <script src="{{asset('cms/assets/js/app.min.js')}}"></script>
 
     <script src="{{asset('cms/assets/vendor/daterangepicker/moment.min.js')}}"></script>
-     <script src="{{asset('cms/assets/vendor/daterangepicker/daterangepicker.js')}}"></script>
 
-       <script src="{{asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
 
         <!-- Datatables JS -->
-    <script src="{{asset('cms/assets/vendor/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-fixedcolumns-bs5/js/fixedColumns.bootstrap5.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/datatables.net-select/js/dataTables.select.min.js')}}"></script>
-
-      <script src="{{asset('cms/assets/vendor/select2/js/select2.min.js')}}"></script>
-
-
-          <!-- Bootstrap Timepicker Plugin js -->
-    <script src="{{asset('cms/assets/vendor/bootstrap-timepicker/js/bootstrap-timepicker.min.js')}}"></script>
-
-    <!-- Input Mask Plugin js -->
-    <script src="{{asset('cms/assets/vendor/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
-
-    <!-- Bootstrap Touchspin Plugin js -->
-    <script src="{{asset('cms/assets/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
-
-    <!-- Bootstrap Maxlength Plugin js -->
-    <script src="{{asset('cms/assets/vendor/bootstrap-maxlength/bootstrap-maxlength.min.js')}}"></script>
-
-    <!-- Typehead Plugin js -->
-    <script src="{{asset('cms/assets/vendor/handlebars/handlebars.min.js')}}"></script>
-    <script src="{{asset('cms/assets/vendor/typeahead.js/typeahead.bundle.min.js')}}"></script>
-
-    <!-- Flatpickr Timepicker Plugin js -->
-    <script src="{{asset('cms/assets/vendor/flatpickr/flatpickr.min.js')}}"></script>
-
-    <!-- Typehead Demo js -->
-    <script src="{{asset('cms/assets/js/pages/typehead.init.js')}}"></script>
-
-    <!-- Timepicker Demo js -->
-    <script src="{{asset('cms/assets/js/pages/timepicker.init.js')}}"></script>
+   
  
     </body>
 </html>
