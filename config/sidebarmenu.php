@@ -3,13 +3,7 @@
 return [
     'admin' => [
        
-          [
-            'text' => 'Vehicles',
-            'route' => 'vehicles.index',
-            'icon' => 'ri-road-map-line',
-            //'can' => 'permission',
-            'active' => ['vehicles', 'vehicles/*']
-        ],
+       
 
            [
             'text' => 'Employees',
@@ -19,18 +13,43 @@ return [
             'active' => ['technicians', 'technicians/*']
         ],
 
-      
-
+    
          [
-            'text' => 'Service Types',
+            'text' => 'Jobs',
+            'route' => 'jobs.index',
+            'icon' => 'ri-suitcase-fill',
+            //'can' => 'permission',
+            'active' => ['Jobs', 'jobs/*']
+        ],
+
+        [
+            'text' => 'Settings',
+            'icon' => ' ri-settings-2-line',
+            //'can' => 'settings',
+            'active' => ['roles', 'roles/*'],
+            'submenu' => [
+                [
+                    'text' => 'Roles',
+                    'route' => 'roles.index',
+                    //'can' => 'role_read',
+                    'active' => ['roles', 'roles/*']
+                ],
+                   [
+            'text' => 'Vehicles',
+            'route' => 'vehicles.index',
+            'icon' => 'ri-road-map-line',
+            //'can' => 'permission',
+            'active' => ['vehicles', 'vehicles/*']
+                ],
+                
+         [
+            'text' => 'Job Types',
             'route' => 'service-types.index',
             'icon' => 'ri-customer-service-line',
             //'can' => 'permission',
             'active' => ['service-types', 'service-types/*']
         ],
-
-
-
+        
           [
             'text' => 'Job Statuses',
             'route' => 'job-statuses.index',
@@ -47,27 +66,6 @@ return [
             'active' => ['task-statuses', 'task-statuses/*']
         ],
 
-    
-         [
-            'text' => 'Jobs',
-            'route' => 'jobs.index',
-            'icon' => 'ri-suitcase-fill',
-            //'can' => 'permission',
-            'active' => ['Jobs', 'jobs/*']
-        ],
-
-        // [
-        //     'text' => 'Settings',
-        //     'icon' => ' ri-settings-2-line',
-        //     //'can' => 'settings',
-        //     'active' => ['roles', 'roles/*'],
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Roles',
-        //             'route' => 'roles.index',
-        //             //'can' => 'role_read',
-        //             'active' => ['roles', 'roles/*']
-        //         ]
-        //     ]],
+            ]],
     ],
 ];
