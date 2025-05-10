@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Auth;
 //Importing laravel-permission models
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
