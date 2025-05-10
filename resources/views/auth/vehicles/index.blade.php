@@ -53,7 +53,13 @@
   
    @endsection
      
-   @section('js')
+
+    @section('pre-css')
+    <link href="{{asset('cms/assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('cms/assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    @endsection      
+    @section('pre-js')
+   <script src="{{asset('cms/assets/vendor/datatables.net/js/jquery.dataTables.min.js')}}"></script>
     <!-- Jobs DataTable Initialization -->
     <script>
         $(document).ready(function() {
