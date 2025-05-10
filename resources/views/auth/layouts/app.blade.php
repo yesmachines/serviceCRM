@@ -73,7 +73,7 @@
                                     <h6 class="text-overflow m-0">{{auth()->user()->email}}</h6>
                                 </div>
                                 <!-- item-->
-                                <a href="#" class="dropdown-item">
+                                <a href="{{ route('technicians.edit',auth()->user()->id) }}" class="dropdown-item">
                                     <i class="ri-account-circle-line fs-18 align-middle me-1"></i>
                                     <span>My Account</span>
                                 </a>

@@ -26,7 +26,7 @@ class RoleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $roles = Role::whereNotIn('name', ['superadmin'])->where('guard_name', 'web')->get();
+        $roles = Role::all();
 
         return view('auth.roles.index')->with('roles', $roles);
     }
@@ -37,17 +37,7 @@ class RoleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $permissions = Permission::where('guard_name', '=', 'web')->orderBy('id', 'asc')->pluck('id', 'name')->toArray();
-        $target = [];
-        foreach ($permissions as $k => $v) {
-            $keys = explode("_", $k);
-            if (count($keys) > 1) {
-                $target[$keys[0]][$v] = $keys[1];
-            } else {
-                $target[$k] = $v;
-            }
-        }
-        return view('auth.roles.create', ['permissions' => $target]);
+        return view('auth.roles.create');
     }
 
     /**
@@ -66,7 +56,6 @@ class RoleController extends Controller {
                                         ->where('guard_name', 'admin')
                         ),
                     ],
-                    'permissions' => 'required',
         ]);
 
         $validator->validate();
@@ -75,17 +64,7 @@ class RoleController extends Controller {
         $role = new Role();
         $role->name = strtolower($name);
         $role->guard_name = 'web';
-
-        $permissions = $request['permissions'];
-
         $role->save();
-        //Looping thru selected permissions
-        foreach ($permissions as $permission) {
-            $p = Permission::where('id', '=', $permission)->firstOrFail();
-            //Fetch the newly created role and assign permission
-            $role = Role::where('name', '=', $name)->first();
-            $role->givePermissionTo($p);
-        }
 
         alert()->success($role->name, 'added!');
         return redirect()->route('roles.index');
@@ -109,20 +88,7 @@ class RoleController extends Controller {
      */
     public function edit($id) {
         $role = Role::findOrFail($id);
-
-        $permissions = Permission::orderBy('id', 'asc')->where('guard_name', '=', 'web')->pluck('id', 'name')->toArray();
-        $target = [];
-        foreach ($permissions as $k => $v) {
-            $keys = explode("_", $k);
-            if (count($keys) > 1) {
-                $target[$keys[0]][$v] = $keys[1];
-            } else {
-                $target[$k] = $v;
-            }
-        }
-
-        $permissions = $target;
-        return view('auth.roles.edit', compact('role', 'permissions'));
+        return view('auth.roles.edit', compact('role'));
     }
 
     /**
@@ -148,27 +114,12 @@ class RoleController extends Controller {
                                     ->whereNotIn('id', [$id]);
                         }),
                     ],
-                    'permissions' => 'required',
         ]);
 
         $validator->validate();
 
         $role->name = strtolower($request->name);
         $role->save();
-
-        $input = $request->except(['permissions']);
-        $permissions = $request['permissions'];
-
-        $p_all = Permission::all(); //Get all permissions
-
-        foreach ($p_all as $p) {
-            $role->revokePermissionTo($p); //Remove all permissions associated with role
-        }
-
-        foreach ($permissions as $permission) {
-            $p = Permission::where('id', '=', $permission)->firstOrFail(); //Get corresponding form //permission in db
-            $role->givePermissionTo($p);  //Assign permission to role
-        }
 
         alert()->success($role->name, 'updated!');
         return redirect()->route('roles.index');

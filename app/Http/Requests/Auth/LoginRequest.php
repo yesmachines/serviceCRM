@@ -46,18 +46,16 @@ class LoginRequest extends FormRequest {
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
-
-        /* $user = Auth::user();
-
-          if ($user->role !== 'admin') {
-          Auth::logout();
-          throw ValidationException::withMessages([
-          'email' => 'You are not authorized to login.',
-          ]);
-          } */
-
-        $this->session()->regenerate();
+        $user = Auth::user();
+        if ($user->hasAnyRole(['superadmin', 'servicemanager', 'servicecoordinator'])) {
+            RateLimiter::clear($this->throttleKey());
+            $this->session()->regenerate();
+        } else {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                        'email' => 'You are not authorized to login.',
+            ]);
+        }
     }
 
     /**
