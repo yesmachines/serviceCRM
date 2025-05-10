@@ -14,10 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-                        'check.admin.permission' => \App\Http\Middleware\CheckAdminPermission::class,
-                    ]);
-     })
+        //        
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

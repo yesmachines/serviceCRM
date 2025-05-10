@@ -201,16 +201,6 @@
                                                 });
                                     });
         </script>
-
-           <!-- App JS -->
-    <script src="{{asset('cms/assets/js/app.min.js')}}"></script>
-
-    <script src="{{asset('cms/assets/vendor/daterangepicker/moment.min.js')}}"></script>
-
-
-        <!-- Datatables JS -->
-   
- 
     </body>
 </html>
 

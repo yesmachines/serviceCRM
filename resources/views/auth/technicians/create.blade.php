@@ -30,11 +30,11 @@
     <link href="{{ asset('cms/assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
     @endsection
     @section('pre-js')
-    <script src="{{ asset('cmsassets/vendor/select2/js/select2.min.js')}}"></script>
+    <script src="{{ asset('cms/assets/vendor/select2/js/select2.min.js')}}"></script>
     <script>
 $(document).ready(function () {
     // Initialize Select2
-    $('.select2').select2();
+  //  $('.select2').select2();
 });
 document.getElementById('image').addEventListener('change', function (event) {
     const [file] = event.target.files;

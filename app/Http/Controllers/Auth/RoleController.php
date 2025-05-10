@@ -13,10 +13,14 @@ use Illuminate\Validation\Rule;
 class RoleController extends Controller {
 
     public function __construct() {
-        $this->middleware('check.admin.permission:web role_read')->only(['index', 'show']);
-        $this->middleware('check.admin.permission:web role_create')->only(['create', 'store']);
-        $this->middleware('check.admin.permission:web role_update')->only(['edit', 'update']);
-        $this->middleware('check.admin.permission:web role_delete')->only(['destroy']);
+        $this->middleware(function ($request, $next) {
+            if (!auth()->user()->hasRole('superadmin')) {
+                alert()->error('No Access!', 'You don\'t have permission to access this page.');
+                return redirect()->route('dashboard');
+            }
+
+            return $next($request);
+        });
     }
 
     /**
