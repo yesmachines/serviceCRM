@@ -41,7 +41,7 @@
         <script src="{{asset('cms/assets/vendor/flatpickr/flatpickr.min.js')}}"></script>
         <script src="{{asset('cms/assets/js/pages/timepicker.init.js')}}"></script>
 
-        // Date pickers
+      
 
         <script>
 
@@ -58,7 +58,7 @@
 
             </script>
 
-        <script>
+        <!-- <script>
         $(document).ready(function () {
             $('#product_id').select2({
                 placeholder: $('#product_id').data('placeholder'),
@@ -86,7 +86,47 @@
                 minimumInputLength: 1
             });
         });
-        </script>
+        </script> -->
+
+
+        
+        <script>
+    $(document).ready(function () {
+        // Initialize select2
+        $('.select2').select2({
+            width: '100%'
+        });
+
+        $('#supplier_id').on('change', function () {
+            let supplierId = $(this).val();
+            let $product = $('#product_id');
+
+            // Reset product list
+            $product.empty().append('<option value="">Select Product</option>');
+
+            if (supplierId) {
+                $.ajax({
+                    url: '/ajax/supplier/' + supplierId,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each(data, function (id, title) {
+                            $product.append(`<option value="${id}">${title}</option>`);
+                        });
+
+                        // Refresh Select2
+                        $product.trigger('change');
+                    }
+                });
+            }
+        });
+
+        // Optional: trigger change if supplier_id has a value on page load (edit page)
+        @if(old('supplier_id', $data->supplier_id ?? false))
+            $('#supplier_id').trigger('change');
+        @endif
+    });
+</script>
+
 
 
     <script>
@@ -119,7 +159,7 @@
     $(document).ready(function () {
         $('#order_id').select2({
             placeholder: $('#order_id').data('placeholder'),
-            allowClear: true,
+            allowClear: false,
             ajax: {
                 url: $('#order_id').data('url'),
                 dataType: 'json',

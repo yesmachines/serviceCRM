@@ -62,18 +62,16 @@ class JobScheduleController extends Controller
 
    public function create(Request $request)
     {   
-        return view('auth.job_schedules.create', [
-            'companies'     => Company::pluck('company', 'id'),
-            'customers'     => Customer::pluck('fullname', 'id'),
-            'jobTypes'  => ServiceType::pluck('title', 'id'),
-            'suppliers'     => Supplier::pluck('brand', 'id'), // for brand
-            'productOptions' => Product::limit(10)->pluck('title', 'id')->toArray(),
-            'orders'     => Order::pluck('os_number', 'id'), 
-            'technicians' => Technician::with('user')->get()->pluck('user.name', 'id'),
-            'jobStatuses'   => JobStatus::pluck('status', 'id'),
-            'machineTypes' => MachineType::options(),
-            'warrantyStatuses' => WarrantyStatus::options(),
-        ]);
+    return view('auth.job_schedules.create', [
+        'companies'     => Company::pluck('company', 'id')->prepend('Select Company', ''),
+        'jobTypes'  => ServiceType::pluck('title', 'id')->prepend('Select Job Type', ''),   
+        'suppliers' => Supplier::pluck('brand', 'id')->prepend('Select Brand', ''),
+        'technicians' => Technician::with('user')->get()->pluck('user.name', 'id')->prepend('Select Technician', ''),
+        'jobStatuses'   => JobStatus::pluck('status', 'id')->prepend('Select job Status', ''),
+        'machineTypes' => MachineType::options(),
+        'warrantyStatuses' => WarrantyStatus::options(),
+        'orders'=>Order::pluck('os_number', 'id')->prepend('Search Os Number', ''),
+    ]);
 }
 
 public function store(StoreJobScheduleRequest $request)
@@ -142,18 +140,17 @@ public function edit($id){
     $suppliers =Supplier::pluck('brand', 'id');
     $technicians = Technician::with('user')->get()->pluck('user.name', 'id');
     $jobStatuses = JobStatus::pluck('status', 'id');
-    $productOptions = Product::limit(10)->pluck('title', 'id');
+    $products = Product::limit(10)->pluck('title', 'id');
     $customers = Customer::pluck('fullname', 'id');
     $orders = Order::pluck('os_number', 'id');
     $jobTypes  = ServiceType::pluck('title', 'id');
     $machineTypes = MachineType::options();
     $warrantyStatuses = WarrantyStatus::options();
 
-     
-
-   return view('auth.job_schedules.edit', compact('data','companies','suppliers','technicians','jobStatuses',
-   'productOptions','customers','orders','jobTypes','machineTypes','warrantyStatuses'
-));
+    
+    return view('auth.job_schedules.edit', compact('data','companies','suppliers','technicians','jobStatuses',
+                 'products','customers','orders','jobTypes','machineTypes','warrantyStatuses'
+                ));
 }
 
 public function update(UpdateJobScheduleRequest $request, $id)
@@ -196,7 +193,6 @@ public function update(UpdateJobScheduleRequest $request, $id)
     
      $jobTypeValue = strtolower($jobTypeTitle);
  
-     // 🎯 Handle ServiceJob logic
      if (in_array($jobTypeValue, ['inside', 'outside', 'amc'])) {
        
          $serviceJob = ServiceJob::where('job_schedule_id', $jobSchedule->id)->first();
@@ -230,18 +226,32 @@ public function update(UpdateJobScheduleRequest $request, $id)
 
 
 
-public function ajaxSearch(Request $request)
+// public function ajaxSearch(Request $request)
+// {
+
+//     $search = $request->get('q');
+
+//     $products = Product::query()
+//         ->where('title', 'like', '%' . $search . '%')
+//         ->limit(20)
+//         ->get(['id', 'title']);
+
+//     return response()->json($products);
+// }
+
+
+
+public function getSuppliersByProduct($supplierId)
 {
-
-    $search = $request->get('q');
-
-    $products = Product::query()
-        ->where('title', 'like', '%' . $search . '%')
-        ->limit(20)
-        ->get(['id', 'title']);
+    $products = Product::where('brand_id', $supplierId)
+          ->limit(30)
+        ->pluck('title', 'id'); // Correct order: title is label, id is value
 
     return response()->json($products);
 }
+
+
+
 
 public function getCustomersByCompany($companyId)
 {

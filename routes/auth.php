@@ -33,7 +33,11 @@ Route::middleware('auth')->group(function () {
       Route::get('job-schedules/data', [JobScheduleController::class, 'getData'])->name('job-schedules.data');
                 Route::resource('vehicles', VehicleController::class)->except('show');
                    Route::get('vehicles/data', [VehicleController::class, 'getData'])->name('vehicles.data');
-                     Route::get('/ajax/products', [JobScheduleController::class, 'ajaxSearch'])->name('products.ajax');
+                //      Route::get('/ajax/products', [JobScheduleController::class, 'ajaxSearch'])->name('products.ajax');
+
+                Route::get('/ajax/supplier/{supplier}', [JobScheduleController::class, 'getSuppliersByProduct']);
+
+
                      Route::get('/ajax/company-customers/{company}', [JobScheduleController::class, 'getCustomersByCompany']);
 
       Route::get('/ajax/find-order', [JobScheduleController::class, 'findOrder'])->name('find-order.ajax');

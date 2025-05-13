@@ -120,7 +120,7 @@
     $(document).ready(function () {
         $('#order_id').select2({
             placeholder: $('#order_id').data('placeholder'),
-            allowClear: true,
+            allowClear: false,
             ajax: {
                 url: $('#order_id').data('url'),
                 dataType: 'json',
