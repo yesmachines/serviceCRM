@@ -23,6 +23,10 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
+        'last_login_at',
+        'last_login_ip',
+        'device_type',
+        'os_sid'
     ];
 
       // Relation to Technician (assuming user → hasOne technician)
@@ -45,6 +49,11 @@ class User extends Authenticatable {
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'device_type',
+        'os_sid',
+        'pivot',
     ];
 
     /**
