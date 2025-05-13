@@ -14,4 +14,9 @@ class JobStatus extends Model
         'priority',
         'active',
     ];
+
+    public function jobSchedules()
+    {
+        return $this->hasMany(JobSchedule::class, 'job_status_id');
+    }
 }

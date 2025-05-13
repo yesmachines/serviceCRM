@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\HomeController;
+use App\Http\Controllers\Auth\JobScheduleController;
 use App\Http\Controllers\Auth\JobStatusController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RoleController;
@@ -28,10 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('roles', RoleController::class);
 
-      Route::resource('jobs', JobController::class)->except('show');
-      Route::get('jobs/data', [JobController::class, 'getData'])->name('jobs.data');
+      Route::resource('job-schedules', JobScheduleController::class)->except('show');
+      Route::get('job-schedules/data', [JobScheduleController::class, 'getData'])->name('job-schedules.data');
                 Route::resource('vehicles', VehicleController::class)->except('show');
                    Route::get('vehicles/data', [VehicleController::class, 'getData'])->name('vehicles.data');
+                     Route::get('/ajax/products', [JobScheduleController::class, 'ajaxSearch'])->name('products.ajax');
+                     Route::get('/ajax/company-customers/{company}', [JobScheduleController::class, 'getCustomersByCompany']);
+
+      Route::get('/ajax/find-order', [JobScheduleController::class, 'findOrder'])->name('find-order.ajax');
+
 
         Route::get('technicians/data', [TechnicianController::class, 'getData'])->name('technicians.data');
         Route::resource('technicians', TechnicianController::class);
@@ -39,9 +45,13 @@ Route::middleware('auth')->group(function () {
           Route::get('service-types/data', [ServiceTypeController::class, 'getData'])->name('service-types.data');
         Route::resource('service-types', ServiceTypeController::class);
        Route::get('job-statuses/data', [JobStatusController::class, 'getData'])->name('job-statuses.data');
+      
+     
+
         Route::resource('job-statuses', JobStatusController::class);
 
          Route::get('task-statuses/data', [TaskStatusController::class, 'getData'])->name('task-statuses.data');
+         
         Route::resource('task-statuses', TaskStatusController::class);
 
 
