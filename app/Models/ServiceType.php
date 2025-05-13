@@ -28,4 +28,9 @@ class ServiceType extends Model
     {
         return $this->hasMany(ServiceType::class, 'parent_id');
     }
+
+    public function jobSchedules()
+    {
+        return $this->hasMany(JobSchedule::class, 'job_type');
+    }
 }

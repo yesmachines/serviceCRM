@@ -35,6 +35,12 @@ class Technician extends Model
         return $this->belongsToMany(Role::class, 'model_has_roles', 'user_id', 'role_id');
     }
 
+    public function jobSchedules()
+    {
+        return $this->hasMany(JobSchedule::class, 'job_owner_id');
+    }
+
+
 
 
 

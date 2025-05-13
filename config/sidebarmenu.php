@@ -22,7 +22,7 @@ return [
     
          [
             'text' => 'Jobs',
-            'route' => 'jobs.index',
+            'route' => 'job-schedules.index',
             'icon' => 'ri-suitcase-fill',
             //'can' => 'permission',
             'active' => ['Jobs', 'jobs/*']

@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Technician;
 use App\Models\User;
 use App\Models\Vehicle;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -162,8 +163,16 @@ class TechnicianController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $emp = Employee::where('user_id', $id)->firstOrFail();
-        $user = User::with('technician')->findOrFail($id);
+
+        try {
+            // $user = User::find($id);
+            $user = User::with('technician','employee')->findOrFail($id);
+            $emp = Employee::where('user_id', $id)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('technicians.index')->with('error', 'User or employee record not found.');
+        }
+      
+       
 
         // Validate input
         $request->validate([

@@ -1,4 +1,5 @@
 <?php
+use Carbon\Carbon;
 
 function isActiveUrl(&$item) {
     $active = false;
@@ -77,4 +78,16 @@ function tokenResponse($status) {
                 "statusCode" => 40000,
                 "message" => $status
                     ], 401);
+}
+
+function parseDateTimeOrNull($date, $time)
+{
+    if (trim($date) && trim($time)) {
+        try {
+            return Carbon::createFromFormat('d/m/Y H:i', trim($date) . ' ' . trim($time));
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+    return null;
 }
