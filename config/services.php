@@ -31,4 +31,9 @@ return [
         ],
     ],
 
+    'onesignal' => [
+        'app_key' => env('OS_APP_KEY'),
+        'app_id' => env('OS_APP_ID'),
+    ],
+    
 ];
