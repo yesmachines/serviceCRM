@@ -59,68 +59,109 @@
 
             </script>
 
-        <script>
-        $(document).ready(function () {
-            $('#product_id').select2({
-                placeholder: $('#product_id').data('placeholder'),
-                ajax: {
-                    url: $('#product_id').data('url'),
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term // search term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.title
-                                };
-                            })
-                        };
-                    },
-                    cache: true
+        
+<script>
+   $(document).ready(function () {
+
+    $('.select2').select2({ width: '100%' });
+
+    function loadProducts(supplierId, selectedProductId = null) {
+      
+        const $product = $('#product_id');
+
+        // console.log("Supplierid",supplierId);
+        $product.empty().append('<option value="">Select Product</option>');
+
+        if (supplierId) {
+            $.ajax({
+                url: '/ajax/supplier/' + supplierId,
+                type: 'GET',
+                success: function (data) {
+                    console.log("Loaded Products:", data); // Debug line
+
+                    $.each(data, function (id, title) {
+                        let selected = (id == selectedProductId) ? 'selected' : '';
+                        $product.append(`<option value="${id}" ${selected}>${title}</option>`);
+                    });
+
+                    $product.select2({ width: '100%' }); // Important!
                 },
-                minimumInputLength: 1
+                error: function (xhr) {
+                    console.error("Product load failed:", xhr.responseText);
+                }
             });
-        });
-        </script>
+        }
+    }
+
+    $('#supplier_id').on('change', function () {
+        const supplierId = $(this).val();
+        loadProducts(supplierId);
+    });
 
 
-    <script>
 
-        $('#company_id').on('change', function () {
-            let companyId = $(this).val();
+    @if(old('supplier_id', $data->brand_id ?? false))
+    loadProducts(
+        '{{ old('supplier_id', $data->brand_id ?? null) }}',
+        '{{ old('product_id', $data->product_id ?? null) }}'
+    );
+    @endif
+
+});
+
+
+
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        // Initialize Select2 on all relevant dropdowns
+        $('.select2').select2({ width: '100%' });
+
+        function loadCustomers(companyId, selectedCustomerId = null) {
             let $customer = $('#customer_id');
 
-            $customer.empty().trigger('change'); // clear old data
+            $customer.empty().append('<option value="">Select customer</option>');
 
             if (companyId) {
                 $.ajax({
                     url: '/ajax/company-customers/' + companyId,
                     type: 'GET',
                     success: function (data) {
-                        let options = '<option value="">Select customer</option>';
                         $.each(data, function (id, name) {
-                            options += `<option value="${id}">${name}</option>`;
+                            let selected = (id == selectedCustomerId) ? 'selected' : '';
+                            $customer.append(`<option value="${id}" ${selected}>${name}</option>`);
                         });
-                        $customer.html(options);
+
+                        // Reinitialize Select2
                         $customer.trigger('change');
                     }
                 });
             }
+        }
+
+        // On change of company dropdown
+        $('#company_id').on('change', function () {
+            let companyId = $(this).val();
+            loadCustomers(companyId);
         });
 
-        </script>
+        // Auto-trigger on edit or validation error (to retain old value)
+        @if(old('company_id', $data->company_id ?? false))
+            loadCustomers('{{ old('company_id', $data->company_id ?? null) }}', '{{ old('customer_id', $data->customer_id ?? null) }}');
+        @endif
+    });
+</script>
+
 
         <script>
     $(document).ready(function () {
         $('#order_id').select2({
             placeholder: $('#order_id').data('placeholder'),
-            allowClear: true,
+            allowClear: false,
             ajax: {
                 url: $('#order_id').data('url'),
                 dataType: 'json',

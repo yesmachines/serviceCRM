@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateJobScheduleRequest extends FormRequest
 {
-     public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
 
     public function rules(): array
     {
+        // dd($this->all());
         return [
             'company_id'     => 'required|exists:companies,id',
             'customer_id'    => 'required|exists:customers,id',

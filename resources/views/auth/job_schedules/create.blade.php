@@ -41,7 +41,7 @@
         <script src="{{asset('cms/assets/vendor/flatpickr/flatpickr.min.js')}}"></script>
         <script src="{{asset('cms/assets/js/pages/timepicker.init.js')}}"></script>
 
-        // Date pickers
+      
 
         <script>
 
@@ -58,68 +58,90 @@
 
             </script>
 
+      
+
+
+        
         <script>
-        $(document).ready(function () {
-            $('#product_id').select2({
-                placeholder: $('#product_id').data('placeholder'),
-                ajax: {
-                    url: $('#product_id').data('url'),
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term // search term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.title
-                                };
-                            })
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 1
-            });
+    $(document).ready(function () {
+        // Initialize select2
+        $('.select2').select2({
+            width: '100%'
         });
-        </script>
+
+        $('#supplier_id').on('change', function () {
+            let supplierId = $(this).val();
+            let $product = $('#product_id');
+
+            // Reset product list
+            $product.empty().append('<option value="">Select Product</option>');
+
+            if (supplierId) {
+                $.ajax({
+                    url: '/ajax/supplier/' + supplierId,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each(data, function (id, title) {
+                            $product.append(`<option value="${id}">${title}</option>`);
+                        });
+
+                        // Refresh Select2
+                        $product.trigger('change');
+                    }
+                });
+            }
+        });
+
+        // Optional: trigger change if supplier_id has a value on page load (edit page)
+        @if(old('supplier_id', $data->supplier_id ?? false))
+            $('#supplier_id').trigger('change');
+        @endif
+    });
+</script>
 
 
-    <script>
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({ width: '100%' });
 
+        // Company to Customer Change
         $('#company_id').on('change', function () {
             let companyId = $(this).val();
             let $customer = $('#customer_id');
 
-            $customer.empty().trigger('change'); // clear old data
+            // Reset customer list
+            $customer.empty().append('<option value="">Select customer</option>');
 
             if (companyId) {
                 $.ajax({
                     url: '/ajax/company-customers/' + companyId,
                     type: 'GET',
                     success: function (data) {
-                        let options = '<option value="">Select customer</option>';
                         $.each(data, function (id, name) {
-                            options += `<option value="${id}">${name}</option>`;
+                            $customer.append(`<option value="${id}">${name}</option>`);
                         });
-                        $customer.html(options);
+
+                        // Refresh Select2
                         $customer.trigger('change');
                     }
                 });
             }
         });
 
-        </script>
+        // ✅ Pre-select customer if editing
+        @if(old('company_id', $data->company_id ?? false))
+            $('#company_id').trigger('change');
+        @endif
+    });
+</script>
+
+
 
         <script>
     $(document).ready(function () {
         $('#order_id').select2({
             placeholder: $('#order_id').data('placeholder'),
-            allowClear: true,
+            allowClear: false,
             ajax: {
                 url: $('#order_id').data('url'),
                 dataType: 'json',

@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('job_schedules', function (Blueprint $table) {
             $table->id();
-              $table->string('job_no')->nullable();
-
+            $table->string('job_no')->nullable();
             // Foreign keys
             $table->foreignId('job_type')->nullable()->constrained('service_types')->onDelete('set null');
             $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('set null');
@@ -26,7 +25,6 @@ return new class extends Migration
             $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
             $table->string('contact_no')->nullable();
             $table->string('location')->nullable();
-
             $table->dateTime('start_datetime')->nullable();
             $table->dateTime('end_datetime')->nullable();
 
