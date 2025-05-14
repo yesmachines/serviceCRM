@@ -15,6 +15,11 @@ class Employee extends Model
         'image_url',
         'status',
     ];
+     
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
     // Employee belongs to a user
     public function user()

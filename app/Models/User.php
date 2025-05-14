@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable {
 
-    use HasFactory,
+    use HasApiTokens,
+        HasFactory,
         Notifiable,
         HasRoles;
 
@@ -52,6 +54,8 @@ class User extends Authenticatable {
         'created_at',
         'updated_at',
         'device_type',
+        'last_login_at',
+        'last_login_ip',
         'os_sid',
         'pivot',
     ];
