@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\MachineType;
 use App\Enums\WarrantyStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreJobScheduleRequest;
-use App\Http\Requests\UpdateJobScheduleRequest;
+use App\Http\Requests\Auth\StoreJobScheduleRequest;
+use App\Http\Requests\Auth\UpdateJobScheduleRequest;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\JobSchedule;
@@ -140,7 +140,7 @@ public function edit($id){
     $suppliers =Supplier::pluck('brand', 'id');
     $technicians = Technician::with('user')->get()->pluck('user.name', 'id');
     $jobStatuses = JobStatus::pluck('status', 'id');
-    $products = Product::limit(10)->pluck('title', 'id');
+    $products = Product::limit(50)->pluck('title', 'id');
     $customers = Customer::pluck('fullname', 'id');
     $orders = Order::pluck('os_number', 'id');
     $jobTypes  = ServiceType::pluck('title', 'id');
@@ -155,6 +155,7 @@ public function edit($id){
 
 public function update(UpdateJobScheduleRequest $request, $id)
 {
+    dd($request->all());
     // Find the job schedule by ID
     $jobSchedule = JobSchedule::findOrFail($id);
 
@@ -223,9 +224,6 @@ public function update(UpdateJobScheduleRequest $request, $id)
 }
 
 
-
-
-
 // public function ajaxSearch(Request $request)
 // {
 
@@ -239,13 +237,12 @@ public function update(UpdateJobScheduleRequest $request, $id)
 //     return response()->json($products);
 // }
 
-
-
 public function getSuppliersByProduct($supplierId)
 {
+    
     $products = Product::where('brand_id', $supplierId)
           ->limit(30)
-        ->pluck('title', 'id'); // Correct order: title is label, id is value
+        ->pluck('title', 'id'); 
 
     return response()->json($products);
 }
@@ -255,6 +252,7 @@ public function getSuppliersByProduct($supplierId)
 
 public function getCustomersByCompany($companyId)
 {
+   
     $customers = Customer::where('company_id', $companyId)
         ->pluck('fullname', 'id');
 

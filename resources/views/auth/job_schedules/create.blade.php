@@ -58,35 +58,7 @@
 
             </script>
 
-        <!-- <script>
-        $(document).ready(function () {
-            $('#product_id').select2({
-                placeholder: $('#product_id').data('placeholder'),
-                ajax: {
-                    url: $('#product_id').data('url'),
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term // search term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.title
-                                };
-                            })
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 1
-            });
-        });
-        </script> -->
+      
 
 
         
@@ -128,32 +100,42 @@
 </script>
 
 
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({ width: '100%' });
 
-    <script>
-
+        // Company to Customer Change
         $('#company_id').on('change', function () {
             let companyId = $(this).val();
             let $customer = $('#customer_id');
 
-            $customer.empty().trigger('change'); // clear old data
+            // Reset customer list
+            $customer.empty().append('<option value="">Select customer</option>');
 
             if (companyId) {
                 $.ajax({
                     url: '/ajax/company-customers/' + companyId,
                     type: 'GET',
                     success: function (data) {
-                        let options = '<option value="">Select customer</option>';
                         $.each(data, function (id, name) {
-                            options += `<option value="${id}">${name}</option>`;
+                            $customer.append(`<option value="${id}">${name}</option>`);
                         });
-                        $customer.html(options);
+
+                        // Refresh Select2
                         $customer.trigger('change');
                     }
                 });
             }
         });
 
-        </script>
+        // ✅ Pre-select customer if editing
+        @if(old('company_id', $data->company_id ?? false))
+            $('#company_id').trigger('change');
+        @endif
+    });
+</script>
+
+
 
         <script>
     $(document).ready(function () {

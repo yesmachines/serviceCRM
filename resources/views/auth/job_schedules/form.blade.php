@@ -35,8 +35,8 @@
             {{ html()->label('Job Status', 'job_status_id')->class('form-label') }}
 
             {{ html()->select('job_status_id', $jobStatuses, old('job_status_id', $data->job_status_id ?? null))
-                ->class('form-control select2' . ($errors->has('job_status_id') ? ' is-invalid' : ''))
-                ->attributes(['id' => 'job_status_id', 'data-toggle' => 'select2']) }}
+                ->class('form-control' . ($errors->has('job_status_id') ? ' is-invalid' : ''))
+                ->attributes(['id' => 'job_status_id']) }}
 
             {!! $errors->first('job_status_id', '<div class="invalid-feedback">:message</div>') !!}
         </div>
@@ -46,7 +46,7 @@
         <div class="mb-3">
             {{ html()->label('Chargeble', 'chargeble')->class('form-label') }}
 
-            {{ html()->select('order_id', old('order_id', $data->order_id ?? null))
+            {{ html()->select('order_id', old('order_id', $orders, $data->order_id ?? null))
                 ->class('form-control select2-order' . ($errors->has('order_id') ? ' is-invalid' : ''))
                 ->attributes([
                     'id' => 'order_id',
@@ -67,9 +67,9 @@
             <div class="col-md-4">
             <div class="mb-3">
                 {{ html()->label('Company', 'company_id')->class('form-label') }}
-                {{ html()->select('company_id', $companies,  $data->company_id ?? null)
+                {{ html()->select('company_id', $companies,  old('company_id', $data->company_id ?? null) )
                     ->class('form-control select2' . ($errors->has('company_id') ? ' is-invalid' : ''))
-                    ->attributes(['id' => 'company_id', 'data-toggle' => 'select2']) }}
+                    ->attributes(['id' => 'company_id']) }}
                 {!! $errors->first('company_id', '<div class="invalid-feedback">:message</div>') !!}
             </div>
         </div>
@@ -92,41 +92,51 @@
             </div>
         </div>
 
+        
 
-
-
+    
+        {{-- Supplier Dropdown --}}
         <div class="col-md-4">
             <div class="mb-3">
                 {{ html()->label('Supplier', 'supplier_id')->class('form-label') }}
-                {{ html()->select('supplier_id', $suppliers, old('supplier_id', $data->supplier_id ?? null))
+                {{ html()->select('supplier_id', $suppliers, old('supplier_id', $data->brand_id ?? null))
                     ->class('form-control select2' . ($errors->has('supplier_id') ? ' is-invalid' : ''))
                     ->attributes(['id' => 'supplier_id']) }}
                 {!! $errors->first('supplier_id', '<div class="invalid-feedback">:message</div>') !!}
             </div>
         </div>
 
+        
+
     </div>
-    
+
+
+
+ 
     
     <div class="row">
 
         {{-- Product Dropdown --}}
         <div class="col-md-4">
-        <div class="mb-3">
-        {{ html()->label('Product', 'product_id')->class('form-label') }}
-        <select id="product_id" name="product_id"
-            class="form-control select2{{ $errors->has('product_id') ? ' is-invalid' : '' }}">
-            <option value="">Select Product</option>
+                <div class="mb-3">
+                    {{ html()->label('Product', 'product_id')->class('form-label') }}
+                    <select id="product_id" name="product_id"
+                            class="form-control select2{{ $errors->has('product_id') ? ' is-invalid' : '' }}">
+                        <option value="">Select Product</option>
 
-            @if (!empty($data->product_id) && isset($products[$data->product_id]))
-                <option value="{{ $data->product_id }}" selected>
-                    {{ $products[$data->product_id] }}
-                </option>
-            @endif
-        </select>
-        {!! $errors->first('product_id', '<div class="invalid-feedback">:message</div>') !!}
-        </div>
-        </div>
+                        {{-- Pre-fill if editing --}}
+                        @if (!empty($data->product_id) && isset($products[$data->product_id]))
+                            <option value="{{ $data->product_id }}" selected>{{ $products[$data->product_id] }}</option>
+                        @endif
+                    </select>
+                    {!! $errors->first('product_id', '<div class="invalid-feedback">:message</div>') !!}
+                </div>
+            </div>
+
+
+
+         
+
 
         <div class="col-md-4">
                 <div class="mb-3">
@@ -163,10 +173,11 @@
         </div>
     </div>
 
+  
+
     <div class="col-md-4">
         <div class="mb-3">
             {{ html()->label('Start Date', 'start_date')->class('form-label') }}
-
             {{ html()->text('start_date')
                 ->class('form-control date' . ($errors->has('start_date') ? ' is-invalid' : ''))
                 ->attributes([
@@ -175,10 +186,10 @@
                     'data-single-date-picker' => 'true'
                 ])
                 ->value(old('start_date', $data->start_date ?? null)) }}
-
             {!! $errors->first('start_date', '<div class="invalid-feedback">:message</div>') !!}
         </div>
     </div>
+
 
     <div class="col-md-4">
         <div class="mb-3">
@@ -209,36 +220,47 @@
        
 
 
-    <div class="col-md-4">
-        <div class="mb-3">
-            {{ html()->label('Start Time', 'start_time')->class('form-label') }}
+ <div class="col-md-4">
+ <div class="mb-3">
+    {{ html()->label('Start Time', 'start_time')->class('form-label') }}
 
-            <div class="input-group">
-                {{ html()->text('start_time')
-                    ->class('form-control' . ($errors->has('start_time') ? ' is-invalid' : ''))
-                    ->attributes([
-                        'id' => 'basic-timepicker',
-                        'placeholder' => 'Select time'
-                    ])
-                    ->value(old('start_time', $data->start_time ?? null)) }}
+    <div class="input-group">
+        {{ html()->text('start_time')
+            ->class('form-control' . ($errors->has('start_time') ? ' is-invalid' : ''))
+            ->attributes([
+                'id' => 'basic-timepicker',
+                'name' => 'start_time', {{-- ADD THIS if not added --}}
+                'placeholder' => 'Select time'
+            ])
+            ->value(old('start_time', $data->start_time ?? null)) }}
 
-                <span class="input-group-text"><i class="ri-time-line"></i></span>
-            </div>
-            {!! $errors->first('start_time', '<div class="invalid-feedback">:message</div>') !!}
-         
-        </div>
+        <span class="input-group-text"><i class="ri-time-line"></i></span>
     </div>
+
+ 
+
+    @if($errors->has('start_time'))
+                <div class="invalid-feedback d-block"> {{-- d-block ensures it's visible --}}
+                    {{ $errors->first('start_time') }}
+                </div>
+            @endif
+</div>
+
+    </div>
+
+    <!--  -->
 
 
      <div class="col-md-4">
-        <div class="mb-3">
-            {{ html()->label('End Time', 'end_time')->class('form-label') }}
+     <div class="mb-3">
+              {{ html()->label('End Time', 'end_time')->class('form-label') }}
 
             <div class="input-group">
                 {{ html()->text('end_time')
                     ->class('form-control' . ($errors->has('end_time') ? ' is-invalid' : ''))
                     ->attributes([
-                        'id' => 'end-timepicker', 
+                        'id' => 'end_timepicker',
+                        'name' => 'end_time', {{-- Ensure this is included --}}
                         'placeholder' => 'Select time'
                     ])
                     ->value(old('end_time', $data->end_time ?? null)) }}
@@ -246,22 +268,24 @@
                 <span class="input-group-text"><i class="ri-time-line"></i></span>
             </div>
 
-            {!! $errors->first('end_time', '<div class="invalid-feedback">:message</div>') !!}
+            {{-- This must be placed OUTSIDE .input-group but inside .mb-3 --}}
+            @if($errors->has('end_time'))
+                <div class="invalid-feedback d-block"> {{-- d-block ensures it's visible --}}
+                    {{ $errors->first('end_time') }}
+                </div>
+            @endif
         </div>
+
+
+  
+  
     </div>
 
    
 
  
 </div>
-<div class="row">
 
-
-   
-
-
-
-</div>
 <div class="row">
 
  <div class="col-md-6">
