@@ -78,9 +78,10 @@ class TechnicianController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
+        // dd($request->all());
         $validated = $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'full_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'employee_id' => 'required|string|max:50|unique:employees,emp_num',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
@@ -90,11 +91,12 @@ class TechnicianController extends Controller {
             'acl' => 'required|array',
             //'acl.*' => 'exists:roles,id', 
             'status' => 'required|string',
-            //'vehicle_assigned'   => 'nullable|string|max:255',
+            // 'vehicle_assigned'   => 'nullable|string|max:255',
             'technician_level' => 'required|string',
             'standard_charge' => 'nullable|numeric|min:0',
             'additional_charge' => 'nullable|numeric|min:0',
         ]);
+
 
         $imagePath = null;
         if ($request->hasFile('image')) {
@@ -103,7 +105,7 @@ class TechnicianController extends Controller {
 
         // Insert into users table and get user_id
         $userId = DB::table('users')->insertGetId([
-            'name' => $validated['full_name'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'created_at' => now(),
@@ -128,7 +130,7 @@ class TechnicianController extends Controller {
             // Insert into technicians table using Eloquent
             Technician::create([
                 'user_id' => $userId,
-                'vehicle_assigned' => $validated['vehicle_assigned'],
+                'vehicle_assigned' => $request->input('vehicle_assigned') ?? null,
                 'technician_level' => $validated['technician_level'],
                 'standard_charge' => $validated['standard_charge'],
                 'additional_charge' => $validated['additional_charge'],

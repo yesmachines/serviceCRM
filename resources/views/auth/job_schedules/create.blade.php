@@ -56,9 +56,20 @@
             dateFormat: "H:i" 
             });
 
+            $("#basic-timepicker").flatpickr({ 
+            enableTime: true, 
+            noCalendar: true, 
+            dateFormat: "H:i" 
+            });
+             $("#end_timepicker").flatpickr({ 
+            enableTime: true, 
+            noCalendar: true, 
+            dateFormat: "H:i" 
+            });
+
             </script>
 
-      
+
 
 
         
