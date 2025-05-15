@@ -55,12 +55,16 @@
     @endsection      
     @section('pre-js')
    <script src="{{asset('cms/assets/vendor/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('cms/assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
+    <script src="{{asset('cms/assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('cms/assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
     <!-- Jobs DataTable Initialization -->
     <script>
         $(document).ready(function() {
             $('#tasktatuses-datatable').DataTable({
                 processing: true,
                 serverSide: true,
+                language:{paginate:{previous:"<i class='ri-arrow-left-s-line'>",next:"<i class='ri-arrow-right-s-line'>"}},drawCallback:function(){$(".dataTables_paginate > .pagination").addClass("pagination-rounded")},
                 ajax: '{{ route('task-statuses.data') }}',
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
