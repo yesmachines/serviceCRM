@@ -8,7 +8,7 @@ return [
             'route' => 'vehicles.index',
             'icon' => 'ri-road-map-line',
             //'can' => 'permission',
-            'active' => ['vehicles', 'vehicles/*']
+            'active' => ['vehicles/*']
                 ],
 
            [
@@ -16,7 +16,7 @@ return [
             'route' => 'technicians.index',
             'icon' => 'ri-folder-user-line',
             //'can' => 'permission',
-            'active' => ['technicians', 'technicians/*']
+            'active' => ['technicians/*']
         ],
 
     
@@ -25,7 +25,7 @@ return [
             'route' => 'job-schedules.index',
             'icon' => 'ri-suitcase-fill',
             //'can' => 'permission',
-            'active' => ['Jobs', 'jobs/*']
+            'active' => ['job-schedules/*']
         ],
 
         [
@@ -38,7 +38,7 @@ return [
                     'text' => 'Roles',
                     'route' => 'roles.index',
                     //'can' => 'role_read',
-                    'active' => ['roles', 'roles/*']
+                    'active' => ['roles/*']
                 ],
              
                 
@@ -47,7 +47,7 @@ return [
             'route' => 'service-types.index',
             'icon' => 'ri-customer-service-line',
             //'can' => 'permission',
-            'active' => ['service-types', 'service-types/*']
+            'active' => ['service-types/*']
         ],
         
           [
@@ -55,7 +55,7 @@ return [
             'route' => 'job-statuses.index',
             'icon' => 'ri-creative-commons-nd-line',
             //'can' => 'permission',
-            'active' => ['job-statuses', 'job-statuses/*']
+            'active' => ['job-statuses/*']
         ],
 
           [
@@ -63,7 +63,7 @@ return [
             'route' => 'task-statuses.index',
             'icon' => 'ri-task-fill',
             //'can' => 'permission',
-            'active' => ['task-statuses', 'task-statuses/*']
+            'active' => ['task-statuses/*']
         ],
 
             ]],
