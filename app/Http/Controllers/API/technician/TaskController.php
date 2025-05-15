@@ -25,13 +25,15 @@ class TaskController extends Controller
         }
         $tasks = $query->paginate(15);
 
-        return TaskResource::collection($tasks);
+        return successResponse('Success', TaskResource::collection($tasks));
     }
 
     public function show($id)
     {
         $task = Task::findOrFail($id);
-        return new TaskResource($task);
+
+        return successResponse('Success',new TaskResource($task));
+        
     }
 
     public function store (Request $request){
@@ -69,7 +71,7 @@ class TaskController extends Controller
         $task->save();
         $task->load(['jobSchedule', 'taskStatus', 'vehicle']);
 
-        return new TaskResource($task);
+        return successResponse('Success',new TaskResource($task));
         // return response()->json($task, 201);
     }
 
@@ -118,7 +120,9 @@ class TaskController extends Controller
         $task->task_status_id  = $request->task_status_id;
         $task->save();
         $task->load(['jobSchedule', 'taskStatus', 'vehicle']);
-        return new TaskResource($task);
+
+        return successResponse('Success',new TaskResource($task));
+      
     }
 
     public function destroy($id)
