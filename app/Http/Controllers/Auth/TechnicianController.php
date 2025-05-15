@@ -88,7 +88,7 @@ class TechnicianController extends Controller {
             'phone' => 'required|string|max:20|unique:employees,phone',
             'division' => 'required|string',
             'designation' => 'nullable|string|max:255',
-            'acl' => 'required|array',
+            'acl' => 'nullable|array',
             //'acl.*' => 'exists:roles,id', 
             'status' => 'required|string',
             // 'vehicle_assigned'   => 'nullable|string|max:255',
@@ -126,23 +126,28 @@ class TechnicianController extends Controller {
             'updated_at' => now(),
         ]);
 
-        if (in_array(8, $request['acl'])) {
-            // Insert into technicians table using Eloquent
-            Technician::create([
-                'user_id' => $userId,
-                'vehicle_assigned' => $request->input('vehicle_assigned') ?? null,
-                'technician_level' => $validated['technician_level'],
-                'standard_charge' => $validated['standard_charge'],
-                'additional_charge' => $validated['additional_charge'],
-            ]);
+        $aclRoles = $request->input('acl', []); // array of role IDs
+        // Sync roles first
+
+        if(!empty( $aclRoles)){
+            if (in_array(8, $request['acl'])) {
+                // Insert into technicians table using Eloquent
+                Technician::create([
+                    'user_id' => $userId,
+                    'vehicle_assigned' => $request->input('vehicle_assigned') ?? null,
+                    'technician_level' => $validated['technician_level'],
+                    'standard_charge' => $validated['standard_charge'],
+                    'additional_charge' => $validated['additional_charge'],
+                ]);
+            }
+            $user = User::find($userId);
+
+            $roleIds = Role::whereIn('id', $validated['acl'])->pluck('id')->toArray();
+    
+            $user->roles()->sync($roleIds);
         }
 
 
-        $user = User::find($userId);
-
-        $roleIds = Role::whereIn('id', $validated['acl'])->pluck('id')->toArray();
-
-        $user->roles()->sync($roleIds);
 
         return redirect()->route('technicians.index')->with('success', 'Technician created successfully.');
     }
@@ -185,7 +190,7 @@ class TechnicianController extends Controller {
             'phone' => 'required|string|max:20|unique:employees,phone,' . $emp->id,
             'division' => 'required|string',
             'designation' => 'required|string',
-            'acl' => 'required|array',
+            'acl' => 'nullable|array',
             'status' => 'required|string',
             'technician_level' => 'required|string',
             'standard_charge' => 'nullable|numeric|min:0',
@@ -221,7 +226,16 @@ class TechnicianController extends Controller {
 
         $aclRoles = $request->input('acl', []); // array of role IDs
         // Sync roles first
-        $user->roles()->sync($aclRoles);
+
+        if(!empty( $aclRoles )){
+            if (in_array(8,  $aclRoles)) {
+                $user->roles()->sync($aclRoles);
+           }
+        }
+      
+
+        
+        
 
         // Check if technician role is among assigned roles
         $technicianRoleId = Role::where('name', 'servicetechnician')->value('id');
