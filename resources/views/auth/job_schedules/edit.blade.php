@@ -46,12 +46,23 @@
 
         <script>
 
-              $("#end-timepicker").flatpickr({ 
+            $("#end-timepicker").flatpickr({ 
             enableTime: true, 
             noCalendar: true, 
             dateFormat: "H:i" 
             });
              $("#close-timepicker").flatpickr({ 
+            enableTime: true, 
+            noCalendar: true, 
+            dateFormat: "H:i" 
+            });
+
+            $("#basic-timepicker").flatpickr({ 
+            enableTime: true, 
+            noCalendar: true, 
+            dateFormat: "H:i" 
+            });
+             $("#end_timepicker").flatpickr({ 
             enableTime: true, 
             noCalendar: true, 
             dateFormat: "H:i" 

@@ -69,11 +69,12 @@
         </div>
     </div>
 
+
     <div class="col-md-4">
         <div class="mb-3">
             {{ html()->label('Chargeble', 'chargeble')->class('form-label') }}
 
-            {{ html()->select('order_id', old('order_id', $orders, $data->order_id ?? null))
+            {{ html()->select('order_id', $orders, old('order_id', $data->order_id ?? null))
                 ->class('form-control select2-order' . ($errors->has('order_id') ? ' is-invalid' : ''))
                 ->attributes([
                     'id' => 'order_id',
@@ -276,7 +277,7 @@
     </div>
 
     <!--  -->
-
+  
 
      <div class="col-md-4">
      <div class="mb-3">
@@ -302,14 +303,8 @@
                 </div>
             @endif
         </div>
-
-
-  
   
     </div>
-
-   
-
  
 </div>
 
