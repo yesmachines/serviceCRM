@@ -32,7 +32,7 @@ return [
             'text' => 'Settings',
             'icon' => ' ri-settings-2-line',
             //'can' => 'settings',
-            'active' => ['roles', 'roles/*'],
+            'active' => ['roles/*','service-types/*','job-statuses/*','task-statuses/*'],
             'submenu' => [
                 [
                     'text' => 'Roles',
