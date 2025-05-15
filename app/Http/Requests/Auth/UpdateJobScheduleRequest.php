@@ -14,7 +14,8 @@ class UpdateJobScheduleRequest extends FormRequest
     public function rules(): array
     {
         // dd($this->all());
-        return [
+      $rules =   [
+            'job_type_id' => 'required|exists:service_types,id',
             'company_id'     => 'required|exists:companies,id',
             'customer_id'    => 'required|exists:customers,id',
             'supplier_id'    => 'nullable|exists:suppliers,id',
@@ -32,6 +33,21 @@ class UpdateJobScheduleRequest extends FormRequest
             'job_details'    => 'nullable|string',
             'remarks'        => 'nullable|string|max:500',
         ];
+
+        $jobTypeId = $this->input('job_type_id');
+        
+        if ($jobTypeId) {
+            $jobTypeTitle = \App\Models\ServiceType::where('id', $jobTypeId)->value('title');
+            $jobTypeSlug = strtolower($jobTypeTitle);
+    
+            if (in_array($jobTypeSlug, ['inside', 'outside', 'amc'])) {
+                $rules['machine_type'] = 'required|string';
+                $rules['is_warranty'] = 'required';
+            }
+        }
+    
+        return $rules;
+ 
     }
 
         public function messages(): array

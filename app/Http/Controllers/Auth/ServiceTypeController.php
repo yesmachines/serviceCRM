@@ -38,8 +38,8 @@ class ServiceTypeController extends Controller
 
     public function create(){
 
-        $services = ServiceType::all();
-
+    $services = ServiceType::where('parent_id',null)->get();
+      
     return view('auth.service_types.create', compact('services'));
     }
 
@@ -64,9 +64,11 @@ class ServiceTypeController extends Controller
     public function edit($id)
     {
             $serviceType = ServiceType::findOrFail($id);
-            $services = ServiceType::where('id', '!=', $id)->get(); // avoid selecting itself as parent
+            $services = ServiceType::where('id', '!=', $id)
+            ->where('parent_id',null)
+            ->get(); 
 
-            return view('auth.service_types.edit', compact('serviceType', 'services'));
+        return view('auth.service_types.edit', compact('serviceType', 'services'));
     }
 
     public function update(Request $request, $id)

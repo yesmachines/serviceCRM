@@ -1,15 +1,42 @@
 <div class="row">
 
     <div class="col-md-4">
-        <div class="mb-3">
-            {{ html()->label('Job Type', 'job_type_id')->class('form-label') }}
+       
 
-            {{ html()->select('job_type_id', $jobTypes, old('job_type_id', $data->job_type ?? null))
-                ->class('form-control' . ($errors->has('job_type_id') ? ' is-invalid' : ''))
-                ->attributes(['id' => 'job_type_id']) }}
+    <div class="mb-3">
+    {{ html()->label('Job Type', 'job_type_id')->class('form-label') }}
 
-            {!! $errors->first('job_type_id', '<div class="invalid-feedback">:message</div>') !!}
-        </div>
+    <select name="job_type_id" class="form-control{{ $errors->has('job_type_id') ? ' is-invalid' : '' }}" id="job_type_id">
+        <option value="">Select Job Type</option>
+
+
+
+        @foreach ($serviceTypesGrouped[null] ?? [] as $parent)
+            @php
+                $hasChildren = isset($serviceTypesGrouped[$parent->id]);
+                $isSelectedParent = old('job_type_id', $data->job_type ?? '') == $parent->id;
+            @endphp
+
+            @if ($hasChildren)
+                <optgroup label="{{ $parent->title }}">
+                    @foreach ($serviceTypesGrouped[$parent->id] as $child)
+                        <option value="{{ $child->id }}"
+                            {{ old('job_type_id', $data->job_type ?? '') == $child->id ? 'selected' : '' }}>
+                            {{ $child->title }}
+                        </option>
+                    @endforeach
+                </optgroup>
+            @else
+                <option value="{{ $parent->id }}" {{ $isSelectedParent ? 'selected' : '' }}>
+                    {{ $parent->title }}
+                </option>
+            @endif
+        @endforeach
+    </select>
+
+    {!! $errors->first('job_type_id', '<div class="invalid-feedback">:message</div>') !!}
+</div>
+
         
 
         {{-- Hidden fields shown conditionally --}}
