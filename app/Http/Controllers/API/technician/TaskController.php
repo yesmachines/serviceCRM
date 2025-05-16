@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\technician;
+namespace App\Http\Controllers\API\technician;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
@@ -37,6 +37,8 @@ class TaskController extends Controller
     }
 
     public function store (Request $request){
+
+        // dd($request->all());
         $rules = [
             'job_schedule_id' => 'nullable|exists:job_schedules,id',
             'task_status_id' => 'nullable|exists:task_statuses,id',
@@ -50,6 +52,8 @@ class TaskController extends Controller
             'end_time'       => 'required|date_format:H:i|after:start_time',
             'task_details' => 'required|string',
             'reason' => 'nullable|string',
+            'assistence' => 'array',
+            'assistence.*' => 'exists:technicians,id',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -59,17 +63,26 @@ class TaskController extends Controller
             return errorResponse(trans('api.required_fields'), $errorMessage);
         }
 
+        $validated = $validator->validated();
+
         $task = new Task();
         $task->start_datetime = parseDateTimeOrNull($request->start_date, $request->start_time);
-        $task->end_datetime = parseDateTimeOrNull($request->end_time, $request->end_time);
-        $task->vehicle_id = $request->vehicle_id;
-        $task->reason = $request->reason;
-        $task->task_details = $request->task_details;
-        $task->task_status_id = $request->task_status_id;
-        $task->job_schedule_id = $request->job_schedule_id;
-        $task->task_status_id  = $request->task_status_id;
+        $task->end_datetime = parseDateTimeOrNull($request->end_date, $request->end_time); // <-- fixed end_datetime
+        $task->vehicle_id = $validated['vehicle_id'] ?? null;
+        $task->reason = $validated['reason'] ?? null;
+        $task->task_details = $validated['task_details'];
+        $task->task_status_id = $validated['task_status_id'] ?? null;
+        $task->job_schedule_id = $validated['job_schedule_id'] ?? null;
         $task->save();
+
+      
+        if (!empty($validated['assistence'])) {
+            $task->assistences()->attach($validated['assistence']);
+        }
+
         $task->load(['jobSchedule', 'taskStatus', 'vehicle']);
+
+       
 
         return successResponse('Success',new TaskResource($task));
         // return response()->json($task, 201);
@@ -77,7 +90,6 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $rules = [
             'job_schedule_id' => 'nullable|exists:job_schedules,id',
             'task_status_id'  => 'nullable|exists:task_statuses,id',
@@ -88,7 +100,8 @@ class TaskController extends Controller
             'end_time'        => 'required|date_format:H:i|after:start_time',
             'task_details'    => 'required|string',
             'reason'          => 'nullable|string',
-            'task_status_id' => 'nullable|exists:task_statuses,id',
+            'assistence'      => 'array',
+            'assistence.*'    => 'exists:technicians,id',
         ];
     
         $validator = Validator::make($request->all(), $rules);
@@ -101,6 +114,8 @@ class TaskController extends Controller
             ], 422);
         }
     
+        $validated = $validator->validated();
+    
         $task = Task::find($id);
     
         if (!$task) {
@@ -110,20 +125,27 @@ class TaskController extends Controller
             ], 404);
         }
     
-        $task->job_schedule_id = $request->job_schedule_id;
-        $task->task_status_id  = $request->task_status_id;
-        $task->vehicle_id      = $request->vehicle_id;
-        $task->start_datetime  = parseDateTimeOrNull($request->start_date, $request->start_time);
-        $task->end_datetime    = parseDateTimeOrNull($request->end_date, $request->end_time);
-        $task->task_details    = $request->task_details;
-        $task->reason          = $request->reason;
-        $task->task_status_id  = $request->task_status_id;
+        // Update task fields
+        $task->job_schedule_id = $validated['job_schedule_id'] ?? null;
+        $task->task_status_id  = $validated['task_status_id'] ?? null;
+        $task->vehicle_id      = $validated['vehicle_id'] ?? null;
+        $task->start_datetime  = parseDateTimeOrNull($validated['start_date'], $validated['start_time']);
+        $task->end_datetime    = parseDateTimeOrNull($validated['end_date'], $validated['end_time']);
+        $task->task_details    = $validated['task_details'];
+        $task->reason          = $validated['reason'] ?? null;
         $task->save();
-        $task->load(['jobSchedule', 'taskStatus', 'vehicle']);
-
-        return successResponse('Success',new TaskResource($task));
-      
+    
+        // ✅ Sync assistences (technicians)
+        if (isset($validated['assistence'])) {
+            $task->assistences()->sync($validated['assistence']);
+        }
+    
+        $task->load(['jobSchedule', 'taskStatus', 'vehicle', 'assistences']);
+    
+        return successResponse('Success', new TaskResource($task));
     }
+      
+    
 
     public function destroy($id)
     {

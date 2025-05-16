@@ -17,6 +17,7 @@ class VehicleController extends Controller
 
    public function getData(Request $request)
     {
+       
         $query = Vehicle::select('id', 'name', 'type','vehicle_number')->get();
 
         return DataTables::of($query)

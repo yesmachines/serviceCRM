@@ -8,10 +8,11 @@ use App\Http\Controllers\Auth\JobScheduleController;
 use App\Http\Controllers\Auth\JobStatusController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RoleController;
+use App\Http\Controllers\Auth\ServiceReportController;
 use App\Http\Controllers\Auth\ServiceTypeController;
 use App\Http\Controllers\Auth\TaskStatusController;
 use App\Http\Controllers\Auth\TechnicianController;
-use App\Http\Controllers\auth\VehicleController;
+use App\Http\Controllers\Auth\VehicleController;
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
@@ -58,6 +59,10 @@ Route::middleware('auth')->group(function () {
          
         Route::resource('task-statuses', TaskStatusController::class);
 
+        Route::resource('service-reports', ServiceReportController::class);
+        Route::get('service-reports-data/data', [ServiceReportController::class, 'getData'])->name('service-reports.data');
+
+        
 
 });
 

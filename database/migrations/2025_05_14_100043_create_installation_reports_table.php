@@ -14,11 +14,24 @@ return new class extends Migration
         Schema::create('installation_reports', function (Blueprint $table) {
             $table->id();
             // Foreign keys
-            $table->foreignId('job_schedule_id')->constrained('job_schedules')->onDelete('cascade');
-            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->dateTime('job_start_datetime');
-            $table->dateTime('job_end_datetime');
+            $table->foreignId('job_schedule_id')->nullable()->constrained('job_schedules')->onDelete('set null');
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
+            $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('set null');
+            $table->foreignId('brand_id')->nullable()->constrained('suppliers')->onDelete('set null');
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
+    
+            // Datetime fields
+            $table->dateTime('created_date')->nullable();
+            $table->dateTime('job_start_datetime')->nullable();
+            $table->dateTime('job_end_datetime')->nullable();
+
+            // Other fields
+            $table->string('serial_no')->nullable();
+            $table->text('names_of_participants')->nullable();
+            $table->string('client_representative')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('client_signature')->nullable(); // Will store image path
+
             $table->timestamps();
         });
     }

@@ -20,6 +20,7 @@ class Task extends Model
     {
         return $this->belongsTo(JobSchedule::class);
     }
+    
 
     public function taskStatus()
     {
@@ -30,4 +31,12 @@ class Task extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
+    public function assistences()
+    {
+        return $this->belongsToMany(Technician::class, 'task_assistances', 'task_id', 'technician_id')->withTimestamps();
+    }
+
+    
 }
+
+

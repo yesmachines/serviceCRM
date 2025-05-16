@@ -40,6 +40,13 @@ class Technician extends Model
         return $this->hasMany(JobSchedule::class, 'job_owner_id');
     }
 
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_assistances', 'technician_id', 'task_id')->withTimestamps();
+    }
+
+    
+
 
 
 
