@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\technician;
+namespace App\Http\Controllers\API\Technician;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\InstallationReportResource;
