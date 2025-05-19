@@ -41,14 +41,10 @@ class ServiceReportController extends Controller
         }
 
         $validated = $validator->validated();
-
+        $imagePath = null;
         if ($request->hasFile('client_signature')) {
-            $file = $request->file('client_signature');
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('client_signatures', $filename, 'public');
-            $data['client_signature'] = $path;
+            $imagePath = $request->file('client_signature')->store('client_signatures', 'public');
         }
-
         $report = new ServiceReport();
         $report->task_id     = $validated['task_id'];
         $report->description = $validated['description'];
@@ -60,7 +56,7 @@ class ServiceReportController extends Controller
         $report->client_representative= $validated['client_representative'];
         $report->designation= $validated['designation'];
         $report->contact_number= $validated['contact_number'];
-        $report->client_signature= $validated['client_signature'];
+        $report->client_signature= $imagePath;
         $report->save();
 
         $report->load(['task', 'technician', 'concludedBy']);
@@ -109,17 +105,17 @@ class ServiceReportController extends Controller
 
     $data = $validator->validated();
 
+
+
+
     // Handle client_signature image update
     if ($request->hasFile('client_signature')) {
         // Delete old file if it exists
         if ($report->client_signature && Storage::disk('public')->exists($report->client_signature)) {
             Storage::disk('public')->delete($report->client_signature);
         }
-
-        $file = $request->file('client_signature');
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('client_signatures', $filename, 'public');
-        $data['client_signature'] = $path;
+        $imagePath = $request->file('client_signature')->store('client_signature', 'public');
+        $report->client_signature = $imagePath;
     }
 
     $report->update($data);

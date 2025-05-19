@@ -18,8 +18,8 @@ class ServiceReportController extends Controller
     try {
         \Log::info('getData called');
 
-        $reports = ServiceReport::with(['task.jobSchedule', 'technician', 'concludedBy'])->latest()->get();
-
+        $reports = ServiceReport::with(['task.jobSchedule', 'technician.user', 'concludedBy'])->latest()->get();
+// dd( $reports);
         return DataTables::of($reports)
             ->addIndexColumn()
             ->addColumn('job_id', function ($row) {
@@ -53,18 +53,6 @@ class ServiceReportController extends Controller
 }
 
 
-public function show($id)
-{
-    $report = ServiceReport::with(['task.jobSchedule', 'technician', 'concludedBy'])->findOrFail($id);
-
- 
-    // If it's an AJAX request, return only partial view
-    if (request()->ajax()) {
-        return view('auth.service_reports.actions', compact('report'))->render();
-    }
-    // Otherwise fallback
-    abort(404);
-}
 
 }
 

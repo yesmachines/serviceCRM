@@ -29,9 +29,7 @@ class ServiceReportResource extends JsonResource
             'client_representative' => $this->client_representative,
             'designation'           => $this->designation,
             'contact_number'        => $this->contact_number,
-            'client_signature'      => $this->client_signature
-                ? asset('storage/' . $this->client_signature)
-                : null,
+            'client_signature'      =>  $this->client_signature ? asset('storage/' . $this->client_signature) : '',
             'created_at'            => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }

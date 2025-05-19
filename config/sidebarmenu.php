@@ -31,20 +31,20 @@ return [
       
 
       
-        // [
-        //     'text' => 'Reports',
-        //     'icon' => 'ri-file-list-line',
-        //     //'can' => 'settings',
-        //     'active' => ['service-report/*'],
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Service Report',
-        //             'route' => 'service-reports.index',
-        //             //'can' => 'role_read',
-        //             'active' => ['service-reports/*']
-        //         ],
-        //     ]
-        //     ],
+        [
+            'text' => 'Reports',
+            'icon' => 'ri-file-list-line',
+            //'can' => 'settings',
+            'active' => ['service-report/*'],
+            'submenu' => [
+                [
+                    'text' => 'Service Report',
+                    'route' => 'service-reports.index',
+                    //'can' => 'role_read',
+                    'active' => ['service-reports/*']
+                ],
+            ]
+            ],
 
 
 
