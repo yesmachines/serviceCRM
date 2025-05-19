@@ -95,7 +95,7 @@
             <!-- ========== Left Sidebar Start ========== -->
             <div class="leftside-menu">
                 <!-- Brand Logo Dark -->
-                <a href="index.html" class="logo logo-light">
+                <a href="{{route('dashboard')}}" class="logo logo-light">
                     <span class="logo-lg">
                         <img src="{{ asset('cms/assets/images/logo.png')}}" alt="dark logo">
                     </span>

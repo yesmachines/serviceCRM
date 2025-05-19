@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('installation_report_id', 'fk_feedback_report')
                   ->references('id')
                   ->on('installation_reports')
-                  ->onDelete('set null');
+                  ->onDelete('cascade');
         });
     }
 

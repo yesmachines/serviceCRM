@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('service_reports', function (Blueprint $table) {
             $table->id();
             // Foreign key to tasks table
-            $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete('set null');
+            $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete('cascade');
             // Report fields
             $table->longText('description')->nullable();
             $table->longText('observations')->nullable();
             $table->longText('actions_taken')->nullable();
             $table->longText('client_remark')->nullable();
             // Technicians
-            $table->foreignId('technician_id')->nullable()->constrained('technicians')->onDelete('set null'); 
+            $table->foreignId('technician_id')->nullable()->constrained('technicians')->onDelete('cascade'); 
             // Job attended 
-            $table->foreignId('concluded_by')->nullable()->constrained('users')->onDelete('set null'); // Job concluded by
+            $table->foreignId('concluded_by')->nullable()->constrained('users')->onDelete('cascade'); // Job concluded by
             // Client details
             $table->string('client_representative')->nullable();
             $table->string('designation')->nullable();

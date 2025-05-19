@@ -19,10 +19,16 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::table('demo_requests', function (Blueprint $table) {
-            $table->dropColumn('reference_no');
-        });
-    }
+   /**
+ * Reverse the migrations.
+ */
+        public function down(): void
+        {
+            if (Schema::hasColumn('demo_requests', 'reference_no')) {
+                Schema::table('demo_requests', function (Blueprint $table) {
+                    $table->dropColumn('reference_no');
+                });
+            }
+        }
+
 };

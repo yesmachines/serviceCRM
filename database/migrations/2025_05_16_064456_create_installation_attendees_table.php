@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('installation_attendees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('installation_report_id')->nullable()->constrained('installation_reports')->onDelete('set null');
-            $table->foreignId('technician_id')->nullable()->constrained('technicians')->onDelete('set null');
+            $table->foreignId('installation_report_id')->nullable()->constrained('installation_reports')->onDelete('cascade');
+            $table->foreignId('technician_id')->nullable()->constrained('technicians')->onDelete('cascade');
             $table->timestamps();
         });
     }

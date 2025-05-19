@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('job_schedule_id')
                   ->references('id')
                   ->on('job_schedules')
-                  ->onDelete('set null'); 
+                  ->onDelete('cascade'); 
         });
     }
 
@@ -27,7 +27,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('demo_request_details', function (Blueprint $table) {
-            $table->dropColumn('reference_no');
+            $table->dropForeign(['job_schedule_id']);
+            $table->dropColumn('job_schedule_id');
         });
     }
 };

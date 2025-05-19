@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('task_assistances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete('set null');
-            $table->foreignId('technician_id')->nullable()->constrained('technicians')->onDelete('set null');
+            $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete('cascade');
+            $table->foreignId('technician_id')->nullable()->constrained('technicians')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_schedule_id')->nullable()->constrained('job_schedules')->onDelete('set null');
-            $table->foreignId('task_status_id')->nullable()->constrained('task_statuses')->onDelete('set null');
-            $table->unsignedBigInteger('vehicle_id')->nullable()->constrained('vehicles')->onDelete('set null');
+            $table->foreignId('job_schedule_id')->nullable()->constrained('job_schedules')->onDelete('cascade');
+            $table->foreignId('task_status_id')->nullable()->constrained('task_statuses')->onDelete('cascade');
+            $table->unsignedBigInteger('vehicle_id')->nullable()->constrained('vehicles')->onDelete('cascade');
             $table->dateTime('start_datetime')->nullable(); 
             $table->dateTime('end_datetime')->nullable(); 
             $table->longText('task_details')->nullable(); 
