@@ -11,6 +11,17 @@ use Illuminate\Support\Str;
 
 class ServiceTypeController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware(function ($request, $next) {
+            if (!auth()->user()->hasRole('superadmin')) {
+                alert()->error('No Access!', 'You don\'t have permission to access this page.');
+                return redirect()->route('dashboard');
+            }
+
+            return $next($request);
+        });
+    }
     public function index(Request $request){
 
 
@@ -58,7 +69,8 @@ class ServiceTypeController extends Controller
             'daily_report' => $request->has('daily_report'),
         ]);
 
-        return redirect()->route('service-types.index')->with('success', 'Service type created successfully.');
+        alert()->success('success', 'Job type created successfully.');
+        return redirect()->route('service-types.index');
     }
 
     public function edit($id)
@@ -92,7 +104,8 @@ class ServiceTypeController extends Controller
 
         $serviceType->save();
 
-        return redirect()->route('service-types.index')->with('success', 'Service Type updated successfully.');
+        alert()->success('success', 'Job type updated successfully.');
+        return redirect()->route('service-types.index');
     }
 
     public function destroy($id)
@@ -116,7 +129,7 @@ class ServiceTypeController extends Controller
 
          return response()->json([
             'status' => true,
-            'message' => 'Service Type deleted successfully.'
+            'message' => 'Job Type deleted successfully.'
         ]);
     } catch (\Exception $e) {
         // Catch unexpected errors

@@ -19,6 +19,7 @@ class JobScheduleController extends Controller
 
     protected $jobScheduleService;
 
+
     public function __construct(JobScheduleServiceInterface $jobScheduleService)
     {
         $this->jobScheduleService = $jobScheduleService;
@@ -35,11 +36,13 @@ class JobScheduleController extends Controller
         return $this->jobScheduleService->getJobSchedulesForDataTable($request);     
     }
 
+    
+
     public function store(StoreJobScheduleRequest $request)
     {
         $this->jobScheduleService->createJobSchedule($request);
-
-        return redirect()->route('job-schedules.index')->with('success', 'Job schedule created successfully.');
+        alert()->success('success', 'Job schedule created successfully.');
+        return redirect()->route('job-schedules.index');
     }
 
 
@@ -61,9 +64,9 @@ class JobScheduleController extends Controller
     public function update(UpdateJobScheduleRequest $request, $id)
     {
         $this->jobScheduleService->updateJobSchedule($request->validated(), $id);
-    
-        return redirect()->route('job-schedules.index')
-                         ->with('success', 'Job schedule updated successfully.');
+
+        alert()->success('success', 'Job schedule updated successfully.');
+        return redirect()->route('job-schedules.index');
     }
 
     public function findOrder(Request $request)

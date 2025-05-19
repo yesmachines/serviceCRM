@@ -5,10 +5,10 @@
     <div class="page-title-right">
         <ol class="breadcrumb m-0">
             <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboards</a></li>
-            <li class="breadcrumb-item active">Service Types</li>
+            <li class="breadcrumb-item active">Job Types</li>
         </ol>
     </div>
-    <h4 class="page-title">Service Types</h4>
+    <h4 class="page-title">Job Types</h4>
     @endsection
 
     @section('content')
@@ -21,7 +21,7 @@
                                     <!-- <h4 class="header-title mb-0">Vehicles</h4> -->
                                       <h4 class="header-title mb-0"></h4>
                                     <a href="{{route('service-types.create')}}" class="btn btn-mg btn-secondary">
-                                        {{ __('Add Service Types') }}
+                                        {{ __('Add Job Types') }}
                                     </a>
                                 </div>
 

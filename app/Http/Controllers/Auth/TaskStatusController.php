@@ -66,7 +66,8 @@ class TaskStatusController extends Controller
                 'active' => $request->has('active'),
             ]);
 
-            return redirect()->route('task-statuses.index')->with('success', 'Task status created successfully.');
+            alert()->success('success', 'Task status created successfully.');
+            return redirect()->route('task-statuses.index');
     }
 
     public function edit(TaskStatus $taskStatus)
@@ -88,7 +89,8 @@ class TaskStatusController extends Controller
             'active' => $request->has('active'),
         ]);
 
-        return redirect()->route('task-statuses.index')->with('success', 'Task status updated successfully.');
+        alert()->success('success', 'Task status updated successfully.');
+        return redirect()->route('task-statuses.index');
     }
 
     /**

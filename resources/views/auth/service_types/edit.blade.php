@@ -5,10 +5,10 @@
     <div class="page-title-right">
         <ol class="breadcrumb m-0">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Service Types</li>
+            <li class="breadcrumb-item active">Job Types</li>
         </ol>
     </div>
-    <h4 class="page-title"> Service Types</h4>
+    <h4 class="page-title"> Job Types</h4>
     <!-- Technicians -->
     @endsection
 
@@ -17,7 +17,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="header-title">Update Service Types</h4>
+                    <h4 class="header-title">Update Job Types</h4>
                 </div>
                 <div class="card-body">
                   <form method="POST" action="{{ route('service-types.update', $serviceType->id) }}">

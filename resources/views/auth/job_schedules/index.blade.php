@@ -28,14 +28,12 @@
                     <table id="jobschedules-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Job No</th>
-                                <th>Job Type</th>
-                                <th>Customer Name</th>
-                                <th>Product</th>
-                                <th>Time</th>
-                                <!-- <th>Status</th> -->
-                                <th>Actions</th>
+                            <th>#</th>
+                            <th>Job No</th>
+                            <th>Job Type</th>
+                            <th>Customer Name</th>
+                            <!-- <th>Product</th> -->
+                            <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,29 +57,33 @@
     <script src="{{asset('cms/assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
     <script src="{{asset('cms/assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
     <!-- Jobs DataTable Initialization -->
-     <script>
+    <script>
         $(document).ready(function () {
             $('#jobschedules-datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                language:{paginate:{previous:"<i class='ri-arrow-left-s-line'>",next:"<i class='ri-arrow-right-s-line'>"}},drawCallback:function(){$(".dataTables_paginate > .pagination").addClass("pagination-rounded")},
                 ajax: '{{ route('job-schedules.data') }}',
+                language: {
+                    paginate: {
+                        previous: "<i class='ri-arrow-left-s-line'>",
+                        next: "<i class='ri-arrow-right-s-line'>"
+                    }
+                },
+                drawCallback: function () {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                },
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'job_no', name: 'job_no' },
                     { data: 'job_type', name: 'job_type' },
                     { data: 'customer', name: 'customer.fullname' },
-
-                    { data: 'product', name: 'product' },
-                    { data: 'time', name: 'time' },
-                   
+                    // { data: 'product', name: 'product.title' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false },
                 ],
                 responsive: true
             });
-            });
-          
-      </script>
+        });
+    </script>
 
        @endsection
 

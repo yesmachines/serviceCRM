@@ -27,6 +27,7 @@ class JobScheduleService implements JobScheduleServiceInterface
 
   public function getJobSchedulesForDataTable(Request $request)
   {
+   
     $query = JobSchedule::with(['customer', 'company', 'product', 'servicetype', 'jobstatus'])->get();
 
     return DataTables::of($query)
@@ -40,16 +41,22 @@ class JobScheduleService implements JobScheduleServiceInterface
       ->addColumn('customer', function ($row) {
             return $row->customer->fullname ?? '-';
         })
-        ->addColumn('product', function ($row) {
-            return $row->product->title ?? '-';
-        })
-       ->addColumn('time', function ($row) {
-            return ($row->start_datetime instanceof \Carbon\Carbon)
-                ? $row->start_datetime->format('Y-m-d H:i')
-                : ($row->start_datetime ?? '-');
-        })
+        // ->addColumn('product', function ($row) {
+        //     return $row->product->title ?? '-';
+        // })
+      
         ->addColumn('actions', function ($row) {
-            return view('auth.job_schedules.actions', ['job' => $row])->render();
+            try {
+                return view('auth.job_schedules.actions', ['job' => $row])->render();
+            } catch (\Throwable $e) {
+                \Log::error('Job Schedule Actions View Error', [
+                    'job_id' => $row->id ?? null,
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+        
+                return 'Error rendering actions';
+            }
         })
         ->rawColumns(['actions'])
         ->make(true);

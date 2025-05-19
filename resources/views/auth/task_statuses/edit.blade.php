@@ -5,7 +5,7 @@
         <div class="page-title-right">
             <ol class="breadcrumb m-0">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('job-statuses.index') }}">Task Statuses</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('task-statuses.index') }}">Task Statuses</a></li>
                 <li class="breadcrumb-item active">Edit</li>
             </ol>
         </div>
@@ -29,7 +29,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="status" class="form-label">Status</label>
-                                        <input type="text" id="status " name="status" class="form-control @error('status') is-invalid @enderror" value="{{ old('status', $jobStatus->status) }}">
+                                        <input type="text" id="status " name="status" class="form-control @error('status') is-invalid @enderror" value="{{ old('status', $taskStatus->status) }}">
                                         @error('status')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -40,7 +40,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="priority" class="form-label">Priority</label>
-                                        <input type="text" id="priority" name="priority" class="form-control @error('priority') is-invalid @enderror" value="{{ old('priority', $jobStatus->priority) }}">
+                                        <input type="text" id="priority" name="priority" class="form-control @error('priority') is-invalid @enderror" value="{{ old('priority', $taskStatus->priority) }}">
                                         @error('priority')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -51,7 +51,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="active" id="active" value="1" {{ old('active', $jobStatus->active) ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="checkbox" name="active" id="active" value="1" {{ old('active', $taskStatus->active) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="active">
                                                 Active
                                             </label>
@@ -64,7 +64,7 @@
                             </div> <!-- end row -->
 
                             <button type="submit" class="btn btn-primary">Update</button>
-                            <a href="{{ route('job-statuses.index') }}" class="btn btn-secondary">Cancel</a>
+                            <a href="{{ route('task-statuses.index') }}" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div> <!-- end card-body -->
                 </div> <!-- end card -->

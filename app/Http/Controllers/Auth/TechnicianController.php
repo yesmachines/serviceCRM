@@ -147,9 +147,8 @@ class TechnicianController extends Controller {
             $user->roles()->sync($roleIds);
         }
 
-
-
-        return redirect()->route('technicians.index')->with('success', 'Technician created successfully.');
+        alert()->success('success', 'Employee created successfully.');
+        return redirect()->route('technicians.index');
     }
 
     /**
@@ -179,7 +178,6 @@ class TechnicianController extends Controller {
             return redirect()->route('technicians.index')->with('error', 'User or employee record not found.');
         }
       
-       
 
         // Validate input
         $request->validate([
@@ -197,6 +195,8 @@ class TechnicianController extends Controller {
             'additional_charge' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+
 
         // Update User table
         $user->name = $request->input('name');
@@ -226,20 +226,19 @@ class TechnicianController extends Controller {
 
         $aclRoles = $request->input('acl', []); // array of role IDs
         // Sync roles first
-
+       
         if(!empty( $aclRoles )){
             if (in_array(8,  $aclRoles)) {
                 $user->roles()->sync($aclRoles);
            }
         }
-      
-
-        
-        
-
+     
         // Check if technician role is among assigned roles
         $technicianRoleId = Role::where('name', 'servicetechnician')->value('id');
+
+
         $hasTechnicianRole = in_array($technicianRoleId, $aclRoles);
+      
 
         if ($hasTechnicianRole) {
             if ($user->technician) {
@@ -264,7 +263,11 @@ class TechnicianController extends Controller {
         $user->save();
         $employee->save();
 
-        return redirect()->route('technicians.index')->with('success', 'Technician updated successfully.');
+        
+        alert()->success('success', 'Employee updated successfully.');
+        return redirect()->route('technicians.index');
+
+      
     }
 
     /**
@@ -272,6 +275,6 @@ class TechnicianController extends Controller {
      */
     public function destroy(Technician $technician) {
         $technician->delete();
-        return response()->json(['status' => true, 'message' => 'Technician deleted successfully.']);
+        return response()->json(['status' => true, 'message' => 'Employee deleted successfully.']);
     }
 }

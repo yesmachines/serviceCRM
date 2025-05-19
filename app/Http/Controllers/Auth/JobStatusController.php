@@ -9,6 +9,18 @@ use Yajra\DataTables\Facades\DataTables;
 
 class JobStatusController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware(function ($request, $next) {
+            if (!auth()->user()->hasRole('superadmin')) {
+                alert()->error('No Access!', 'You don\'t have permission to access this page.');
+                return redirect()->route('dashboard');
+            }
+
+            return $next($request);
+        });
+    }
+
      public function index(Request $request){
 
 
@@ -54,7 +66,10 @@ class JobStatusController extends Controller
                 'active' => $request->has('active'),
             ]);
 
-            return redirect()->route('job-statuses.index')->with('success', 'Job status created successfully.');
+            alert()->success('success', 'Job status created successfully.');
+            return redirect()->route('job-statuses.index');
+
+         
     }
 
     public function edit(JobStatus $jobStatus)
@@ -76,8 +91,9 @@ class JobStatusController extends Controller
             'priority' => $request->input('priority'),
             'active' => $request->has('active'),
         ]);
-
-        return redirect()->route('job-statuses.index')->with('success', 'Job status updated successfully.');
+        
+        alert()->success('success', 'Job status updated successfully.');
+        return redirect()->route('job-statuses.index');
     }
 
     /**
