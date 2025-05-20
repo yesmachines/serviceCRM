@@ -19,29 +19,39 @@ class InstallationReportController extends Controller
     {
         try {
             \Log::info('InstallationReportController@getData called');
-
-            $reports = InstallationReport::with(['task.jobSchedule', 'technician.user', 'concludedBy'])->latest()->get();
-
+    
+            $reports = InstallationReport::with(['jobSchedule', 'clientFeedbacks', 'technicianFeedbacks'])
+                ->latest()
+                ->get()
+                ->unique('id')
+                ->values();
+    
             return DataTables::of($reports)
                 ->addIndexColumn()
                 ->addColumn('job_id', function ($row) {
-                    return optional($row->task->jobSchedule)->job_no ?? '-';
+                    return optional($row->jobSchedule)->job_no ?? '-';
                 })
-                ->addColumn('task_details', function ($row) {
-                    return optional($row->task)->task_details ?? '-';
+                ->addColumn('client_feedback', function ($row) {
+                    return $row->clientFeedbacks->pluck('feedback')->implode('<br>') ?: '-';
                 })
-                ->addColumn('technician_name', function ($row) {
-                    return optional($row->technician)->name ?? '-';
-                })
-                ->addColumn('client_remark', function ($row) {
-                    return $row->client_remark ?? '-';
+                ->addColumn('technician_feedback', function ($row) {
+                    return $row->technicianFeedbacks->pluck('feedback')->implode('<br>') ?: '-';
                 })
                 ->addColumn('actions', function ($row) {
                     return view('auth.installation_reports.actions', ['report' => $row])->render();
                 })
-                ->rawColumns(['actions'])
-                ->make(true);
 
+                // ->addColumn('actions', function ($row) {
+                //     return view('auth.installation_reports.actions', ['report' => $row])->render();
+                // })
+
+                
+                ->addColumn('actions', function ($row) {
+                    return view('auth.installation_reports.actions', ['report' => $row])->render();
+                })
+                ->rawColumns(['client_feedback', 'technician_feedback', 'actions'])
+                ->make(true);
+    
         } catch (\Exception $e) {
             \Log::error('InstallationReportController@getData error: ' . $e->getMessage());
             return response()->json([
@@ -51,4 +61,5 @@ class InstallationReportController extends Controller
             ], 500);
         }
     }
+    
 }

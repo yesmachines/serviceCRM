@@ -26,10 +26,10 @@
                             <tr>
                               <th>#</th>
                               <th>Job Id</th>
-                              <th>Task Details</th>
-                              <th>Technician Name</th>
-                              <th>Attendees</th> <!-- New Column -->
-                              <th>Client Remark</th>
+                              <th>Client Feedback</th>
+                              <th>Technician Feedback</th>
+                              <!-- <th>Attendees</th> <!-- New Column -->
+                              <!-- <th>Client Remark</th> --> -->
                               <th>Actions</th>
                             </tr>
                            
@@ -70,14 +70,16 @@
             columns: [
               { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'job_id', name: 'job_id' },
-            { data: 'task_details', name: 'task_details' },
-            { data: 'technician_name', name: 'technician_name' },
-            { data: 'attendees', name: 'attendees' }, // New column for attendees
-            { data: 'client_remark', name: 'client_remark' },
+            { data: 'client_feedback', name: 'client_feedback' },
+            { data: 'technician_feedback', name: 'technician_feedback' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false },
             ],
             responsive: true
         });
     </script>
+
+
+
     @endsection
 </x-app-layout>
+
