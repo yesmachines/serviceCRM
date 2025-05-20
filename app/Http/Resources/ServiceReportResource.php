@@ -26,6 +26,7 @@ class ServiceReportResource extends JsonResource
             'technician'            => $this->whenLoaded('technician'),
             'concluded_by'          => $this->concluded_by,
             'concluded_user'        => $this->whenLoaded('concludedBy'),
+            'client_feedbacks'      => ClientFeedbackResource::collection($this->whenLoaded('clientFeedbacks')),
             'client_representative' => $this->client_representative,
             'designation'           => $this->designation,
             'contact_number'        => $this->contact_number,

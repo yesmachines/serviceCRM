@@ -19,7 +19,7 @@ class ServiceReportController extends Controller
         \Log::info('getData called');
 
         $reports = ServiceReport::with(['task.jobSchedule', 'technician.user', 'concludedBy'])->latest()->get();
-// dd( $reports);
+
         return DataTables::of($reports)
             ->addIndexColumn()
             ->addColumn('job_id', function ($row) {
@@ -29,8 +29,9 @@ class ServiceReportController extends Controller
                 return optional($row->task)->task_details ?? '-';
             })
             ->addColumn('technician_name', function ($row) {
-                return optional($row->technician)->name ?? '-';
+                return optional($row->technician->user)->name ?? '-';
             })
+            
             ->addColumn('client_remark', function ($row) {
                 return $row->client_remark ?? '-';
             })

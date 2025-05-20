@@ -38,12 +38,20 @@ class ServiceReport extends Model
         return $this->belongsTo(Technician::class);
     }
 
+    
+
     /**
      * Get the user who concluded the job.
      */
     public function concludedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'concluded_by');
+    }
+
+
+    public function clientFeedbacks()
+    {
+        return $this->hasMany(ServiceReportClientFeedback::class);
     }
     
 }

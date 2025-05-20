@@ -37,10 +37,14 @@ class User extends Authenticatable {
         return $this->hasOne(Technician::class);
     }
 
+    
+
     // Relation to Employee (assuming user → hasOne employee)
+   
+
     public function employee()
     {
-        return $this->hasOne(Employee::class);
+        return $this->hasOne(Employee::class, 'user_id');
     }
 
     /**

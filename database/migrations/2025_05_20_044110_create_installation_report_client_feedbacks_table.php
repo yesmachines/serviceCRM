@@ -11,27 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('installation_technician_feedbacks', function (Blueprint $table) {
+        Schema::create('installation_report_client_feedbacks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('installation_report_id')->nullable();
-            $table->text('label');
-            $table->string('feedback')->nullable();
-            $table->longText('remarks')->nullable();
-            $table->timestamps();
-
-            // Manually name the foreign key constraint
-            $table->foreign('installation_report_id', 'fk_feedback_report')
+            // Shorter, custom foreign key name
+            $table->foreign('installation_report_id', 'fk_ir_feedback')
                   ->references('id')
                   ->on('installation_reports')
                   ->onDelete('cascade');
+        
+            $table->text('label');
+            $table->string('feedback')->nullable();
+            $table->longText('remarks')->nullable();
+        
+            $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('installation_technician_feedbacks');
+        Schema::dropIfExists('installation_report_client_feedbacks');
     }
 };

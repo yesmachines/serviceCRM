@@ -28,6 +28,7 @@ class InstallationReport extends Model
         return $this->belongsTo(JobSchedule::class);
     }
 
+
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -47,4 +48,22 @@ class InstallationReport extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function attendees()
+    {
+        return $this->hasMany(InstallationAttendee::class);
+    }
+    public function clientFeedbacks()
+    {
+        return $this->hasMany(InstallationReportClientFeedback::class);
+    }
+
+    public function technicianFeedbacks()
+    {
+        return $this->hasMany(InstallationTechnicianFeedback::class);
+    }
+
+   
+    
+
 }

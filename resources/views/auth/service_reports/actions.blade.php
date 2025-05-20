@@ -28,18 +28,17 @@
                             <tr><th>Concluded By</th><td>{{ optional($report->concludedBy)->name }}</td></tr>
                             <tr><th>Task Details</th><td>{{ optional($report->task)->task_details }}</td></tr>
                             <tr><th>Job Schedule No</th><td>{{ optional($report->task->jobSchedule)->job_no }}</td></tr>
-                            <tr><th>Job Location</th><td>{{ optional($report->task->jobSchedule)->location }}</td></tr>
+                            <tr><th>Job Location</th><td>{{ $report->task->jobSchedule->location ?? '' }}</td></tr>
                             <tr><th>Job Start</th><td>{{ optional($report->task->jobSchedule)->start_datetime }}</td></tr>
                             <tr><th>Job End</th><td>{{ optional($report->task->jobSchedule)->end_datetime }}</td></tr>
                             <tr>
                                 <th>Client Signature</th>
                                 <td>
-                                    @php use Illuminate\Support\Facades\Storage; @endphp
-                                    @if(Storage::disk('public')->exists($report->client_signature))
-                                        <img src="{{ asset('storage/' . $report->client_signature) }}" alt="Client Signature" class="img-fluid" style="max-height: 200px;">
-                                    @else
-                                        <em>No signature available</em>
-                                    @endif
+                                @if($report->client_signature && Storage::disk('public')->exists($report->client_signature))
+                                    <img src="{{ asset('storage/' . $report->client_signature) }}" alt="Client Signature" class="img-fluid" style="max-height: 200px;">
+                                @else
+                                    <em>No signature available</em>
+                                @endif
                                 </td>
                             </tr>
                         </tbody>

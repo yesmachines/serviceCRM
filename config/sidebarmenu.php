@@ -28,9 +28,6 @@ return [
             'active' => ['job-schedules/*']
         ],
 
-      
-
-      
         [
             'text' => 'Reports',
             'icon' => 'ri-file-list-line',
@@ -42,6 +39,13 @@ return [
                     'route' => 'service-reports.index',
                     //'can' => 'role_read',
                     'active' => ['service-reports/*']
+                ],
+
+                [
+                    'text' => 'Installation Report',
+                    'route' => 'installation-reports.index',
+                    //'can' => 'role_read',
+                    'active' => ['installation-reports/*']
                 ],
             ]
             ],

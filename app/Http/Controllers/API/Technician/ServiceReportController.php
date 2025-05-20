@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API\Technician;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceReportResource;
+use App\Models\ClientFeedback;
 use App\Models\ServiceReport;
+use App\Models\ServiceReportClientFeedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +22,6 @@ class ServiceReportController extends Controller
 
     public function store(Request $request)
     {
-       
         $validator = Validator::make($request->all(), [
             'task_id'               => 'nullable|exists:tasks,id',
             'description'           => 'nullable|string',
@@ -33,6 +34,7 @@ class ServiceReportController extends Controller
             'designation'           => 'nullable|string|max:255',
             'contact_number'        => 'nullable|string|max:50',
             'client_signature' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'client_feedbacks' => 'nullable|array',
         ]);
 
         if ($validator->fails()) {
@@ -59,7 +61,19 @@ class ServiceReportController extends Controller
         $report->client_signature= $imagePath;
         $report->save();
 
-        $report->load(['task', 'technician', 'concludedBy']);
+        if (!empty($validated['client_feedbacks']) && is_array($validated['client_feedbacks'])) {
+            foreach ($validated['client_feedbacks'] as $label => $feedback) {
+                ServiceReportClientFeedback::create([
+                    'service_report_id' => $report->id,
+                    'label' => $label,
+                    'feedback' => $feedback,
+                    'remark' => $request->remarks ?? null,
+                ]);
+           }
+        }
+
+
+        $report->load(['task', 'technician', 'concludedBy','clientFeedbacks']);
 
         return successResponse('Success',new ServiceReportResource($report));
 
@@ -83,7 +97,6 @@ class ServiceReportController extends Controller
     if (!$report) {
         return errorResponse('Service report not found.', null, 404);
     }
-    
 
     $validator = Validator::make($request->all(), [
         'task_id'               => 'nullable|exists:tasks,id',
@@ -97,6 +110,7 @@ class ServiceReportController extends Controller
         'designation'           => 'nullable|string|max:255',
         'contact_number'        => 'nullable|string|max:50',
         'client_signature'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'client_feedbacks' => 'nullable|array',
     ]);
 
     if ($validator->fails()) {
@@ -105,9 +119,19 @@ class ServiceReportController extends Controller
 
     $data = $validator->validated();
 
-
-
-
+             
+    if (!empty($data['client_feedbacks']) && is_array($data['client_feedbacks'])) {
+        $report->clientFeedbacks()->delete();
+        foreach ($data['client_feedbacks'] as $label => $feedback) {
+            ServiceReportClientFeedback::create([
+                'service_report_id' => $report->id,
+                'label' => $label,
+                'feedback' => $feedback,
+                'remarks' => $request->remarks ?? null,
+            ]);
+       }
+    }
+    
     // Handle client_signature image update
     if ($request->hasFile('client_signature')) {
         // Delete old file if it exists
@@ -120,11 +144,11 @@ class ServiceReportController extends Controller
 
     $report->update($data);
 
-    $report->load(['task', 'technician', 'concludedBy']);
+    $report->load(['task', 'technician', 'concludedBy','clientFeedbacks']);
 
     return successResponse('Success',new ServiceReportResource($report));
 
-    }
+}
 
     public function destroy($id)
     {
