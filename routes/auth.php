@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\DemoClientFeedbackController;
 use App\Http\Controllers\Auth\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\HomeController;
@@ -51,6 +52,8 @@ use App\Http\Controllers\Auth\VehicleController;
         Route::resource('installation-reports', InstallationReportController::class);
         Route::get('installation-data/data', [InstallationReportController::class, 'getData'])->name('installation-reports.data');
 
+        Route::resource('demo-client-reports', DemoClientFeedbackController::class)->except('show');
+        Route::get('demo-client-reports/data', [DemoClientFeedbackController::class, 'getData'])->name('demo-client-reports.data');
         
 
 });

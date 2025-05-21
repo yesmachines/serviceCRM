@@ -20,12 +20,13 @@ class InstallationReportController extends Controller
         try {
             \Log::info('InstallationReportController@getData called');
     
-            $reports = InstallationReport::with(['jobSchedule', 'clientFeedbacks', 'technicianFeedbacks'])
+            $reports = InstallationReport::with(['jobSchedule', 'clientFeedbacks', 'technicianFeedbacks',
+            'order','brand','product','attendees.user','company'])
                 ->latest()
                 ->get()
                 ->unique('id')
                 ->values();
-    
+
             return DataTables::of($reports)
                 ->addIndexColumn()
                 ->addColumn('job_id', function ($row) {
@@ -40,12 +41,6 @@ class InstallationReportController extends Controller
                 ->addColumn('actions', function ($row) {
                     return view('auth.installation_reports.actions', ['report' => $row])->render();
                 })
-
-                // ->addColumn('actions', function ($row) {
-                //     return view('auth.installation_reports.actions', ['report' => $row])->render();
-                // })
-
-                
                 ->addColumn('actions', function ($row) {
                     return view('auth.installation_reports.actions', ['report' => $row])->render();
                 })

@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Technician\UserController;
 use App\Http\Controllers\API\CommonController;
-use App\Http\Controllers\api\Technician\InstallationReportController;
-use App\Http\Controllers\api\Technician\ServiceReportController;
-use App\Http\Controllers\api\Technician\TaskController;
+use App\Http\Controllers\API\Technician\InstallationReportController;
+use App\Http\Controllers\API\Technician\ServiceReportController;
+use App\Http\Controllers\API\Technician\TaskController;
+use App\Http\Controllers\API\Technician\DemoClientFeedbackController;
 use App\Models\InstallationReport;
 
 Route::middleware(['api'])
@@ -23,4 +24,5 @@ Route::middleware(['auth:technician', 'ability:servicetechnician,dcm'])
             Route::resource('tasks', TaskController::class);
             Route::apiResource('service-reports', ServiceReportController::class);
             Route::apiResource('installation-reports', InstallationReportController::class);
+            Route::apiResource('demo-client-feedbacks',DemoClientFeedbackController::class);
         });

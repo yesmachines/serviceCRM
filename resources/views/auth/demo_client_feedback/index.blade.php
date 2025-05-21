@@ -20,16 +20,18 @@
                 </div>
 
                 <div class="card-body">
-                    <table id="installation-report-datatable" class="table table-striped dt-responsive nowrap w-100">
+                    <table id="demo-client-report-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                             <tr>
                               <th>#</th>
                               <th>Job Id</th>
-                              <th>Client Feedback</th>
-                              <th>Technician Feedback</th>
+                              <th>Demo Objective</th>
+                              <th>Designation</th>
+                              <th>Rating</th>
                               <th>Actions</th>
                             </tr>
+
                            
                         </thead>
                         <tbody></tbody>
@@ -52,7 +54,7 @@
     <script src="{{ asset('cms/assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
 
     <script>
-        $('#installation-report-datatable').DataTable({
+        $('#demo-client-report-datatable').DataTable({
             processing: true,
             serverSide: true,
             language: {
@@ -64,18 +66,19 @@
             drawCallback: function () {
                 $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
             },
-            ajax: '{{ route('installation-reports.data') }}',
+            ajax: '{{ route('demo-client-reports.data') }}',
             columns: [
               { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'job_id', name: 'job_id' },
-            { data: 'client_feedback', name: 'client_feedback' },
-            { data: 'technician_feedback', name: 'technician_feedback' },
-            { data: 'actions', name: 'actions', orderable: false, searchable: false },
+           
+        { data: 'job_id', name: 'job_id' },
+        { data: 'demo_objective', name: 'demo_objective' },
+        { data: 'designation', name: 'designation' },
+        { data: 'rating', name: 'rating' },
+        { data: 'actions', name: 'actions', orderable: false, searchable: false }
             ],
             responsive: true
         });
     </script>
-
 
 
     @endsection

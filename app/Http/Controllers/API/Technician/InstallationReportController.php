@@ -72,6 +72,7 @@ class InstallationReportController extends Controller
         $report->designation = $data['contact_number'] ?? null;
         $report->job_start_datetime = parseDateTimeOrNull($request->start_date, $request->start_time);
         $report->job_end_datetime = parseDateTimeOrNull($request->close_date, $request->end_time);
+        $report->client_signature =  $data['client_signature'];
         // $jobSchedule->created_date = parseDateTimeOrNull($request->close_date, $request->close_time);
         $report->save();
       

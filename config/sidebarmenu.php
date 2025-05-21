@@ -34,11 +34,12 @@ return [
             //'can' => 'settings',
             'active' => ['service-report/*'],
             'submenu' => [
+
                 [
-                    'text' => 'Service Report',
-                    'route' => 'service-reports.index',
+                    'text' => 'Demo Client Feedback',
+                    'route' => 'demo-client-reports.index',
                     //'can' => 'role_read',
-                    'active' => ['service-reports/*']
+                    'active' => ['demo-client-reports/*']
                 ],
 
                 [
@@ -47,6 +48,16 @@ return [
                     //'can' => 'role_read',
                     'active' => ['installation-reports/*']
                 ],
+
+                [
+                    'text' => 'Service Report',
+                    'route' => 'service-reports.index',
+                    //'can' => 'role_read',
+                    'active' => ['service-reports/*']
+                ],
+
+                
+              
             ]
             ],
 
