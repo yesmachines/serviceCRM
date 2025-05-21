@@ -26,7 +26,7 @@
             <div class="row mb-3">
                         <!-- First Dropdown -->
                         <div class="col-lg-3">
-                            <label for="job_id_filter_1" class="form-label">Filter by Job ID</label>
+                            <label for="job_id_filter_1" class="form-label">Job No</label>
                             <select id="job_id_filter_1" class="form-control select2" data-toggle="select2">
                                 <option value="">All Job IDs</option>
                                 @foreach($jobSchedules as $job)
@@ -37,7 +37,7 @@
 
                         <!-- Second Dropdown -->
                         <div class="col-lg-3">
-                            <label for="job_id_filter_2" class="form-label">Filter by Job Status</label>
+                            <label for="job_id_filter_2" class="form-label">Job Status</label>
                             <select id="job_id_filter_2" class="form-control">
                                 <option value="">All Job IDs</option>
                                 @foreach($jobStatus as $job)

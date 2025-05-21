@@ -27,7 +27,7 @@
             <div class="row mb-3">
                     <!-- Filter by Job ID -->
                     <div class="col-lg-3">
-                        <label for="job_id_filter" class="form-label">Filter by Job ID</label>
+                        <label for="job_id_filter" class="form-label">Job No</label>
                         <select id="job_id_filter" class="form-control select2" data-toggle="select2">
                             <option value="">All Job IDs</option>
                             @foreach($jobSchedules as $job)
@@ -38,7 +38,7 @@
 
                     <!-- Filter by Task Status -->
                     <div class="col-lg-3">
-                        <label for="task_status_filter" class="form-label">Filter by Task Status</label>
+                        <label for="task_status_filter" class="form-label">Task Status</label>
                         <select id="task_status_filter" class="form-control select2">
                             <option value="">All Task Status</option>
                             @foreach($taskStatus as $task)
@@ -49,7 +49,7 @@
 
                     <!-- Filter by Company -->
                     <div class="col-lg-3">
-                        <label for="company_filter" class="form-label">Filter by Company</label>
+                        <label for="company_filter" class="form-label">Company</label>
                         <select id="company_filter" class="form-control select2" data-toggle="select2">
                             <option value="">All Companies</option>
                             @foreach($companies as $company)
@@ -59,10 +59,6 @@
                     </div>
                 </div>
 
-                                
-
-
-                               
                                     <table id="service-report-datatable" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
