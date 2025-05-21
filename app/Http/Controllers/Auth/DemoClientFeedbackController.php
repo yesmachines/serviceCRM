@@ -4,55 +4,69 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\DemoClientFeedback;
+use App\Models\JobSchedule;
+use App\Models\JobStatus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class DemoClientFeedbackController extends Controller
 {
     public function index(Request $request){
-
-        return view('auth.demo_client_feedback.index');
+        $jobSchedules = JobSchedule::orderBy('job_no')->get();
+        $jobStatus = JobStatus::get();
+        return view('auth.demo_client_feedback.index',compact('jobSchedules','jobStatus'));
     }
+
+   
 
 
     public function getData(Request $request)
     {
-        try {
-            \Log::info('DemoClientReportController@getData called');
+        $query = DemoClientFeedback::with('jobSchedule.jobStatus');
     
-            $reports = DemoClientFeedback::with('jobSchedule')
-            ->latest()
-            ->get()
-            ->unique('id')
-            ->values();
-        
+        if ($request->filled('job_id')) {
+            $query->where('job_schedule_id', $request->job_id);
+        }
+    
+        if ($request->filled('job_status')) {
+            $query->whereHas('jobSchedule.jobStatus', function ($q) use ($request) {
+                $q->where('id', $request->job_status);
+            });
+        }
+    
+        if ($request->filled('start_date')) {
+            $query->whereHas('jobSchedule', function ($q) use ($request) {
+                $q->whereDate('start_datetime', '>=', $request->start_date);
+            });
+        }
+    
+        if ($request->filled('end_date')) {
+            $query->whereHas('jobSchedule', function ($q) use ($request) {
+                $q->whereDate('end_datetime', '<=', $request->end_date);
+            });
+        }
+    
+        $reports = $query->latest()->get()->unique('id')->values();
+    
         return DataTables::of($reports)
             ->addIndexColumn()
-            ->addColumn('job_id', function ($row) {
-                return optional($row->jobSchedule)->job_no ?? '-';
+            ->addColumn('job_id', fn($row) => optional($row->jobSchedule)->job_no ?? '-')
+            ->addColumn('job_status', fn($row) => optional(optional($row->jobSchedule)->jobStatus)->status ?? '-')
+            ->addColumn('job_start_time', function ($row) {
+                $start = optional($row->jobSchedule)->start_datetime;
+                return $start ? Carbon::parse($start)->format('d M Y h:i A') : '-';
             })
-            ->addColumn('demo_objective', function ($row) {
-                return $row->demo_objective ?? '-';
+            ->addColumn('job_end_time', function ($row) {
+                $end = optional($row->jobSchedule)->end_datetime;
+                return $end ? Carbon::parse($end)->format('d M Y h:i A') : '-';
             })
-            ->addColumn('designation', function ($row) {
-                return $row->designation ?? '-';
-            })
-            ->addColumn('rating', function ($row) {
-                return $row->rating ?? '-';
-            })
+            ->addColumn('designation', fn($row) => $row->result ?? '-')
+            ->addColumn('rating', fn($row) => $row->rating ?? '-')
             ->addColumn('actions', function ($row) {
                 return view('auth.demo_client_feedback.actions', ['report' => $row])->render();
             })
             ->rawColumns(['actions'])
             ->make(true);
-    
-        } catch (\Exception $e) {
-            \Log::error('ClientFeedbackController@getData error: ' . $e->getMessage());
-            return response()->json([
-                'error' => true,
-                'message' => 'Internal Server Error',
-                'details' => $e->getMessage()
-            ], 500);
-        }
     }
 }

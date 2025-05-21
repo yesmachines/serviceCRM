@@ -23,12 +23,13 @@
                         $end = $report->job_end_datetime ? Carbon::parse($report->job_end_datetime)->format('d M Y h:i A') : null;
                         @endphp
                            
-                            <tr><th>Job Schedule No</th><td>{{$report->jobSchedule->job_no ?? ''}}</td></tr>
-                            <tr><th>Job Location</th><td>{{$report->jobSchedule->location ?? ''}}</td></tr>
-                            <tr><th>Job Contact No</th><td>{{$report->jobSchedule->contact_no ?? ''}}</td></tr>
-                            <tr><th>Job Strat Time and Date</th><td>{{ $start ?? ''}}</td></tr>
-                            <tr><th>Job End Time and Date</th><td>{{ $end}}</td></tr>
-                           
+                            <tr><th>Job Schedule No</th><td>{{$report->jobSchedule->job_no ?? '-'}}</td></tr>
+                            <tr><th>Job Location</th><td>{{$report->jobSchedule->location ?? '-'}}</td></tr>
+                            <tr><th>Job Contact No</th><td>{{$report->jobSchedule->contact_no ?? '-'}}</td></tr>
+
+                            <tr><th>Job Status</th><td>{{$report->jobSchedule->jobStatus->status ?? '-'}}</td></tr>
+                            <tr><th>Job Strat Time and Date</th><td>{{ $start ?? '-'}}</td></tr>
+                            <tr><th>Job End Time and Date</th><td>{{ $end ?? '-'}}</td></tr>
                            
                            
                             <tr>

@@ -31,6 +31,7 @@
                             <tr><th>Job Strat Time and Date</th><td>{{ $start ?? '-'}}</td></tr>
                             <tr><th>Job End Time and Date</th><td>{{ $end ?? '-'}}</td></tr>
                             <tr><th>Demo Objective</th><td>{{$report->demo_objective ?? '-'}}</td></tr>
+                            <tr><th>Job Status</th><td>{{$report->jobSchedule->jobStatus->status ?? '-'}}</td></tr>
                             <tr><th>Result</th><td>{{$report->result ?? '-'}}</td></tr>
                             <tr><th>Client Representative</th><td>{{$report->client_representative ?? '-'}}</td></tr>
                             <tr><th>Designation</th><td>{{$report->designation ?? '-'}}</td></tr>
