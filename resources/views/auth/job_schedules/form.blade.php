@@ -70,7 +70,44 @@
     </div>
 
 
-    <div class="col-md-4">
+    {{-- Chargeable Order No --}}
+        <div class="col-md-4" id="chargeable-order-field">
+            <div class="mb-3">
+                {{ html()->label('Chargeble', 'chargeble')->class('form-label') }}
+
+                {{ html()->select('order_id', $orders, old('order_id', $data->order_id ?? null))
+                    ->class('form-control select2-order' . ($errors->has('order_id') ? ' is-invalid' : ''))
+                    ->attributes([
+                        'id' => 'order_id',
+                        'data-placeholder' => 'Select an order no',
+                        'data-url' => route('find-order.ajax')
+                    ]) }}
+
+                {!! $errors->first('order_id', '<div class="invalid-feedback">:message</div>') !!}
+            </div>
+        </div>
+
+      
+
+        {{-- DRF Reference --}}
+        <div class="col-md-4" id="drf-reference-field" style="display: none;">
+            <div class="mb-3">
+                {{ html()->label('Drf Reference', 'drf_refference')->class('form-label') }}
+
+                {{ html()->select('demo_request_id', $drfRefferences, old('demo_request_id', $data->demo_request_id ?? null))
+                    ->class('form-control select2-demo' . ($errors->has('demo_request_id') ? ' is-invalid' : ''))
+                    ->attributes([
+                        'id' => 'demo_request_id',
+                        'data-placeholder' => 'Select reference',
+                        'data-url' => route('find-demo.ajax')
+                    ]) }}
+
+                {!! $errors->first('demo_request_id', '<div class="invalid-feedback">:message</div>') !!}
+            </div>
+        </div>
+
+
+    <!-- <div class="col-md-4">
         <div class="mb-3">
             {{ html()->label('Chargeble', 'chargeble')->class('form-label') }}
 
@@ -85,6 +122,23 @@
             {!! $errors->first('order_id', '<div class="invalid-feedback">:message</div>') !!}
         </div>
     </div>
+
+
+    <div class="col-md-4">
+        <div class="mb-3">
+            {{ html()->label('Drf Reference', 'drf_refference')->class('form-label') }}
+
+            {{ html()->select('demo_request_id ', $drfRefferences, old('demo_request_id ', $data->demo_request_id  ?? null))
+                ->class('form-control select2-demo' . ($errors->has('demo_request_id ') ? ' is-invalid' : ''))
+                ->attributes([
+                    'id' => 'demo_request_id ',
+                    'data-placeholder' => 'Select reference',
+                    'data-url' => route('find-order.ajax')
+                ]) }}
+
+            {!! $errors->first('demo_request_id', '<div class="invalid-feedback">:message</div>') !!}
+        </div>
+    </div> -->
 
 
 </div>
@@ -276,7 +330,6 @@
 
     </div>
 
-    <!--  -->
   
 
      <div class="col-md-4">
@@ -305,6 +358,8 @@
         </div>
   
     </div>
+
+   
  
 </div>
 

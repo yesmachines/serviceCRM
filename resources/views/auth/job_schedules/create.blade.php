@@ -139,7 +139,7 @@
             }
         });
 
-        // ✅ Pre-select customer if editing
+        
         @if(old('company_id', $data->company_id ?? false))
             $('#company_id').trigger('change');
         @endif
@@ -180,6 +180,42 @@
 </script>
 
 <script>
+    $(document).ready(function () {
+        $('.select2-demo').select2({
+            placeholder: function () {
+                return $(this).data('placeholder');
+            },
+            allowClear: false,
+            ajax: {
+                url: function () {
+                    return $(this).data('url');
+                },
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                id: item.id,
+                                text: item.reference_no
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1
+        });
+    });
+</script>
+
+
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         const jobTypeSelect = document.getElementById('job_type_id');
         const jobTypeFields = document.getElementById('job-type-fields');
@@ -196,6 +232,40 @@
         }
 
         toggleJobFields(); // On page load
+        jobTypeSelect.addEventListener('change', toggleJobFields); // On dropdown change
+    });
+</script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const jobTypeSelect = document.getElementById('job_type_id');
+        const jobTypeFields = document.getElementById('job-type-fields');
+        const drfField = document.getElementById('drf-reference-field');
+        const chargeableField = document.getElementById('chargeable-order-field');
+
+        function toggleJobFields() {
+            const selectedValue = jobTypeSelect.options[jobTypeSelect.selectedIndex].text.toLowerCase();
+            console.log('Selected Job Type:', selectedValue);
+
+            // Show extra fields for these job types
+            if (['inside', 'outside', 'amc'].includes(selectedValue)) {
+                jobTypeFields.classList.remove('d-none');
+            } else {
+                jobTypeFields.classList.add('d-none');
+            }
+
+            // Show DRF when demo is selected, otherwise show chargeable order
+            if (selectedValue === 'demo') {
+                drfField?.classList.remove('d-none');
+                drfField?.style.setProperty('display', 'block');
+                chargeableField?.style.setProperty('display', 'none');
+            } else {
+                drfField?.style.setProperty('display', 'none');
+                chargeableField?.style.setProperty('display', 'block');
+            }
+        }
+
+        toggleJobFields(); // Initial run
         jobTypeSelect.addEventListener('change', toggleJobFields); // On dropdown change
     });
 </script>

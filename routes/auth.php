@@ -55,7 +55,8 @@ use App\Http\Controllers\Auth\VehicleController;
         Route::resource('demo-client-reports', DemoClientFeedbackController::class)->except('show');
         Route::get('demo-client-reports/data', [DemoClientFeedbackController::class, 'getData'])->name('demo-client-reports.data');
         
-
+        Route::get('/ajax/find-demo', [JobScheduleController::class, 'findDemo'])->name('find-demo.ajax');
+        
 });
 
 

@@ -64,4 +64,9 @@ class JobSchedule extends Model
     {
         return $this->belongsTo(JobStatus::class, 'job_status_id');
     }
+
+    public function demoRequest()
+    {
+        return $this->belongsTo(DemoRequest::class, 'demo_request_id');
+    }
 }

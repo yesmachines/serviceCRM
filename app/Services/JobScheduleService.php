@@ -10,6 +10,7 @@ use App\Services\Interfaces\JobScheduleServiceInterface;
 use App\Http\Requests\Auth\StoreJobScheduleRequest;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\DemoRequest;
 use App\Models\JobStatus;
 use App\Models\Order;
 use App\Models\Product;
@@ -81,10 +82,10 @@ class JobScheduleService implements JobScheduleServiceInterface
         $jobSchedule->end_datetime = parseDateTimeOrNull($request->start_date, $request->end_time);
         $jobSchedule->closing_date = parseDateTimeOrNull($request->close_date, $request->close_time);
 
-        $jobSchedule->order_id = $request->order_id;
+        $jobSchedule->order_id = $request->order_id ?? null;
         $jobSchedule->job_details = $request->job_details;
         $jobSchedule->remarks = $request->remarks;
-
+        $jobSchedule->demo_request_id = $request->demo_request_id ?? null;
         $jobSchedule->save();
 
         $jobType = strtolower(optional(ServiceType::find($request->job_type_id))->title);
@@ -96,6 +97,7 @@ class JobScheduleService implements JobScheduleServiceInterface
                 'service_type_id' => $request->job_type_id
             ]);
         }
+        
 
         return $jobSchedule;
     }
@@ -111,6 +113,7 @@ class JobScheduleService implements JobScheduleServiceInterface
             'machineTypes'      => MachineType::options(),
             'warrantyStatuses'  => WarrantyStatus::options(),
             'orders'            => Order::pluck('os_number', 'id')->prepend('Search Os Number', ''),
+            'drfRefferences'    => DemoRequest::pluck('reference_no', 'id')->prepend('Search Drf Reference', ''),
         ];
     }
 
@@ -139,6 +142,7 @@ class JobScheduleService implements JobScheduleServiceInterface
             'serviceTypesGrouped' => ServiceType::all()->groupBy('parent_id'),
             'machineTypes'      => MachineType::options(),
             'warrantyStatuses'  => WarrantyStatus::options(),
+            'drfRefferences'    => DemoRequest::pluck('reference_no', 'id')->prepend('Search Drf Reference', ''),
         ];
     }
 
@@ -162,9 +166,10 @@ class JobScheduleService implements JobScheduleServiceInterface
 
         // $jobSchedule->closing_date   = parseDateTimeOrNull($data['close_date'], $data['close_time']);
 
-        $jobSchedule->order_id       = $data['order_id'];
+        $jobSchedule->order_id       = $data['order_id'] ?? null;
         $jobSchedule->job_details    = $data['job_details'];
         $jobSchedule->remarks        = $data['remarks'];
+        $jobSchedule->demo_request_id = $data['demo_request_id'] ?? null;
 
         $jobSchedule->save();
 
@@ -201,6 +206,25 @@ class JobScheduleService implements JobScheduleServiceInterface
             ->get(['id', 'os_number'])
             ->toArray();
     }
+
+    public function findDemo(Request $request): array
+    {
+        $search = Request::input('q');
+    
+        return DemoRequest::query()
+            ->where('reference_no', 'like', '%' . $search . '%')
+            ->limit(20)
+            ->get(['id', 'reference_no'])
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'reference_no' => $item->reference_no
+                ];
+            })
+            ->toArray();
+    }
+
+    
 
     private function generateUniqueJobNo()
     {

@@ -75,6 +75,12 @@ class JobScheduleController extends Controller
         return response()->json($orders);
     }
 
+    public function findDemo (Request $request){
+
+        $demos = $this->jobScheduleService->findDemo($request);
+        return response()->json($demos);
+
+    }
 
     public function getSuppliersByProduct($supplierId)
     {

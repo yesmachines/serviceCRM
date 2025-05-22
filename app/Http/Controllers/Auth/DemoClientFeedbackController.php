@@ -23,7 +23,8 @@ class DemoClientFeedbackController extends Controller
 
     public function getData(Request $request)
     {
-        $query = DemoClientFeedback::with('jobSchedule.jobStatus');
+        $query = DemoClientFeedback::with( 'jobSchedule.jobStatus',
+        'jobSchedule.demoRequest.details');
     
         if ($request->filled('job_id')) {
             $query->where('job_schedule_id', $request->job_id);

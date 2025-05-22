@@ -31,8 +31,7 @@
                             <tr><th>Job Schedule No</th><td>{{ optional($report->task->jobSchedule)->job_no  ?? '-' }}</td></tr>
                             <tr><th>Job Location</th><td>{{ $report->task->jobSchedule->location ?? '-' }}</td></tr>
                             <tr><th>Job Start</th><td>{{ optional($report->task->jobSchedule)->start_datetime  ?? '-' }}</td></tr>
-                            <tr><th>Job End</th><td>{{ optional($report->task->jobSchedule)->end_datetime  ?? '-' }}</td></tr>
-                            <tr>
+                            <tr><th>Job End</th><td>{{ optional($report->task->jobSchedule)->end_datetime  ?? '-' }}</td></tr>                      <tr>
                                 <th>Client Signature</th>
                                 <td>
                                 @if($report->client_signature && Storage::disk('public')->exists($report->client_signature))

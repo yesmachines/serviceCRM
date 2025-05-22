@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\ServiceType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobScheduleRequest extends FormRequest
@@ -16,7 +17,6 @@ class StoreJobScheduleRequest extends FormRequest
 
  public function rules(): array
  {
-    //  dd($this->all()); 
      return [
          'job_type_id' => 'required|exists:service_types,id',
          'company_id'     => 'required|exists:companies,id',
@@ -32,24 +32,43 @@ class StoreJobScheduleRequest extends FormRequest
          'end_time'       => 'required|date_format:H:i|after:start_time',
          'close_date'     => 'nullable|date_format:m/d/Y',
          'close_time'     => 'nullable|date_format:H:i',
-         'order_id'       => 'required|exists:orders,id',
+         'order_id'       => 'nullable|exists:orders,id',
          'job_details'    => 'nullable|string',
          'remarks'        => 'nullable|string|max:500',
      ];
 
-        $jobTypeId = $this->input('job_type_id');
+     $jobTypeId = $this->input('job_type_id');
 
-        if ($jobTypeId) {
-            $jobTypeTitle = \App\Models\ServiceType::where('id', $jobTypeId)->value('title');
-            $jobTypeSlug = strtolower($jobTypeTitle);
-    
-            if (in_array($jobTypeSlug, ['inside', 'outside', 'amc'])) {
-                $rules['machine_type'] = 'required|string';
-                $rules['is_warranty'] = 'required|boolean';
-            }
+    if ($jobTypeId) {
+        $jobTypeTitle = \App\Models\ServiceType::where('id', $jobTypeId)->value('title');
+        $jobTypeSlug = strtolower($jobTypeTitle);
+
+        if (in_array($jobTypeSlug, ['inside', 'outside', 'amc'])) {
+            $rules['machine_type'] = 'required|string';
+            $rules['is_warranty'] = 'required|in:yes,no'; // if it's 'yes' or 'no' as string
+            $rules['order_id'] = 'required|exists:orders,id';
         }
+
+        if ($jobTypeSlug === 'demo') {
+            $rules['demo_request_id'] = 'required|exists:demo_requests,id';
+        }
+    }
+
+    return $rules;
+
+        // $jobTypeId = $this->input('job_type_id');
+
+        // if ($jobTypeId) {
+        //     $jobTypeTitle = \App\Models\ServiceType::where('id', $jobTypeId)->value('title');
+        //     $jobTypeSlug = strtolower($jobTypeTitle);
     
-        return $rules;
+        //     if (in_array($jobTypeSlug, ['inside', 'outside', 'amc'])) {
+        //         $rules['machine_type'] = 'required|string';
+        //         $rules['is_warranty'] = 'required|boolean';
+        //     }
+        // }
+    
+        
  }
 
 
