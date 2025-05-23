@@ -26,7 +26,12 @@
                             </tr>
                             <tr>
                                 <th>Demo Date</th>
-                                <td>{{ optional($report->jobSchedule->demoRequest->demo_date) ? \Carbon\Carbon::parse($report->jobSchedule->demoRequest->demo_date)->format('d M Y') : '-' }}</td>
+                                <td>
+                                {{ $report->jobSchedule->demoRequest && $report->jobSchedule->demoRequest->demo_date 
+                                    ? \Carbon\Carbon::parse($report->jobSchedule->demoRequest->demo_date)->format('d M Y') 
+                                    : '-' 
+                                }}
+                            </td>
                             </tr>
                             <tr>
                                 <th>Submitted Offer</th>
@@ -95,7 +100,7 @@
 
                    
 
-                    @if($report->jobSchedule->demoRequest->details && count($report->jobSchedule->demoRequest->details))
+                    @if(optional($report->jobSchedule->demoRequest)->details && count($report->jobSchedule->demoRequest->details))
                         <h6 class="mt-4">DRF ITEMS</h6>
                         <table class="table table-bordered">
                             <thead>
@@ -117,8 +122,8 @@
                                         <td>{{ $detail['qty'] ?? '-' }}</td>
                                         <td>{{ $detail['remarks'] ?? '-' }}</td>
                                         <td>{{ $detail['product_type'] ?? '-' }}</td>
-                                        <td>{{ $detail['machine_out'] ? \Carbon\Carbon::parse($detail['machine_out'])->format('d-m-Y H:i') : '-' }}</td>
-                                        <td>{{ $detail['machine_in'] ? \Carbon\Carbon::parse($detail['machine_in'])->format('d-m-Y H:i') : '-' }}</td>
+                                        <td>{{ !empty($detail['machine_out']) ? \Carbon\Carbon::parse($detail['machine_out'])->format('d-m-Y H:i') : '-' }}</td>
+                                        <td>{{ !empty($detail['machine_in']) ? \Carbon\Carbon::parse($detail['machine_in'])->format('d-m-Y H:i') : '-' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -127,32 +132,7 @@
                         <p><em>No DRF Details available.</em></p>
                     @endif
 
-                    {{-- Client Feedback Table --}}
-                    <h5 class="mt-5 mb-3">Client Feedback</h5>
-                    <table class="table table-bordered text-center align-middle">
-                        <thead>
-                            <tr>
-                                <th></th> <!-- Label column with no heading -->
-                                <th>Excellent</th>
-                                <th>Good</th>
-                                <th>To Improve</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($report->clientFeedbacks as $feedback)
-                                <tr>
-                                    <td class="text-start">{{ $feedback->label ?? '-' }}</td>
-                                    <td>@if(strtolower($feedback->feedback) == 'excellent') ✓ @endif</td>
-                                    <td>@if(strtolower($feedback->feedback) == 'good') ✓ @endif</td>
-                                    <td>@if(strtolower($feedback->feedback) == 'to-improve' || strtolower($feedback->feedback) == 'to improve') ✓ @endif</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">No client feedbacks available.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+
 
                 </div>
             </div>
