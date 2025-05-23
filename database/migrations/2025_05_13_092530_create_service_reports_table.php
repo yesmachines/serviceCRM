@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('designation')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('client_signature')->nullable(); 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

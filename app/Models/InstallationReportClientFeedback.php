@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InstallationReportClientFeedback extends Model
 {
 
+    use SoftDeletes;
     protected $table = 'installation_report_client_feedbacks';
 
     protected $fillable = [

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime('end_datetime')->nullable(); 
             $table->longText('task_details')->nullable(); 
             $table->text('reason')->nullable(); 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

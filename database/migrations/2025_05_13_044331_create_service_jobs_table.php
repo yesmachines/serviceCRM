@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('service_type_id')->nullable()->constrained('service_types')->onDelete('cascade');
             $table->string('machine_type')->nullable();
             $table->string('is_warranty'); 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

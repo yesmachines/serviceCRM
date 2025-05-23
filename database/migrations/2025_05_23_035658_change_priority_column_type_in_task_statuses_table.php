@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->nullable();
-            $table->string('type')->nullable();
-            $table->string('vehicle_number')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::table('task_statuses', function (Blueprint $table) {
+            $table->tinyInteger('priority')->nullable()->change();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::table('task_statuses', function (Blueprint $table) {
+            $table->string('priority')->nullable()->change();
+        });
     }
 };

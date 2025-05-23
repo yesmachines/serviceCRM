@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('technician_level')->nullable();
             $table->float('standard_charge')->nullable();
             $table->float('additional_charge')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

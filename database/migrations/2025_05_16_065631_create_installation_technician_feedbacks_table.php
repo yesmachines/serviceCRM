@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('label');
             $table->string('feedback')->nullable();
             $table->longText('remarks')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             // Manually name the foreign key constraint

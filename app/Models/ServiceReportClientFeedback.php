@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServiceReportClientFeedback extends Model
 {
+     use SoftDeletes;
      // Optional: define the table name explicitly if it doesn't follow Laravel's plural naming convention
      protected $table = 'service_report_client_feedbacks';
 

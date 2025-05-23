@@ -20,6 +20,7 @@ return new class extends Migration
               ->nullOnDelete();  
             $table->string('slug')->unique();  
             $table->boolean('daily_report')->default(false);
+            $table->softDeletes();
              $table->timestamps();
         });
     }

@@ -31,6 +31,7 @@ return new class extends Migration
             $table->dateTime('created_date')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             // Foreign key constraints
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');

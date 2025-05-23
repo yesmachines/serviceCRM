@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('product_type')->nullable(); // e.g., machine or consumable
             $table->string('is_out_from_stock')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             // Foreign key constraints
             $table->foreign('demo_request_id')->references('id')->on('demo_requests')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

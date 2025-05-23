@@ -10,16 +10,16 @@ use Yajra\DataTables\Facades\DataTables;
 class TaskStatusController extends Controller
 {
     
-     public function __construct() {
-        $this->middleware(function ($request, $next) {
-            if (!auth()->user()->hasRole('superadmin')) {
-                alert()->error('No Access!', 'You don\'t have permission to access this page.');
-                return redirect()->route('dashboard');
-            }
+    //  public function __construct() {
+    //     $this->middleware(function ($request, $next) {
+    //         if (!auth()->user()->hasRole('superadmin')) {
+    //             alert()->error('No Access!', 'You don\'t have permission to access this page.');
+    //             return redirect()->route('dashboard');
+    //         }
 
-            return $next($request);
-        });
-    }
+    //         return $next($request);
+    //     });
+    // }
      public function index(Request $request){
 
 
@@ -55,7 +55,7 @@ class TaskStatusController extends Controller
        public function store(Request $request)
         {
             $request->validate([
-                'status' => 'required|string|max:255',
+                'status' => 'required|string|max:255|unique:task_statuses,status',
                 'priority' => 'required|string|max:255',
                 'active' => 'nullable|boolean',
             ]);
@@ -78,7 +78,7 @@ class TaskStatusController extends Controller
      public function update(Request $request, TaskStatus $taskStatus)
     {
         $request->validate([
-            'status' => 'required|string|max:255',
+            'status' => 'required|string|max:255|unique:task_statuses,status,' . $taskStatus->id,
             'priority' => 'required|string|max:255',
             'active' => 'nullable|boolean',
         ]);

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('priority')->nullable(); // optional, make nullable if not always set
             $table->boolean('active')->default(true); // checkbox-like flag
+            $table->softDeletes();
             $table->timestamps();
         });
     }

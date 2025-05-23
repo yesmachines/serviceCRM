@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InstallationReport extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'job_schedule_id',
         'order_id',
@@ -62,8 +64,4 @@ class InstallationReport extends Model
     {
         return $this->hasMany(InstallationTechnicianFeedback::class);
     }
-
-   
-    
-
 }

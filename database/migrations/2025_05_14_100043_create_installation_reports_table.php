@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('client_representative')->nullable();
             $table->string('designation')->nullable();
             $table->string('client_signature')->nullable(); // Will store image path
-
+            $table->softDeletes();
 
             $table->timestamps();
         });

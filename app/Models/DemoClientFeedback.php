@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DemoClientFeedback extends Model
 {
+    use SoftDeletes;
     protected $table ='demo_client_feedbacks';
     protected $fillable = [
         'job_schedule_id',

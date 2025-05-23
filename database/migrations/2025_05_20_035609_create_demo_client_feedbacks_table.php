@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('designation')->nullable();          
             $table->string('client_signature')->nullable();   
             $table->integer('rating')->nullable();             
-            $table->longText('comment')->nullable();           
+            $table->longText('comment')->nullable(); 
+            $table->softDeletes();          
             $table->timestamps();
         });
     }

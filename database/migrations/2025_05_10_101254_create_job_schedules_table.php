@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('job_no')->nullable();
             // Foreign keys
-            $table->foreignId('job_type')->nullable()->constrained('service_types')->onDelete('set null');
-            $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('set null');
-            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('set null');
-            $table->foreignId('brand_id')->nullable()->constrained('suppliers')->onDelete('set null');
-            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
-            $table->foreignId('job_owner_id')->nullable()->constrained('technicians')->onDelete('set null');
-            $table->foreignId('job_status_id')->nullable()->constrained('job_statuses')->onDelete('set null');
-            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
+            $table->foreignId('job_type')->nullable()->constrained('service_types')->onDelete('cascade');
+            $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('cascade');
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained('suppliers')->onDelete('cascade');
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade');
+            $table->foreignId('job_owner_id')->nullable()->constrained('technicians')->onDelete('cascade');
+            $table->foreignId('job_status_id')->nullable()->constrained('job_statuses')->onDelete('cascade');
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('cascade');
             $table->string('contact_no')->nullable();
             $table->string('location')->nullable();
             $table->dateTime('start_datetime')->nullable();
@@ -32,6 +32,7 @@ return new class extends Migration
             // $table->string('chargeable')->nullable();
             $table->dateTime('closing_date')->nullable();
             $table->longText('remarks')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

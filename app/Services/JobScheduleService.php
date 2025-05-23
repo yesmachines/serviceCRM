@@ -109,7 +109,9 @@ class JobScheduleService implements JobScheduleServiceInterface
             'serviceTypesGrouped' => ServiceType::all()->groupBy('parent_id'),
             'suppliers'         => Supplier::pluck('brand', 'id')->prepend('Select Brand', ''),
             'technicians'       => Technician::with('user')->get()->pluck('user.name', 'id')->prepend('Select Technician', ''),
-            'jobStatuses'       => JobStatus::pluck('status', 'id')->prepend('Select job Status', ''),
+            'jobStatuses' => JobStatus::orderBy('priority')
+                ->pluck('status', 'id')
+                ->prepend('Select job Status', ''),
             'machineTypes'      => MachineType::options(),
             'warrantyStatuses'  => WarrantyStatus::options(),
             'orders'            => Order::pluck('os_number', 'id')->prepend('Search Os Number', ''),
@@ -135,7 +137,9 @@ class JobScheduleService implements JobScheduleServiceInterface
             'companies'         => Company::pluck('company', 'id'),
             'suppliers'         => Supplier::pluck('brand', 'id'),
             'technicians'       => Technician::with('user')->get()->pluck('user.name', 'id'),
-            'jobStatuses'       => JobStatus::pluck('status', 'id'),
+            'jobStatuses' => JobStatus::orderBy('priority')
+            ->pluck('status', 'id')
+            ->prepend('Select job Status', ''),
             'products'          => Product::limit(50)->pluck('title', 'id'),
             'customers'         => Customer::pluck('fullname', 'id'),
             'orders'            => Order::pluck('os_number', 'id'),

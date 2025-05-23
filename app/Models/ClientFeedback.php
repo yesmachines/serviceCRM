@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClientFeedback extends Model
 {
+    use SoftDeletes;
     protected $table = 'client_feedbacks';
     
     protected $fillable = [
