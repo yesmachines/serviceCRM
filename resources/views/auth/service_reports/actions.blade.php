@@ -16,7 +16,7 @@
                     <h5 class="mb-3">Service Report Details</h5>
                     <table class="table table-bordered">
                         <tbody>
-                            <tr><th>Task ID</th><td>{{ $report->task->task_details ?? '-' }}</td></tr>
+                            <tr><th>Task Details</th><td>{{ $report->task->task_details ?? '-' }}</td></tr>
                             <tr><th>Description</th><td>{{ $report->description  ?? '-' }}</td></tr>
                             <tr><th>Observations</th><td>{{ $report->observations  ?? '-' }}</td></tr>
                             <tr><th>Actions Taken</th><td>{{ $report->actions_taken  ?? '-' }}</td></tr>
