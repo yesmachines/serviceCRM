@@ -35,20 +35,28 @@
                             </select>
                         </div>
 
+
+                        <div class="col-lg-3">
+                            <label for="serial_id_filter_2" class="form-label">Serial No</label>
+                            <select id="serial_id_filter_2" class="form-control">
+                                <option value="">All Serial No</option>
+                                @foreach($serialNos as $serial)
+                                    <option value="{{ $serial->id }}">{{ $serial->serial_no }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                      
                         <!-- Second Dropdown -->
                         <div class="col-lg-3">
-                            <label for="job_id_filter_2" class="form-label">Job Status</label>
-                            <select id="job_id_filter_2" class="form-control">
-                                <option value="">All Job IDs</option>
+                            <label for="job_status_id_filter_3" class="form-label">Job Status</label>
+                            <select id="job_status_id_filter_3" class="form-control">
+                                <option value="">All Job</option>
                                 @foreach($jobStatus as $job)
                                     <option value="{{ $job->id }}">{{ $job->status }}</option>
                                 @endforeach
                             </select>
-                        </div>
-
-                       
+                        </div>                       
                     </div>
-
 
                 <div class="card-body">
                     <table id="installation-report-datatable" class="table table-striped dt-responsive nowrap w-100">
@@ -57,10 +65,11 @@
                             <tr>
                               <th>#</th>
                               <th>Job Id</th>
+                              <th>Serial No</th>
                               <th>Job Status</th>
+                            
                               <th>Company</th>
-                              <th>Client Feedback</th>
-                              <th>Technician Feedback</th>
+                              <th>Os Number</th>
                               <th>Actions</th>
                             </tr>
                            
@@ -107,21 +116,28 @@
                 url: '{{ route("installation-reports.data") }}',
                 data: function (d) {
                     d.job_id = $('#job_id_filter_1').val();
-                    d.job_status = $('#job_id_filter_2').val();
+                   
+                    d.serial_id = $('#serial_id_filter_2').val();
+                    d.job_status = $('#job_status_id_filter_3').val();
+                    
                 }
             },
+
+          
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'job_id', name: 'job_id' },
+                { data: 'serial_no', name: 'serial_no' },
                 { data: 'job_status', name: 'job_status' },
+              
                 { data: 'company', name: 'company' },
-                { data: 'client_feedback', name: 'client_feedback' },
-                { data: 'technician_feedback', name: 'technician_feedback' },
+                { data: 'order_no', name: 'order_no' },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
             ]
         });
 
-        $('#job_id_filter_1, #job_id_filter_2').on('change', function () {
+
+        $('#job_id_filter_1, #serial_id_filter_2, #job_status_id_filter_3').on('change', function () {
             table.ajax.reload();
         });
 

@@ -29,7 +29,7 @@ class ServiceReportController extends Controller
        try {
            \Log::info('getData called');
    
-           $query = ServiceReport::with(['task.jobSchedule.jobstatus', 'technician.user', 'concludedBy']);
+           $query = ServiceReport::with(['task.jobSchedule.jobstatus', 'technician.user', 'concludedBy','clientFeedbacks']);
    
            // Apply filters
            if ($request->filled('job_id')) {

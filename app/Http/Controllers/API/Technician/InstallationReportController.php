@@ -21,7 +21,7 @@ class InstallationReportController extends Controller
 
     public function store(Request $request)
     {
-   
+ 
         $validator = Validator::make($request->all(), [
             'job_schedule_id'       => 'required|exists:job_schedules,id',
             'order_id'              => 'nullable|exists:orders,id',
@@ -52,8 +52,7 @@ class InstallationReportController extends Controller
         }
 
         $data = $validator->validated();
-
-
+       
         if ($request->hasFile('client_signature')) {
             $file = $request->file('client_signature');
             $path = $file->store('client_signatures', 'public');
@@ -73,30 +72,37 @@ class InstallationReportController extends Controller
         $report->job_start_datetime = parseDateTimeOrNull($request->start_date, $request->start_time);
         $report->job_end_datetime = parseDateTimeOrNull($request->close_date, $request->end_time);
         $report->client_signature =  $data['client_signature'] ?? null;
+        $report->serial_no =  strtoupper('SN-' . uniqid());
         // $jobSchedule->created_date = parseDateTimeOrNull($request->close_date, $request->close_time);
         $report->save();
       
-        if (!empty($data['technician_feedbacks']) && is_array($data['technician_feedbacks'])) {
-                foreach ($data['technician_feedbacks'] as $label => $feedback) {
-                    InstallationTechnicianFeedback::create([
+        if (!empty($data['client_feedbacks']) && is_array($data['client_feedbacks'])) {
+                foreach ($data['client_feedbacks'] as $label => $feedback) {
+                    InstallationReportClientFeedback::create([
                         'installation_report_id' => $report->id,
                         'label' => $label,
                         'feedback' => $feedback,
-                        'remarks' => $request->remarks ?? null,
+                        // 'remarks' => $request->remarks ?? null,
                     ]);
             }
         }
+        if (!empty($data['technician_feedbacks']) && is_array($data['technician_feedbacks'])) {
+            foreach ($request->technician_feedbacks as $item) {
+                // Remove 'remark' so you're only left with the dynamic label key
+                $labelFeedback = collect($item)->except('remark')->toArray();
+            
+                // There should be only one item left in the array after removing 'remark'
+                foreach ($labelFeedback as $label => $feedback) {
+                    InstallationTechnicianFeedback::create([
+                        'installation_report_id' => $report->id,
+                        'label'     => $label,
+                        'feedback'  => $feedback,
+                        'remarks'   => $item['remark'] ?? null,
+                    ]);
+                }
+            }
+    }
 
-        if (!empty($data['client_feedbacks']) && is_array($data['client_feedbacks'])) {
-            foreach ($data['client_feedbacks'] as $label => $feedback) {
-                InstallationReportClientFeedback::create([
-                    'installation_report_id' => $report->id,
-                    'label' => $label,
-                    'feedback' => $feedback,
-                    'remarks' => $request->remarks ?? null,
-                ]);
-           }
-        }
     
 
 
@@ -145,6 +151,7 @@ class InstallationReportController extends Controller
         if (!$report) {
             return response()->json(['status' => false, 'message' => 'Installation report not found.'], 404);
         }
+        
 
         $validator = Validator::make($request->all(), [
             'job_schedule_id'       => 'nullable|exists:job_schedules,id',
@@ -178,6 +185,11 @@ class InstallationReportController extends Controller
 
 
         $data = $validator->validated();
+         // Generate serial_no only if not already set
+         if (empty($report->serial_no)) {
+            $data['serial_no'] = strtoupper('SN-' . uniqid());
+        }
+
 
         if ($request->hasFile('client_signature')) {
             if ($report->client_signature && Storage::disk('public')->exists($report->client_signature)) {
@@ -233,7 +245,7 @@ class InstallationReportController extends Controller
                 ]);
             }
         }
-        
+      
         // CLIENT FEEDBACKS
         if (!empty($data['client_feedbacks']) && is_array($data['client_feedbacks'])) {
             // Delete existing client feedbacks

@@ -67,7 +67,7 @@ class ServiceReportController extends Controller
                     'service_report_id' => $report->id,
                     'label' => $label,
                     'feedback' => $feedback,
-                    'remark' => $request->remarks ?? null,
+                    // 'remark' => $request->remarks ?? null,
                 ]);
            }
         }
@@ -127,7 +127,7 @@ class ServiceReportController extends Controller
                 'service_report_id' => $report->id,
                 'label' => $label,
                 'feedback' => $feedback,
-                'remarks' => $request->remarks ?? null,
+                // 'remarks' => $request->remarks ?? null,
             ]);
        }
     }

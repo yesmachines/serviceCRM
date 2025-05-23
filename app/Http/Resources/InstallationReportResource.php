@@ -68,7 +68,7 @@ class InstallationReportResource extends JsonResource
                 }),
 
             'client_feedbacks'    => InstallationReportClientFeedbackResource::collection($this->whenLoaded('clientFeedbacks')),
-            'installation_feedbacks'    => InstallationTechnicianFeedbackResource::collection($this->whenLoaded('technicianFeedbacks')),
+            'installation_technician_feedbacks'    => InstallationTechnicianFeedbackResource::collection($this->whenLoaded('technicianFeedbacks')),
             
             // 'attendees' => AttendeeResource::collection($this->whenLoaded('attendees')),
            
