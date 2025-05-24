@@ -51,21 +51,23 @@ class InstallationReportResource extends JsonResource
                     'title' => $this->product->title,
                 ];
             }),
+      
 
-          'attendees' => $this->whenLoaded('attendees', function () {
-                    return $this->attendees->map(function ($attendee) {
-                        $technician = optional($attendee->technician);
-                        $user = optional($technician->user);
-                        $employee = optional($user->employee);
+           'attendees' => $this->whenLoaded('attendees', function () {
+                return $this->attendees->map(function ($attendee) {
+                    return [
+                        // /'id' => $attendee->id,
+                        // 'technician_id' => $attendee->technician_id,
+                        'attendee' => $attendee->relationLoaded('user') && $attendee->user ? [
+                            'id' => $attendee->user->id,
+                            'email' => $attendee->user->email,
+                        ] : null,
+                    ];
+                });
+            }),
 
-                        return [
-                            'technician_id' => $technician->id,
-                            'name'          => $user->name,
-                            'email'         => $user->email,
-                            'phone'         => $employee->phone,
-                        ];
-                    });
-                }),
+
+      
 
             'client_feedbacks'    => InstallationReportClientFeedbackResource::collection($this->whenLoaded('clientFeedbacks')),
             'installation_technician_feedbacks'    => InstallationTechnicianFeedbackResource::collection($this->whenLoaded('technicianFeedbacks')),

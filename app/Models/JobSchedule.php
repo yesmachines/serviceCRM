@@ -70,4 +70,8 @@ class JobSchedule extends Model
     {
         return $this->belongsTo(DemoRequest::class, 'demo_request_id');
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

@@ -27,49 +27,50 @@
             <div class="row mb-3">
                     <!-- Filter by Job ID -->
                     <div class="col-lg-3">
-                        <label for="job_id_filter" class="form-label">Job No</label>
-                        <select id="job_id_filter" class="form-control select2" data-toggle="select2">
-                            <option value="">All Job IDs</option>
-                            @foreach($jobSchedules as $job)
-                                <option value="{{ $job->id }}">{{ $job->job_no }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                            <label for="job_id_filter_1" class="form-label">Job No</label>
+                            <select id="job_id_filter_1" class="form-control select2" data-toggle="select2">
+                                <option value="">All Job IDs</option>
+                                @foreach($jobSchedules as $id => $job)
+                                    <option value="{{ $id }}">{{ $job }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <!-- Filter by Task Status -->
-                    <div class="col-lg-3">
-                        <label for="task_status_filter" class="form-label">Task Status</label>
-                        <select id="task_status_filter" class="form-control select2">
-                            <option value="">All Task Status</option>
-                            @foreach($taskStatus as $task)
-                                <option value="{{ $task->id }}">{{ $task->status }}</option>
-                            @endforeach
-                        </select>
-                    </div>
 
-                    <!-- Filter by Company -->
-                    <div class="col-lg-3">
-                        <label for="company_filter" class="form-label">Company</label>
-                        <select id="company_filter" class="form-control select2" data-toggle="select2">
-                            <option value="">All Companies</option>
-                            @foreach($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->company }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                      <!-- Second Dropdown -->
+                      <div class="col-lg-3">
+                            <label for="company_id_filter_2" class="form-label">Company</label>
+                            <select id="company_id_filter_2" class="form-control select2">
+                                <option value="">All Companies</option>
+                                @foreach($companies as $id => $company)
+                                    <option value="{{ $id }}">{{ $company }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                          <!-- Start Date -->
+                            <div class="col-lg-3">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" id="start_date" class="form-control" />
+                            </div>
+
+                            <!-- End Date -->
+                            <div class="col-lg-3">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" id="end_date" class="form-control" />
+                            </div>    
                 </div>
 
                                     <table id="service-report-datatable" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Job Id</th>
-                                                <th>Company</th>
-                                                <th>Task Status</th>
-                                                <th>Task Details</th>
-                                                 <th>Job attended technician </th>
-                                                 <th> Remark from client</th>
-                                                <th>Actions</th>
+                                            <th>#</th>
+                                            <th>Job Id</th>
+                                            <th>Company</th>
+                                            <th>Job Status</th>
+                                            <th>Stard Time</th>
+                                            <th>End Time</th>
+                                            <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -108,9 +109,10 @@
             ajax: {
                 url: '{{ route("service-reports.data") }}',
                 data: function (d) {
-                    d.job_id = $('#job_id_filter').val();
-                    d.task_status = $('#task_status_filter').val();
-                    d.company_id = $('#company_filter').val();
+                    d.job_id = $('#job_id_filter_1').val();
+                    d.company_id = $('#company_id_filter_2').val();
+                    d.start_date = $('#start_date').val();
+                    d.end_date = $('#end_date').val();
                 }
             },
             columns: [
@@ -118,9 +120,8 @@
                 { data: 'job_id', name: 'job_id' },
                 { data: 'company', name: 'company' },
                 { data: 'task_status', name: 'task_status' },
-                { data: 'task_details', name: 'task_details' },
-                { data: 'technician_name', name: 'technician_name' },
-                { data: 'client_remark', name: 'client_remark' },
+                { data: 'job_start_time', name: 'job_start_time' },
+                { data: 'job_end_time', name: 'job_end_time' },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
             ],
             language: {
@@ -135,9 +136,9 @@
         });
 
         // Filter reload
-        $('#job_id_filter, #task_status_filter, #company_filter').on('change', function () {
-            table.ajax.reload();
-        });
+        $('#job_id_filter_1, #company_id_filter_2, #start_date, #end_date').on('change', function () {
+         table.ajax.reload();
+       });
 
         $('.select2').select2();
     });

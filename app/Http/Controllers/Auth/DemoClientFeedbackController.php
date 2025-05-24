@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\DemoClientFeedback;
 use App\Models\JobSchedule;
 use App\Models\JobStatus;
@@ -13,9 +14,10 @@ use Yajra\DataTables\Facades\DataTables;
 class DemoClientFeedbackController extends Controller
 {
     public function index(Request $request){
-        $jobSchedules = JobSchedule::orderBy('job_no')->get();
-        $jobStatus = JobStatus::get();
-        return view('auth.demo_client_feedback.index',compact('jobSchedules','jobStatus'));
+        $jobSchedules = JobSchedule::orderBy('job_no')->pluck('job_no', 'id');
+        $companies = Company::pluck('company', 'id');
+        
+        return view('auth.demo_client_feedback.index',compact('jobSchedules','companies'));
     }
 
    
@@ -23,16 +25,23 @@ class DemoClientFeedbackController extends Controller
 
     public function getData(Request $request)
     {
-        $query = DemoClientFeedback::with( 'jobSchedule.jobStatus',
-        'jobSchedule.demoRequest.details');
+        $query = DemoClientFeedback::with(
+            'jobSchedule.jobStatus',
+            'jobSchedule.demoRequest.details',
+            'jobSchedule.company',
+            'jobSchedule.brand',
+            'jobSchedule.product',
+            'jobSchedule.customer',
+
+        );
     
         if ($request->filled('job_id')) {
             $query->where('job_schedule_id', $request->job_id);
         }
     
-        if ($request->filled('job_status')) {
-            $query->whereHas('jobSchedule.jobStatus', function ($q) use ($request) {
-                $q->where('id', $request->job_status);
+        if ($request->filled('company_id')) {
+            $query->whereHas('jobSchedule.company', function ($q) use ($request) {
+                $q->where('id', $request->company_id);
             });
         }
     
@@ -53,6 +62,7 @@ class DemoClientFeedbackController extends Controller
         return DataTables::of($reports)
             ->addIndexColumn()
             ->addColumn('job_id', fn($row) => optional($row->jobSchedule)->job_no ?? '-')
+            ->addColumn('company', fn($row) => optional(optional($row->jobSchedule)->company)->company ?? '-')
             ->addColumn('job_status', fn($row) => optional(optional($row->jobSchedule)->jobStatus)->status ?? '-')
             ->addColumn('job_start_time', function ($row) {
                 $start = optional($row->jobSchedule)->start_datetime;
@@ -62,8 +72,6 @@ class DemoClientFeedbackController extends Controller
                 $end = optional($row->jobSchedule)->end_datetime;
                 return $end ? Carbon::parse($end)->format('d M Y h:i A') : '-';
             })
-            ->addColumn('designation', fn($row) => $row->result ?? '-')
-            ->addColumn('rating', fn($row) => $row->rating ?? '-')
             ->addColumn('actions', function ($row) {
                 return view('auth.demo_client_feedback.actions', ['report' => $row])->render();
             })

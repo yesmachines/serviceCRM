@@ -19,24 +19,15 @@ class InstallationAttendee extends Model
         return $this->belongsTo(InstallationReport::class);
     }
 
-    
-
-   
-
     public function technician()
     {
-        return $this->belongsTo(Technician::class, 'technician_id');
+        return $this->hasOne(Technician::class, 'user_id', 'technician_id');
     }
+  
 
     public function user()
     {
-        return $this->hasOneThrough(
-            \App\Models\User::class,
-            \App\Models\Technician::class,
-            'id',          // Foreign key on Technician table...
-            'id',          // Foreign key on User table...
-            'technician_id', // Local key on InstallationAttendee table...
-            'user_id'      // Local key on Technician table...
-        );
+        return $this->belongsTo(User::class, 'technician_id');
     }
 }
+

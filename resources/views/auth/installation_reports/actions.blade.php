@@ -30,21 +30,10 @@
                             <tr><th>Job Start Time and Date</th><td>{{ $start ?? '-' }}</td></tr>
                             <tr><th>Job End Time and Date</th><td>{{ $end ?? '-' }}</td></tr>
                             <tr><th>Company</th><td>{{ $report->company->company ?? '-' }}</td></tr>
-                            <tr><th>Order No</th><td>{{ $report->order->os_number ?? '-' }}</td></tr>
+                            <tr><th>Order No</th><td>{{ $report->jobSchedule->order->os_number ?? '-' }}</td></tr>
                             <tr><th>Product</th><td>{{ $report->product->title ?? '-' }}</td></tr>
                             <tr><th>Brand</th><td>{{ $report->brand->brand ?? '-' }}</td></tr>
-                            <tr>
-                                <th>Attendees</th>
-                                <td>
-                                    @if($report->attendees->count())
-                                        @foreach($report->attendees as $attendee)
-                                            <div>{{ $attendee->user->name ?? 'N/A' }}</div>
-                                        @endforeach
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                            </tr>
+                            
                             <tr>
                                 <th>Client Signature</th>
                                 <td>
@@ -118,7 +107,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Designation</th> {{-- Optional: only if available --}}
+                                            <th>Technician Level</th> {{-- Optional: only if available --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -126,7 +115,7 @@
                                             <tr>
                                                 <td>{{ $attendee->user->name ?? '-' }}</td>
                                                 <td>{{ $attendee->user->email ?? '-' }}</td>
-                                                <td>{{ $attendee->designation ?? '-' }}</td> {{-- Add this only if you have it --}}
+                                                <td>{{ $attendee->technician->technician_level ?? '-' }}</td> {{-- Add this only if you have it --}}
                                             </tr>
                                         @empty
                                             <tr>

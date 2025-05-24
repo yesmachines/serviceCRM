@@ -14,8 +14,14 @@
                     <h5 class="mb-3">Demo Client Feedback Report Details</h5>
                     @php
                         use Carbon\Carbon;
-                        $start = $report->job_start_datetime ? Carbon::parse($report->job_start_datetime)->format('d M Y h:i A') : null;
-                        $end = $report->job_end_datetime ? Carbon::parse($report->job_end_datetime)->format('d M Y h:i A') : null;
+
+                        $start = optional($report->jobSchedule)->start_datetime
+                            ? Carbon::parse($report->jobSchedule->start_datetime)->format('d M Y h:i A')
+                            : null;
+
+                        $end = optional($report->jobSchedule)->end_datetime
+                            ? Carbon::parse($report->jobSchedule->end_datetime)->format('d M Y h:i A')
+                            : null;
                     @endphp
 
                     <table class="table table-bordered">
@@ -41,12 +47,33 @@
                                 <th>Job Schedule No</th>
                                 <td>{{ $report->jobSchedule->job_no ?? '-' }}</td>
                             </tr>
+
                             <tr>
-                                <th>Job Location</th>
+                                <th>Company</th>
+                                <td>{{ $report->jobSchedule->company->company ?? '-' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Brand</th>
+                                <td>{{ $report->jobSchedule->brand->brand ?? '-' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Product</th>
+                                <td>{{ $report->jobSchedule->product->title ?? '-' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Customer</th>
+                                <td>{{ $report->jobSchedule->customer->fullname ?? '-' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Location</th>
                                 <td>{{ $report->jobSchedule->location ?? '-' }}</td>
                             </tr>
                             <tr>
-                                <th>Job Contact No</th>
+                                <th>Contact No</th>
                                 <td>{{ $report->jobSchedule->contact_no ?? '-' }}</td>
                             </tr>
                             <tr>

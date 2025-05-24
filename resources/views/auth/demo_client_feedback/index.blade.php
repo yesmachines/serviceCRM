@@ -28,20 +28,20 @@
                         <div class="col-lg-3">
                             <label for="job_id_filter_1" class="form-label">Job No</label>
                             <select id="job_id_filter_1" class="form-control select2" data-toggle="select2">
-                                <option value="">All Job IDs</option>
-                                @foreach($jobSchedules as $job)
-                                    <option value="{{ $job->id }}">{{ $job->job_no }}</option>
+                                <option value="">All Job</option>
+                                @foreach($jobSchedules as $id => $job)
+                                    <option value="{{ $id }}">{{ $job }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <!-- Second Dropdown -->
                         <div class="col-lg-3">
-                            <label for="job_id_filter_2" class="form-label">Job Status</label>
-                            <select id="job_id_filter_2" class="form-control">
-                                <option value="">All Job IDs</option>
-                                @foreach($jobStatus as $job)
-                                    <option value="{{ $job->id }}">{{ $job->status }}</option>
+                            <label for="company_id_filter_2" class="form-label">Company</label>
+                            <select id="company_id_filter_2" class="form-control select2">
+                                <option value="">All Companies</option>
+                                @foreach($companies as $id => $company)
+                                    <option value="{{ $id }}">{{ $company }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -67,11 +67,10 @@
                     <tr>
                         <th>#</th>
                         <th>Job No</th>
+                        <th>Company</th>
                         <th>Job Status</th>
                         <th>Start Time</th>
                         <th>End Time</th>  
-                        <th>Result</th>
-                        <th>Rating</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -107,7 +106,7 @@ $(document).ready(function () {
             url: '{{ route("demo-client-reports.data") }}',
             data: function (d) {
                 d.job_id = $('#job_id_filter_1').val();
-                d.job_status = $('#job_id_filter_2').val();
+                d.company_id = $('#company_id_filter_2').val();
                 d.start_date = $('#start_date').val();
                 d.end_date = $('#end_date').val();
             }
@@ -115,17 +114,18 @@ $(document).ready(function () {
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'job_id', name: 'job_id' },
+            { data: 'company', name: 'company' },
             { data: 'job_status', name: 'job_status' },
             { data: 'job_start_time', name: 'job_start_time' },
             { data: 'job_end_time', name: 'job_end_time' },
-            { data: 'result', name: 'result' },
-            { data: 'rating', name: 'rating' },
+            // { data: 'result', name: 'result' },
+            // { data: 'rating', name: 'rating' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ],
         responsive: true
     });
 
-    $('#job_id_filter_1, #job_id_filter_2, #start_date, #end_date').on('change', function () {
+    $('#job_id_filter_1, #company_id_filter_2, #start_date, #end_date').on('change', function () {
         table.ajax.reload();
     });
 

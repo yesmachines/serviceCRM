@@ -29,33 +29,35 @@
                             <label for="job_id_filter_1" class="form-label">Job No</label>
                             <select id="job_id_filter_1" class="form-control select2" data-toggle="select2">
                                 <option value="">All Job IDs</option>
-                                @foreach($jobSchedules as $job)
-                                    <option value="{{ $job->id }}">{{ $job->job_no }}</option>
+                                @foreach($jobSchedules as $id => $job)
+                                    <option value="{{ $id }}">{{ $job }}</option>
                                 @endforeach
                             </select>
                         </div>
 
 
-                        <div class="col-lg-3">
-                            <label for="serial_id_filter_2" class="form-label">Serial No</label>
-                            <select id="serial_id_filter_2" class="form-control">
-                                <option value="">All Serial No</option>
-                                @foreach($serialNos as $serial)
-                                    <option value="{{ $serial->id }}">{{ $serial->serial_no }}</option>
+                      <!-- Second Dropdown -->
+                      <div class="col-lg-3">
+                            <label for="company_id_filter_2" class="form-label">Company</label>
+                            <select id="company_id_filter_2" class="form-control select2">
+                                <option value="">All Companies</option>
+                                @foreach($companies as $id => $company)
+                                    <option value="{{ $id }}">{{ $company }}</option>
                                 @endforeach
                             </select>
                         </div>
-                      
-                        <!-- Second Dropdown -->
-                        <div class="col-lg-3">
-                            <label for="job_status_id_filter_3" class="form-label">Job Status</label>
-                            <select id="job_status_id_filter_3" class="form-control">
-                                <option value="">All Job</option>
-                                @foreach($jobStatus as $job)
-                                    <option value="{{ $job->id }}">{{ $job->status }}</option>
-                                @endforeach
-                            </select>
-                        </div>                       
+
+                          <!-- Start Date -->
+                            <div class="col-lg-3">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" id="start_date" class="form-control" />
+                            </div>
+
+                            <!-- End Date -->
+                            <div class="col-lg-3">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" id="end_date" class="form-control" />
+                            </div>                     
                     </div>
 
                 <div class="card-body">
@@ -65,11 +67,10 @@
                             <tr>
                               <th>#</th>
                               <th>Job Id</th>
-                              <th>Serial No</th>
-                              <th>Job Status</th>
-                            
                               <th>Company</th>
-                              <th>Os Number</th>
+                              <th>Job Status</th>
+                              <th>Stard Time</th>
+                              <th>End Time</th>
                               <th>Actions</th>
                             </tr>
                            
@@ -116,9 +117,9 @@
                 url: '{{ route("installation-reports.data") }}',
                 data: function (d) {
                     d.job_id = $('#job_id_filter_1').val();
-                   
-                    d.serial_id = $('#serial_id_filter_2').val();
-                    d.job_status = $('#job_status_id_filter_3').val();
+                    d.company_id = $('#company_id_filter_2').val();
+                    d.start_date = $('#start_date').val();
+                    d.end_date = $('#end_date').val();
                     
                 }
             },
@@ -126,20 +127,21 @@
           
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+
                 { data: 'job_id', name: 'job_id' },
-                { data: 'serial_no', name: 'serial_no' },
-                { data: 'job_status', name: 'job_status' },
-              
                 { data: 'company', name: 'company' },
-                { data: 'order_no', name: 'order_no' },
+                { data: 'job_status', name: 'job_status' },
+                { data: 'job_start_time', name: 'job_start_time' },
+                { data: 'job_end_time', name: 'job_end_time' },
+        
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
             ]
         });
 
 
-        $('#job_id_filter_1, #serial_id_filter_2, #job_status_id_filter_3').on('change', function () {
-            table.ajax.reload();
-        });
+        $('#job_id_filter_1, #company_id_filter_2, #start_date, #end_date').on('change', function () {
+         table.ajax.reload();
+       });
 
         $('.select2').select2();
     });

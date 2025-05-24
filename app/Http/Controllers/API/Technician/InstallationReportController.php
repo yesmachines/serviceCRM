@@ -15,7 +15,10 @@ class InstallationReportController extends Controller
 {
     public function index()
     {
-        $reports = InstallationReport::with(['jobSchedule', 'order', 'company', 'brand', 'product'])->latest()->paginate(15);
+        $reports = InstallationReport::with(['jobSchedule', 'order', 'company', 'brand', 'product',
+        'attendees.user'])->latest()->paginate(15);
+
+      
         return successResponse('Success', InstallationReportResource::collection($reports));
     }
 
@@ -38,7 +41,7 @@ class InstallationReportController extends Controller
             'designation'           => 'nullable|string|max:255',
             'client_signature'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'attendees' => 'nullable|array',
-            'attendees.*.id' => 'nullable|exists:technicians,id',
+            'attendees.*.id' => 'nullable|exists:users,id',
             'technician_feedbacks' => 'nullable|array',
             'client_feedbacks' => 'nullable|array',
         ]
@@ -121,8 +124,9 @@ class InstallationReportController extends Controller
             $report->attendees()->createMany($attendeeData);
         }
 
-        $report->load(['jobSchedule', 'order', 'company', 'brand', 'product','attendees.technician.user.employee','technicianFeedbacks','clientFeedbacks']);
+        $report=  $report->load(['jobSchedule', 'order', 'company', 'brand', 'product','attendees.user','technicianFeedbacks','clientFeedbacks']);
 
+    
         return response()->json([
             'status' => true,
             'message' => 'Installation report created successfully.',
@@ -169,7 +173,7 @@ class InstallationReportController extends Controller
             'designation'           => 'nullable|string|max:255',
             'client_signature'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'attendees' => 'nullable|array',
-            'attendees.*.id' => 'nullable|exists:technicians,id',
+            'attendees.*.id' => 'nullable|exists:users,id',
             'technician_feedbacks' => 'nullable|array',
             'client_feedbacks' => 'nullable|array',
         ]
@@ -245,6 +249,7 @@ class InstallationReportController extends Controller
                 ]);
             }
         }
+       
       
         // CLIENT FEEDBACKS
         if (!empty($data['client_feedbacks']) && is_array($data['client_feedbacks'])) {
@@ -261,7 +266,7 @@ class InstallationReportController extends Controller
             }
         }
     
-        $report->load(['jobSchedule', 'order', 'company', 'brand', 'product','attendees.technician.user.employee','technicianFeedbacks','clientFeedbacks']);
+        $report->load(['jobSchedule', 'order', 'company', 'brand', 'product','attendees.user','technicianFeedbacks','clientFeedbacks']);
 
         return response()->json([
             'status' => true,
