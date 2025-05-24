@@ -10,16 +10,16 @@ use Yajra\DataTables\Facades\DataTables;
 class TaskStatusController extends Controller
 {
     
-    //  public function __construct() {
-    //     $this->middleware(function ($request, $next) {
-    //         if (!auth()->user()->hasRole('superadmin')) {
-    //             alert()->error('No Access!', 'You don\'t have permission to access this page.');
-    //             return redirect()->route('dashboard');
-    //         }
+     public function __construct() {
+        $this->middleware(function ($request, $next) {
+            if (!auth()->user()->hasRole('superadmin')) {
+                alert()->error('No Access!', 'You don\'t have permission to access this page.');
+                return redirect()->route('dashboard');
+            }
 
-    //         return $next($request);
-    //     });
-    // }
+            return $next($request);
+        });
+    }
      public function index(Request $request){
 
 
