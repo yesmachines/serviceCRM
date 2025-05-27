@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\DemoClientFeedbackController;
+use App\Http\Controllers\Auth\DemoRequestController;
 use App\Http\Controllers\Auth\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\HomeController;
@@ -55,8 +56,16 @@ use App\Http\Controllers\Auth\VehicleController;
         Route::resource('demo-client-reports', DemoClientFeedbackController::class)->except('show');
         Route::get('demo-client-reports/data', [DemoClientFeedbackController::class, 'getData'])->name('demo-client-reports.data');
         
+
+        Route::resource('drf-requests', DemoRequestController::class)->except('show');
+        Route::get('drf-requests/data', [DemoRequestController::class, 'getData'])->name('drf-requests.data');
+
+        Route::get('demo-request/view/{id}', [DemoRequestController::class, 'view'])->name('demorequest.view');
+
+
         Route::get('/ajax/find-demo', [JobScheduleController::class, 'findDemo'])->name('find-demo.ajax');
         
 });
 
 
+// <a class="dropdown-item" href="{{ route('drf-requests.view', $report->id) }}">View DRF Details</a>

@@ -2,6 +2,14 @@
 
 return [
     'admin' => [
+
+        [
+            'text' => 'DRF Requests',
+            'route' => 'drf-requests.index',
+            'icon' => 'ri-inbox-archive-fill',
+            //'can' => 'permission',
+            'active' => ['drf-requests/*']
+                ],
        
              [
             'text' => 'Vehicles',
@@ -10,6 +18,8 @@ return [
             //'can' => 'permission',
             'active' => ['vehicles/*']
                 ],
+
+              
 
            [
             'text' => 'Employees',
