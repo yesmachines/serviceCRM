@@ -59,22 +59,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($report->clientFeedbacks as $feedback)
-                                <tr>
-
-                                    <td class="text-start">
-                                                {{ \App\Enums\InstallationFeedbackLabel::fromKey($feedback->label ?? '')?->label() ?? '-' }}
-                                            </td>
-
-                                    <td>@if(strtolower($feedback->feedback) == 'excellent') ✓ @endif</td>
-                                    <td>@if(strtolower($feedback->feedback) == 'good') ✓ @endif</td>
-                                    <td>@if(strtolower($feedback->feedback) == 'to-improve' || strtolower($feedback->feedback) == 'to improve') ✓ @endif</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">No client feedbacks available.</td>
-                                </tr>
-                            @endforelse
+                        @forelse($report->clientFeedbacks as $feedback)
+                            <tr>
+                                <td class="text-start">
+                                    {{ \App\Enums\InstallationCF::tryFrom($feedback->label)?->label() ?? '-' }}
+                                </td>
+                                <td>@if(strtolower($feedback->feedback) === 'excellent') ✓ @endif</td>
+                                <td>@if(strtolower($feedback->feedback) === 'good') ✓ @endif</td>
+                                <td>
+                                    @if(in_array(strtolower($feedback->feedback), ['to-improve', 'to improve'])) ✓ @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center">No client feedbacks available.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
 
@@ -92,7 +92,7 @@
                                 <tbody>
                                     @forelse($report->technicianFeedbacks as $feedback)
                                         <tr>
-                                            <td>{{ $feedback->label ?? '-' }}</td>         {{-- Description --}}
+                                            <td>{{ $feedback->label ?? '-' }}   {{ \App\Enums\InstallationTF::fromKey($feedback->label ?? '')?->label() ?? '-' }}</td>         {{-- Description --}}
                                             <td>{{ $feedback->feedback ?? '-' }}</td>      {{-- Yes / No --}}
                                             <td>{{ $feedback->remarks ?? '-' }}</td>       {{-- Remarks --}}
                                         </tr>

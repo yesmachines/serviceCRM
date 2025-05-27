@@ -59,10 +59,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                              
                                     @forelse($report->clientFeedbacks as $feedback)
                                         <tr>
                                              <td class="text-start">
-                                                {{ \App\Enums\InstallationFeedbackLabel::fromKey($feedback->label ?? '')?->label() ?? '-' }}
+                                            {{ \App\Enums\InstallationCF::fromKey($feedback->label ?? '')?->label() ?? '-' }}
+                                            
                                             </td>
                                             <td>@if(strtolower($feedback->feedback) == 'excellent') ✓ @endif</td>
                                             <td>@if(strtolower($feedback->feedback) == 'good') ✓ @endif</td>

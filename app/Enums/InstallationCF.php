@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum InstallationFeedbackLabel: string
+enum InstallationCF: string
 {
     case PUNCTUALITY = 'punctuality';
     case KNOWLEDGE_ATTITUDE = 'knowledge_attitude';
@@ -24,3 +24,4 @@ enum InstallationFeedbackLabel: string
         return self::tryFrom($key);
     }
 }
+

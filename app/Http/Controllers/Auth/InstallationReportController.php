@@ -65,7 +65,7 @@ class InstallationReportController extends Controller
             }
             
             $reports = $query->get()->unique('id')->values();
-            
+           
 
             return DataTables::of($reports)
             ->addIndexColumn()
