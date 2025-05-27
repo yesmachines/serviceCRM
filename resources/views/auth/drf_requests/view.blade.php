@@ -12,87 +12,108 @@
     @endsection
 
     @section('content')
-        <!-- Begin page -->
         <div class="wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="clearfix">
+                                    <div class="w-100" style="max-width:100%; padding: 0 24px;">
+                                        @if(isset($drfDatas))
+                                            @php
+                                                $demoDate = $drfDatas->demo_date ? \Carbon\Carbon::parse($drfDatas->demo_date)->format('d M Y') : null;
+                                            @endphp
 
-            
-         
+                                            <div class="card p-3 shadow-sm border-0" style="background:#f8f9fa; text-align:left;">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-3 col-5 text-muted">Brand:</div>
+                                                    <div class="col-md-9 col-7 fw-bold">{{ $drfDatas->brand->brand ?? '-' }}</div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-3 col-5 text-muted">Company:</div>
+                                                    <div class="col-md-9 col-7 fw-bold">{{ $drfDatas->company->company ?? '-' }}</div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-3 col-5 text-muted">Customer:</div>
+                                                    <div class="col-md-9 col-7 fw-bold">{{ $drfDatas->customer->fullname ?? '-' }}</div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-3 col-5 text-muted">Demo Date:</div>
+                                                    <div class="col-md-9 col-7 fw-bold">{{ $demoDate ?? '-' }}</div>
+                                                </div>
 
-
-            <!-- <div class="content-page">
-                <div class="content">
-
-                    <!-- Start Content-->
-                    <div class="container-fluid">
-
-                       
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-
-                                        <!-- Invoice Logo-->
-                                        <div class="clearfix">
-                                            <!-- <div class="float-start mb-3">
-                                                <img src="assets/images/logo-dark.png" alt="dark logo" height="22">
-                                            </div> -->
-                                            <div class="w-100" style="max-width:100%; padding: 0 24px;">
-                                                <h4 class="m-0 d-print-none mb-3">Demo Request Form</h4>
-                                                @if(isset($drfDatas))
-                                                    <div class="card p-3 shadow-sm border-0" style="background:#f8f9fa; text-align:left;">
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-3 col-5 text-muted">Brand:</div>
-                                                            <div class="col-md-9 col-7 fw-bold">{{ $drfDatas->brand->brand ?? '-' }}</div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-3 col-5 text-muted">Company:</div>
-                                                            <div class="col-md-9 col-7 fw-bold">{{ $drfDatas->company->company ?? '-' }}</div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-3 col-5 text-muted">Customer:</div>
-                                                            <div class="col-md-9 col-7 fw-bold">{{ $drfDatas->customer->fullname ?? '-' }}</div>
-                                                        </div>
-                                                        @if($drfDatas->details && count($drfDatas->details))
-                                                            <div class="row mb-2">
-                                                                <div class="col-12 text-muted mb-1">Details:</div>
-                                                                <div class="col-12">
-                                                                    @foreach($drfDatas->details as $detail)
-                                                                    
-                                                                        <div class="border rounded p-2 mb-2 bg-white">
-                                                                            <div class="row">
-                                                                            @foreach($detail->getAttributes() as $key => $value)
-                                                                                @if($key !== 'id' && $key !== 'demo_request_id' && $key !== 'created_at' && $key !== 'updated_at')
-                                                                                    <div class="col-md-4 col-6 mb-1">
-                                                                                        <span class="text-muted">{{ ucfirst(str_replace('_',' ',$key)) }}:</span>
-                                                                                        <span class="fw-semibold">{{ $value }}</span>
-                                                                                    </div>
-                                                                                @endif
-                                                                            @endforeach
-                                                                            </div>
+                                                
+                                                @if($drfDatas->details && count($drfDatas->details))
+                                                    <div class="row mb-2">
+                                                        <div class="col-12 text-muted mb-2">Details:</div>
+                                                        @foreach($drfDatas->details as $detail)
+                                                            <div class="col-12">
+                                                                <div class="border rounded p-3 mb-3 bg-white">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Product Name:</span>
+                                                                            <span class="fw-semibold">{{ $detail->product->title ?? 'N/A' }}</span>
                                                                         </div>
-                                                                    @endforeach
+
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Description:</span>
+                                                                            <span class="fw-semibold">{{ $detail->description ?? 'N/A' }}</span>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Quantity :</span>
+                                                                            <span class="fw-semibold">{{ $detail->qty ?? 'N/A' }}</span>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Job No(s):</span>
+                                                                            @if($drfDatas->jobSchedules && $drfDatas->jobSchedules->count())
+                                                                                @foreach($drfDatas->jobSchedules as $job)
+                                                                                    <div class="fw-semibold">{{ $job->job_no ?? 'N/A' }}</div>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <span class="fw-semibold">N/A</span>
+                                                                            @endif
+                                                                        </div>
+
+                                        
+
+                                                                      <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Machine In:</span>
+                                                                            <span class="fw-semibold">{{ $detail->machine_in ? \Carbon\Carbon::parse($detail->machine_in)->format('d M Y h:i A') : 'N/A' }}</span>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Machine Out:</span>
+                                                                            <span class="fw-semibold">{{ $detail->machine_out ? \Carbon\Carbon::parse($detail->machine_out)->format('d M Y h:i A') : 'N/A' }}</span>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Product Name:</span>
+                                                                            <span class="fw-semibold">{{ $detail->product->title ?? 'N/A' }}</span>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-12 mb-2">
+                                                                            <span class="text-muted d-block">Remarks:</span>
+                                                                            <span class="fw-semibold">{{ $detail->remarks ?? 'N/A' }}</span>
+                                                                        </div>
+                                                                        
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        @else
-                                                            <div class="row mb-2">
-                                                                <div class="col-12 text-muted">No details available.</div>
-                                                            </div>
-                                                        @endif
+                                                        @endforeach
                                                     </div>
-                                                @else
-                                                    <div class="mt-3 text-muted">No request data available.</div>
                                                 @endif
-                                            </div>
-                                        </div>
 
-                                        <!-- Invoice Detail-->
-                                     
-                      
-                    </div>
-                </div>
-            </div>
-          
-        </div>
-        @endsection
-  </x-app-layout>
+                                    </div> <!-- /.w-100 -->
+                                    @endif
+                                </div> <!-- /.clearfix -->
+                            </div> <!-- /.card-body -->
+                        </div> <!-- /.card -->
+                    </div> <!-- /.col-12 -->
+                </div> <!-- /.row -->
+            </div> <!-- /.container-fluid -->
+        </div> <!-- /.wrapper -->
+    @endsection
+</x-app-layout>

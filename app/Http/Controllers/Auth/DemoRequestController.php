@@ -87,9 +87,8 @@ class DemoRequestController extends Controller
         return redirect()->route('drf-requests.index')->withErrors($validator);
     }
 
-    $drfDatas = DemoRequest::with(['details','brand', 'company', 'customer'])->findOrFail($id);
+    $drfDatas = DemoRequest::with(['details','brand', 'company', 'customer','jobSchedules'])->findOrFail($id);
 
-    // dd($drfDatas );
 
     return view('auth.drf_requests.view',compact('drfDatas'));
 
