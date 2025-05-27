@@ -12,15 +12,19 @@
     @endsection
 
     @section('content')
+   
+
+                
     <div class="row">
         <div class="col-12">
             <div class="card">
 
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title mb-0">Job Schedules</h4>
+                    <h4 class="header-title mb-0"></h4>
                     <a href="{{route('job-schedules.create')}}" class="btn btn-mg btn-secondary">
-                        {{ __('Create Job Schedule') }}
+                    {{ __('Create Job Schedule') }}
                     </a>
+                    
                 </div>
 
                 <div class="card-body">
