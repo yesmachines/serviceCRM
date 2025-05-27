@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\DemoRequest;
 use App\Models\JobSchedule;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,8 +19,9 @@ class DemoRequestController extends Controller
 
     $jobSchedules = JobSchedule::orderBy('job_no')->pluck('job_no', 'id');
     $companies = Company::pluck('company', 'id');
-   
-    return view('auth.drf_requests.index',compact('jobSchedules','companies'));
+    $brands = Supplier::pluck('brand', 'id');
+    $customers = Customer::pluck('fullname', 'id');
+    return view('auth.drf_requests.index',compact('jobSchedules','companies','brands','customers'));
     
    }
    public function getData(Request $request)
@@ -28,9 +31,26 @@ class DemoRequestController extends Controller
    
            $query = DemoRequest::with(['brand', 'company', 'customer'])->latest();
    
+ 
            if ($request->filled('company_id')) {
                $query->where('company_id', $request->company_id);
            }
+
+            if ($request->filled('company_id')) {
+                $query->where('company_id', $request->company_id);
+            }
+
+            if ($request->filled('brand')) {
+                $query->where('brand_id', $request->brand);
+            }
+
+            if ($request->filled('customer')) {
+                $query->where('customer_id', $request->customer);
+            }
+
+            if ($request->filled('demo_date')) {
+                $query->whereDate('demo_date', $request->demo_date);
+            }
    
            $reports = $query->get();
    

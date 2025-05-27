@@ -22,6 +22,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 
 
+
 class JobScheduleService implements JobScheduleServiceInterface
 {
 
@@ -29,23 +30,33 @@ class JobScheduleService implements JobScheduleServiceInterface
   public function getJobSchedulesForDataTable(Request $request)
   {
    
-    $query = JobSchedule::with(['customer', 'company', 'product', 'servicetype', 'jobstatus'])->get();
+    $query = JobSchedule::with(['customer', 'company', 'product', 'servicetype', 'jobstatus']);
+
+    if (Request::input('company_id')) {
+        $query->where('company_id', Request::input('company_id'));
+    }
+    
+    if (Request::input('job_id')) {
+        $query->where('id', Request::input('job_id'));
+    }
+    
+    if (Request::input('type_id')) {
+        $query->where('job_type', Request::input('type_id'));
+    }
+    
+    if (Request::input('status_id')) {
+        $query->where('job_status_id', Request::input('status_id'));
+    }
+    
 
     return DataTables::of($query)
         ->addIndexColumn()
-        ->addColumn('job_no', function ($row) {
-            return $row->job_no ?? '-';
-        })
-        ->addColumn('job_type', function ($row) {
-            return $row->servicetype->title ?? '-';
-        })
-      ->addColumn('customer', function ($row) {
-            return $row->customer->fullname ?? '-';
-        })
-        // ->addColumn('product', function ($row) {
-        //     return $row->product->title ?? '-';
-        // })
-      
+        ->addColumn('job_no', fn($row) => $row->job_no ?? '-')
+        ->addColumn('job_type', fn($row) => $row->servicetype->title ?? '-')
+        ->addColumn('customer', fn($row) => $row->customer->fullname ?? '-')
+        ->addColumn('company', fn($row) => $row->company->company ?? '-')
+        ->addColumn('product', fn($row) => $row->product->title ?? '-')
+        ->addColumn('jobstatus', fn($row) => $row->jobstatus->status ?? '-')
         ->addColumn('actions', function ($row) {
             try {
                 return view('auth.job_schedules.actions', ['job' => $row])->render();
@@ -55,7 +66,6 @@ class JobScheduleService implements JobScheduleServiceInterface
                     'message' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-        
                 return 'Error rendering actions';
             }
         })

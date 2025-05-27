@@ -20,7 +20,12 @@ use Spatie\Permission\Models\Role;
 class TechnicianController extends Controller {
 
     public function index(Request $request) {
-        return view('auth.technicians.index');
+        $targetRoles = ['servicemanager', 'servicecoordinator', 'servicetechnician'];
+
+            // Fetch only roles in the allowed list
+            $roles = Role::whereIn('name', $targetRoles)->get();
+
+        return view('auth.technicians.index',compact('roles'));
     }
 
     public function getData(Request $request) {
@@ -33,6 +38,29 @@ class TechnicianController extends Controller {
                     $q->whereIn('name', $targetRoles);
                 })
                 ->select('users.*');
+
+                $requestedRole = $request->input('role');          // safe access
+                if ($requestedRole !== null && $requestedRole !== '') {
+                    $query->whereHas('roles', function ($q) use ($requestedRole) {
+                        $q->where('name', $requestedRole);
+                    });
+                }
+                $requestedDesignation = $request->input('designation');
+                if ($requestedDesignation !== null && $requestedDesignation !== '') {
+                    $query->whereHas('employee', function ($q) use ($requestedDesignation) {
+                        $q->where('designation', 'like', '%' . $requestedDesignation . '%');
+                    });
+                }
+
+                if ($request->filled('email')) {
+                    $query->where('email', 'like', '%' . $request->input('email') . '%');
+                }
+            
+                if ($request->filled('phone')) {
+                    $query->whereHas('employee', function ($q) use ($request) {
+                        $q->where('phone', 'like', '%' . $request->input('phone') . '%');
+                    });
+                }
 
         return DataTables::of($query)
                         ->addIndexColumn()

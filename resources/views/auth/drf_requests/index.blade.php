@@ -39,12 +39,39 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="col-lg-3">
+                            <label for="brand_filter" class="form-label">Brand</label>
+                            <select id="brand_filter" class="form-control select2">
+                                <option value="">All Brands</option>
+                                @foreach($brands as  $id => $brand)
+                                    <option value="{{ $id }}">{{ $brand }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="customer_filter" class="form-label">Customer</label>
+                            <select id="customer_filter" class="form-control select2">
+                                <option value="">All Customers</option>
+                                @foreach($customers as  $id => $customer)
+                                    <option value="{{$id }}">{{ $customer }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="demo_date_filter" class="form-label">Demo Date</label>
+                            <input type="date" id="demo_date_filter" class="form-control" />
+                        </div>
+
                     </div>
 
                     <table id="drf-request-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>DRF References</th>
                                 <th>Brand</th>
                                 <th>Company</th>
                                 <th>Customer</th>
@@ -93,10 +120,14 @@
                         url: '{{ route("drf-requests.data") }}',
                         data: function (d) {
                             d.company_id = $('#company_id_filter').val();
+                            d.brand = $('#brand_filter').val();
+                            d.customer = $('#customer_filter').val();
+                            d.demo_date = $('#demo_date_filter').val();
                         }
                     },
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                        { data: 'reference_no', name: 'reference_no' },
                         { data: 'brand', name: 'brand' },
                         { data: 'company', name: 'company' },
                         { data: 'customer', name: 'customer' },
@@ -106,9 +137,9 @@
                     ]
                 });
 
-                $('#company_id_filter').on('change', function () {
-                    table.ajax.reload();
-                });
+                $('#company_id_filter, #brand_filter, #customer_filter, #demo_date_filter').on('change', function () {
+                        table.ajax.reload();
+                    });
 
                 $('.select2').select2();
             });

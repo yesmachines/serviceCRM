@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreJobScheduleRequest;
 use App\Http\Requests\Auth\UpdateJobScheduleRequest;
+use App\Models\Company;
 use App\Models\Customer;
+use App\Models\JobSchedule;
+use App\Models\JobStatus;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ServiceType;
 use App\Services\Interfaces\JobScheduleServiceInterface;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -26,8 +30,11 @@ class JobScheduleController extends Controller
     }
 
     public function index(Request $request){
-
-        return view('auth.job_schedules.index');
+        $types  = ServiceType::pluck('title', 'id');
+        $companies = Company::pluck('company', 'id');
+        $statuses = JobStatus::pluck('status','id');
+        $jobSchedules = JobSchedule::orderBy('job_no')->pluck('job_no', 'id');
+        return view('auth.job_schedules.index',compact('companies','types','statuses','jobSchedules'));
     }
 
 
