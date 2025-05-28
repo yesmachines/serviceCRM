@@ -61,9 +61,7 @@
                         <tbody>
                         @forelse($report->clientFeedbacks as $feedback)
                             <tr>
-                                <td class="text-start">
-                                    <td>{{ $feedback->label_name }} </td>
-                                </td>
+                                <td class="text-start">{{ $feedback->label_name }}</td>
                                 <td>@if(strtolower($feedback->feedback) === 'excellent') ✓ @endif</td>
                                 <td>@if(strtolower($feedback->feedback) === 'good') ✓ @endif</td>
                                 <td>
