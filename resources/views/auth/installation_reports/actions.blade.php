@@ -62,7 +62,7 @@
                         @forelse($report->clientFeedbacks as $feedback)
                             <tr>
                                 <td class="text-start">
-                                    {{ \App\Enums\InstallationCF::tryFrom($feedback->label)?->label() ?? '-' }}
+                                    {{ \App\Enums\InstallationCF::tryFrom($feedback->label) ?? '-' }}
                                 </td>
                                 <td>@if(strtolower($feedback->feedback) === 'excellent') ✓ @endif</td>
                                 <td>@if(strtolower($feedback->feedback) === 'good') ✓ @endif</td>
