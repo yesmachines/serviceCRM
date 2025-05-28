@@ -70,7 +70,8 @@
                     </div>
 
                     <!-- Table -->
-                    <table id="jobschedules-datatable" class="table table-striped dt-responsive nowrap w-100">
+                    <table id="jobschedules-datatable" class="table table-striped dt-responsive w-100">
+                        
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -96,6 +97,12 @@
         <link href="{{ asset('cms/assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('cms/assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('cms/assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
+        <style>
+            div.dataTables_wrapper {
+                width: 100%;
+                overflow-x: auto;
+            }
+            </style>
     @endsection
 
     @section('pre-js')
@@ -112,6 +119,7 @@
                 const table = $('#jobschedules-datatable').DataTable({
                     processing: true,
                     serverSide: true,
+                    scrollX: true,
                     ajax: {
                         url: '{{ route('job-schedules.data') }}',
                         data: function (d) {
