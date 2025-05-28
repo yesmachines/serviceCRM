@@ -1,40 +1,43 @@
 <div class="row">
 
     <div class="col-md-4">
-       
-
     <div class="mb-3">
     {{ html()->label('Job Type', 'job_type_id')->class('form-label') }}
 
-    <select name="job_type_id" class="form-control{{ $errors->has('job_type_id') ? ' is-invalid' : '' }}" id="job_type_id">
-        <option value="">Select Job Type</option>
+    @if (!empty($data->job_type)) {{-- If job type is set, show read-only --}}
+        @php
+            $selectedJobType = \App\Models\ServiceType::find($data->job_type);
+        @endphp
+        <input type="hidden" name="job_type_id" value="{{ $selectedJobType->id }}">
+        <input type="text" class="form-control" value="{{ $selectedJobType->title }}" readonly>
+    @else {{-- If job type not set, show dropdown --}}
+        <select name="job_type_id" class="form-control{{ $errors->has('job_type_id') ? ' is-invalid' : '' }}" id="job_type_id">
+            <option value="">Select Job Type</option>
 
+            @foreach ($serviceTypesGrouped[null] ?? [] as $parent)
+                @php
+                    $hasChildren = isset($serviceTypesGrouped[$parent->id]);
+                    $selectedId = old('job_type_id');
+                @endphp
 
+                @if ($hasChildren)
+                    <optgroup label="{{ $parent->title }}">
+                        @foreach ($serviceTypesGrouped[$parent->id] as $child)
+                            <option value="{{ $child->id }}" {{ $selectedId == $child->id ? 'selected' : '' }}>
+                                {{ $child->title }}
+                            </option>
+                        @endforeach
+                    </optgroup>
+                @else
+                    <option value="{{ $parent->id }}" {{ $selectedId == $parent->id ? 'selected' : '' }}>
+                        {{ $parent->title }}
+                    </option>
+                @endif
+            @endforeach
+        </select>
 
-        @foreach ($serviceTypesGrouped[null] ?? [] as $parent)
-            @php
-                $hasChildren = isset($serviceTypesGrouped[$parent->id]);
-                $isSelectedParent = old('job_type_id', $data->job_type ?? '') == $parent->id;
-            @endphp
-
-            @if ($hasChildren)
-                <optgroup label="{{ $parent->title }}">
-                    @foreach ($serviceTypesGrouped[$parent->id] as $child)
-                        <option value="{{ $child->id }}"
-                            {{ old('job_type_id', $data->job_type ?? '') == $child->id ? 'selected' : '' }}>
-                            {{ $child->title }}
-                        </option>
-                    @endforeach
-                </optgroup>
-            @else
-                <option value="{{ $parent->id }}" {{ $isSelectedParent ? 'selected' : '' }}>
-                    {{ $parent->title }}
-                </option>
-            @endif
-        @endforeach
-    </select>
-
-    {!! $errors->first('job_type_id', '<div class="invalid-feedback">:message</div>') !!}
+        {!! $errors->first('job_type_id', '<div class="invalid-feedback">:message</div>') !!}
+    @endif
 </div>
 
         

@@ -180,20 +180,20 @@ class JobScheduleService implements JobScheduleServiceInterface
     {
         $jobSchedule = JobSchedule::findOrFail($id);
 
-        $jobTypeChanged = $jobSchedule->job_no != $data['job_type_id'];
-        $jobSchedule->job_no = $data['job_type_id'];        
+        // $jobTypeChanged = $jobSchedule->job_no != $data['job_type_id'];
+        // $jobSchedule->job_no = $data['job_type_id'];        
     
-        if ($jobTypeChanged) {
-            // Regenerate job_id
-            $companyCode = 'YES'; 
-            $jobTypeCode = strtoupper(optional(ServiceType::find($data['job_type_id']))->code);
-            $year = now()->format('y');
-            // Count how many jobs exist for this new combination
-            $count = JobSchedule::where('job_no', 'like', "$companyCode/$jobTypeCode/$year/%")->count();
-            $sequence = $count + 1;
+        // if ($jobTypeChanged) {
+        //     // Regenerate job_id
+        //     $companyCode = 'YES'; 
+        //     $jobTypeCode = strtoupper(optional(ServiceType::find($data['job_type_id']))->code);
+        //     $year = now()->format('y');
+        //     // Count how many jobs exist for this new combination
+        //     $count = JobSchedule::where('job_no', 'like', "$companyCode/$jobTypeCode/$year/%")->count();
+        //     $sequence = $count + 1;
 
-            $jobSchedule->job_no = "{$companyCode}/{$jobTypeCode}/{$year}/{$sequence}";
-        }
+        //     $jobSchedule->job_no = "{$companyCode}/{$jobTypeCode}/{$year}/{$sequence}";
+        // }
  
         $jobSchedule->company_id     = $data['company_id'];
         $jobSchedule->customer_id    = $data['customer_id'];
@@ -242,14 +242,7 @@ class JobScheduleService implements JobScheduleServiceInterface
             ServiceJob::where('job_schedule_id', $jobSchedule->id)->delete();
         }
     }
-// "id" => 3
-//     "job_schedule_id" => 11
-//     "service_type_id" => 5
-//     "machine_type" => "YM"
-//     "is_warranty" => "yes"
-//     "deleted_at" => null
-//     "created_at" => "2025-05-28 11:00:31"
-//     "updated_at" => "2025-05-28 11:00:31"
+
  public function findOrder(Request $request): array
     {
         $search = Request::input('q');
