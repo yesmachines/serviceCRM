@@ -25,6 +25,6 @@ class InstallationTechnicianFeedback extends Model
     
      public function getLabelNameAttribute()
     {
-        return \App\Enums\InstallationCF::from($this->label)->label();
+        return option(\App\Enums\InstallationCF::from($this->label))->label()??'--';
     }
 }
