@@ -92,7 +92,8 @@
                                 <tbody>
                                     @forelse($report->technicianFeedbacks as $feedback)
                                         <tr>
-                                            <td>{{ $feedback->label ?? '-' }}   {{ \App\Enums\InstallationTF::fromKey($feedback->label ?? '')?->label() ?? '-' }}</td>         {{-- Description --}}
+                                            <td>{{ $feedback->label_name ?? '-' }} </td>
+                                            <!--<td>{{ $feedback->label ?? '-' }}   {{ \App\Enums\InstallationTF::fromKey($feedback->label ?? '')?->label() ?? '-' }}</td>         {{-- Description --}}-->
                                             <td>{{ $feedback->feedback ?? '-' }}</td>      {{-- Yes / No --}}
                                             <td>{{ $feedback->remarks ?? '-' }}</td>       {{-- Remarks --}}
                                         </tr>

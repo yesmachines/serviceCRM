@@ -22,4 +22,9 @@ class InstallationTechnicianFeedback extends Model
     {
         return $this->belongsTo(InstallationReport::class);
     }
+    
+     public function getLabelNameAttribute()
+    {
+        return \App\Enums\InstallationCF::from($this->label)->label();
+    }
 }
