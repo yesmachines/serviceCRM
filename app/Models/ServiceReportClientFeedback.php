@@ -26,4 +26,10 @@ class ServiceReportClientFeedback extends Model
      {
          return $this->belongsTo(ServiceReport::class);
      }
+
+     
+     public function getLabelNameAttribute()
+    {
+        return \App\Enums\ServiceCF::tryFrom($this->label)?->label() ?? '--';
+    }
 }

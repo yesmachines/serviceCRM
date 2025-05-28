@@ -21,8 +21,17 @@ enum ServiceCF: string
         };
     }
 
+    
+    public static function toKeyLabelArray(): array {
+        return array_map(fn($case) => [
+            'key' => $case->value,
+            'label' => $case->label(),
+                ], self::cases());
+    }
+
     public static function fromKey(string $key): ?self
     {
         return self::tryFrom($key);
     }
 }
+
