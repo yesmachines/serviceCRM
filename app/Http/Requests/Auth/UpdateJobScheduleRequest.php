@@ -36,22 +36,22 @@ class UpdateJobScheduleRequest extends FormRequest
         ];
 
       
-    //  $jobTypeId = $this->input('job_type_id');
+     $jobTypeId = $this->input('job_type_id');
 
-    //  if ($jobTypeId) {
-    //      $jobTypeTitle = \App\Models\ServiceType::where('id', $jobTypeId)->value('title');
-    //      $jobTypeSlug = strtolower($jobTypeTitle);
+     if ($jobTypeId) {
+         $jobTypeTitle = \App\Models\ServiceType::where('id', $jobTypeId)->value('title');
+         $jobTypeSlug = strtolower($jobTypeTitle);
  
-    //      if (in_array($jobTypeSlug, ['inside', 'outside', 'amc'])) {
-    //          $rules['machine_type'] = 'required|string';
-    //          $rules['is_warranty'] = 'required|in:yes,no'; // if it's 'yes' or 'no' as string
-    //          $rules['order_id'] = 'required|exists:orders,id';
-    //      }
+         if (in_array($jobTypeSlug, ['inside', 'outside', 'amc'])) {
+             $rules['machine_type'] = 'required|string';
+             $rules['is_warranty'] = 'required|in:yes,no'; // if it's 'yes' or 'no' as string
+             $rules['order_id'] = 'required|exists:orders,id';
+         }
  
     //      if ($jobTypeSlug === 'demo') {
     //          $rules['demo_request_id'] = 'required|exists:demo_requests,id';
     //      }
-    //  }
+     }
  
      return $rules;
         

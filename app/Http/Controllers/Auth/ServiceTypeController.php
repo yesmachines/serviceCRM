@@ -34,6 +34,10 @@ class ServiceTypeController extends Controller
 
     return DataTables::of($query)
         ->addIndexColumn()
+
+        ->addColumn('code', function ($row) {
+            return $row->code ?? '-';
+        })
         ->addColumn('parent_title', function ($row) {
             return $row->parent ? $row->parent->title : '-';
         })
@@ -60,6 +64,7 @@ class ServiceTypeController extends Controller
             'title' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:service_types,id',
             'daily_report' => 'nullable|boolean',
+            'code' => 'nullable|string|max:5|unique:service_types,code',
         ]);
 
         ServiceType::create([
@@ -67,6 +72,7 @@ class ServiceTypeController extends Controller
             'parent_id' => $request->input('parent_id'),
             'slug' => Str::slug($request->input('title')),
             'daily_report' => $request->has('daily_report'),
+            'code' => $request->input('code'),
         ]);
 
         alert()->success('success', 'Job type created successfully.');
@@ -92,11 +98,14 @@ class ServiceTypeController extends Controller
             'title' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:service_types,id',
             'daily_report' => 'nullable|boolean',
+            'code' => 'nullable|string|max:5|unique:service_types,code,' . $id,
         ]);
 
         // Update fields
         $serviceType->title = $validated['title'];
         $serviceType->parent_id = $validated['parent_id'] ?? null;
+
+        $serviceType->code = $validated['code'] ?? null;
         $serviceType->daily_report = $request->has('daily_report') ? 1 : 0; // checkbox
 
         // You can also generate slug here if needed

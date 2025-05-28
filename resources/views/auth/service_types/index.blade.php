@@ -31,6 +31,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Title</th>
+                                                <th>Code</th>
                                                 <th>Parant Service</th>
                                                  <th>Daily Report</th>
                                                 <th>Actions</th>
@@ -68,6 +69,7 @@
                   columns: [
                       { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                       { data: 'title', name: 'title' },
+                      { data: 'code', name: 'code' },
                       { data: 'parent_title', name: 'parent.title' },
                       { data: 'daily_report_label', name: 'daily_report' },
                       { data: 'actions', name: 'actions', orderable: false, searchable: false },

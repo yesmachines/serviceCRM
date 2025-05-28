@@ -77,12 +77,8 @@ class JobScheduleService implements JobScheduleServiceInterface
     public function createJobSchedule(StoreJobScheduleRequest $request)
     {
 
-        $companyCode = 'YES'; // Or from related company model
-
-        // Derive jobTypeCode from ServiceType title
-        $jobTypeTitle = strtolower(optional(ServiceType::find($request->job_type_id))->title);
-        $jobTypeCode = strtoupper(substr(strtolower($jobTypeTitle), 0, 2)); // e.g., "Demo" → "DE"
-        // Get current year (last two digits)
+        $companyCode = 'YES';
+        $jobTypeCode = strtoupper(optional(ServiceType::find($request->job_type_id))->code);
         $year = now()->format('y');
         // Count existing jobs with same pattern in this year
         $count = JobSchedule::where('job_no', 'like', "$companyCode/$jobTypeCode/$year/%")->count();
@@ -91,6 +87,9 @@ class JobScheduleService implements JobScheduleServiceInterface
     
         // Final Job ID
         $jobId = "{$companyCode}/{$jobTypeCode}/{$year}/{$sequence}";
+
+
+
 
         $jobSchedule = new JobSchedule();
         $jobSchedule->job_no = $jobId;
@@ -114,12 +113,9 @@ class JobScheduleService implements JobScheduleServiceInterface
         $jobSchedule->demo_request_id = $request->demo_request_id ?? null;
         $jobSchedule->save();
 
-        // $jobType = strtolower(optional(ServiceType::find($request->job_type_id))->title);
-        // $jobTypeCode = strtoupper(substr($jobType, 0, 2));
-
-       
-
-        if (in_array($jobTypeTitle, ['amc', 'inside', 'outside'])) {
+        $jobType = strtolower(optional(ServiceType::find($request->job_type_id))->title);
+    
+        if (in_array($jobType, ['amc', 'inside', 'outside'])) {
             ServiceJob::create([
                 'job_schedule_id' => $jobSchedule->id,
                 'machine_type' => $request->machine_type,
@@ -185,24 +181,17 @@ class JobScheduleService implements JobScheduleServiceInterface
         $jobSchedule = JobSchedule::findOrFail($id);
 
         $jobTypeChanged = $jobSchedule->job_no != $data['job_type_id'];
-        // Update job_type_id
-        $jobSchedule->job_no = $data['job_type_id'];
+        $jobSchedule->job_no = $data['job_type_id'];        
     
         if ($jobTypeChanged) {
             // Regenerate job_id
-            $companyCode = 'YES'; // Replace with actual company code logic
-    
-            // Derive new job type code
-            $jobTypeTitle = optional(ServiceType::find($data['job_type_id']))->title;
-            $jobTypeCode = strtoupper(substr(strtolower($jobTypeTitle), 0, 2));
-    
+            $companyCode = 'YES'; 
+            $jobTypeCode = strtoupper(optional(ServiceType::find($data['job_type_id']))->code);
             $year = now()->format('y');
-    
             // Count how many jobs exist for this new combination
             $count = JobSchedule::where('job_no', 'like', "$companyCode/$jobTypeCode/$year/%")->count();
             $sequence = $count + 1;
-    
-            // Generate new job_id
+
             $jobSchedule->job_no = "{$companyCode}/{$jobTypeCode}/{$year}/{$sequence}";
         }
  
@@ -232,6 +221,7 @@ class JobScheduleService implements JobScheduleServiceInterface
         $jobTypeTitle = optional(ServiceType::find($data['job_type_id']))->title;
         $jobType = strtolower($jobTypeTitle);
 
+
         if (in_array($jobType, ['inside', 'outside', 'amc'])) {
             $serviceJob = ServiceJob::where('job_schedule_id', $jobSchedule->id)->first();
 
@@ -252,7 +242,14 @@ class JobScheduleService implements JobScheduleServiceInterface
             ServiceJob::where('job_schedule_id', $jobSchedule->id)->delete();
         }
     }
-
+// "id" => 3
+//     "job_schedule_id" => 11
+//     "service_type_id" => 5
+//     "machine_type" => "YM"
+//     "is_warranty" => "yes"
+//     "deleted_at" => null
+//     "created_at" => "2025-05-28 11:00:31"
+//     "updated_at" => "2025-05-28 11:00:31"
  public function findOrder(Request $request): array
     {
         $search = Request::input('q');

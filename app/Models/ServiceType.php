@@ -13,6 +13,7 @@ class ServiceType extends Model
         'parent_id',
         'slug',
         'daily_report',
+        'code'
     ];
 
     /**
