@@ -25,5 +25,9 @@ class InstallationReportClientFeedback extends Model
         return $this->belongsTo(InstallationReport::class);
     }
 
+     public function getLabelNameAttribute()
+    {
+        return \App\Enums\InstallationCF::tryFrom($this->label)?->label() ?? '--';
+    }
     
 }

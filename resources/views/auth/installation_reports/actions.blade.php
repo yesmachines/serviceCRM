@@ -62,7 +62,7 @@
                         @forelse($report->clientFeedbacks as $feedback)
                             <tr>
                                 <td class="text-start">
-                                    {{ \App\Enums\InstallationCF::tryFrom($feedback->label)?->label() ?? '-' }}
+                                    <td>{{ $feedback->label_name }} </td>
                                 </td>
                                 <td>@if(strtolower($feedback->feedback) === 'excellent') ✓ @endif</td>
                                 <td>@if(strtolower($feedback->feedback) === 'good') ✓ @endif</td>
@@ -92,8 +92,7 @@
                                 <tbody>
                                     @forelse($report->technicianFeedbacks as $feedback)
                                         <tr>
-                                             <td>{{ $feedback->label_name ?? '-' }} </td>
-                                            <!--<td>{{ $feedback->label ?? '-' }}   {{ \App\Enums\InstallationTF::fromKey($feedback->label ?? '')?->label() ?? '-' }}</td>         {{-- Description --}}-->
+                                             <td>{{ $feedback->label_name }} </td>
                                             <td>{{ $feedback->feedback ?? '-' }}</td>      {{-- Yes / No --}}
                                             <td>{{ $feedback->remarks ?? '-' }}</td>       {{-- Remarks --}}
                                         </tr>
