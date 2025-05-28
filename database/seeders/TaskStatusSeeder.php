@@ -17,7 +17,7 @@ class TaskStatusSeeder extends Seeder
             ['status' => 'OPEN','priority' => 1, 'active' => true],
             ['status' => 'ONHOLD',    'priority' => 2, 'active' => true],
             ['status' => 'CLOSED',  'priority' => 3, 'active' => true],
-            ['status' => 'CANCEL',    'priority' => 4, 'active' => true],
+            // ['status' => 'CANCEL',    'priority' => 4, 'active' => true],
          
         ];
    

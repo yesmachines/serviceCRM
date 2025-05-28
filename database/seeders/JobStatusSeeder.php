@@ -14,10 +14,12 @@ class JobStatusSeeder extends Seeder
     public function run(): void
     {
         $statuses = [
-            ['status' => 'OPEN','priority' => 1, 'active' => true],
-            ['status' => 'ONHOLD',    'priority' => 2, 'active' => true],
-            ['status' => 'CLOSED',  'priority' => 3, 'active' => true],
-            ['status' => 'CANCEL',    'priority' => 4, 'active' => true],
+            ['status' => 'NEW','priority' => 1, 'active' => true],
+            ['status' => 'OPEN','priority' => 2, 'active' => true],
+            ['status' => 'PAIN',    'priority' => 3, 'active' => true],
+            ['status' => 'CLOSED',  'priority' => 4, 'active' => true],
+            ['status' => 'CAN CELLED',  'priority' => 5, 'active' => true],
+            ['status' => 'ON HOLD',  'priority' => 6, 'active' => true],
          
         ];
    
