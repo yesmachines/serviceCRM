@@ -38,11 +38,12 @@ class DemoClientFeedbackController extends Controller
         $data = $validator->validated();
 
 
-        if ($request->hasFile('client_signature')) {
-            $file = $request->file('client_signature');
-            $path = $file->store('client_signatures', 'public');
-            $data['client_signature'] = $path;
-        }
+    
+
+        $data['client_signature'] = $request->hasFile('client_signature')
+        ? $request->file('client_signature')->store('client_signatures', 'public')
+        : null;
+
         $report = new DemoClientFeedback();
         $report->job_schedule_id = $data['job_schedule_id'] ?? null;
         $report->demo_objective  = $data['demo_objective'] ?? null;
