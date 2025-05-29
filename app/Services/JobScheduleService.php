@@ -26,6 +26,17 @@ use Yajra\DataTables\Facades\DataTables;
 class JobScheduleService implements JobScheduleServiceInterface
 {
 
+    public function getIndexData(Request $request): array
+    {
+        return [
+            'types'        => ServiceType::pluck('title', 'id'),
+            'companies'    => Company::pluck('company', 'id'),
+            'statuses'     => JobStatus::pluck('status', 'id'),
+            'jobSchedules' => JobSchedule::orderBy('job_no')->pluck('job_no', 'id'),
+        ];
+    }
+
+
 
   public function getJobSchedulesForDataTable(Request $request)
   {

@@ -16,5 +16,6 @@ interface JobScheduleServiceInterface
     public function updateJobSchedule(array $data, int $id): void;
     public function findOrder(Request $request): array;
     public function findDemo(Request $request): array;
+    public function getIndexData(Request $request): array;
     
 }

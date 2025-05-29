@@ -29,13 +29,12 @@ class JobScheduleController extends Controller
         $this->jobScheduleService = $jobScheduleService;
     }
 
-    public function index(Request $request){
-        $types  = ServiceType::pluck('title', 'id');
-        $companies = Company::pluck('company', 'id');
-        $statuses = JobStatus::pluck('status','id');
-        $jobSchedules = JobSchedule::orderBy('job_no')->pluck('job_no', 'id');
-        return view('auth.job_schedules.index',compact('companies','types','statuses','jobSchedules'));
+    public function index(Request $request)
+    {
+        $data = $this->jobScheduleService->getIndexData($request);
+        return view('auth.job_schedules.index', $data);
     }
+
 
 
    public function getData(Request $request)
