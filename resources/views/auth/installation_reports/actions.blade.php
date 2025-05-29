@@ -24,6 +24,12 @@
                             @endphp
 
                             <tr><th>Job Schedule No</th><td>{{ $report->jobSchedule->job_no ?? '-' }}</td></tr>
+
+
+                            <tr><th>Job Created By</th><td>{{ optional($report->jobSchedule->createdBy)->name  ?? '-' }}</td></tr>
+                            <tr><th>Job Owner</th><td>{{ optional($report->jobSchedule->jobOwner)->name  ?? '-' }}</td></tr>
+
+
                             <tr><th>Job Location</th><td>{{ $report->jobSchedule->location ?? '-' }}</td></tr>
                             <tr><th>Job Contact No</th><td>{{ $report->jobSchedule->contact_no ?? '-' }}</td></tr>
                             <tr><th>Job Status</th><td>{{ $report->jobSchedule->jobStatus->status ?? '-' }}</td></tr>

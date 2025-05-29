@@ -19,7 +19,7 @@ class UpdateJobScheduleRequest extends FormRequest
             'company_id'     => 'required|exists:companies,id',
             'customer_id'    => 'required|exists:customers,id',
             'supplier_id'    => 'nullable|exists:suppliers,id',
-            'technician_id'  => 'required|exists:technicians,id',
+            'technician_id'  => 'required|exists:users,id',
             'job_status_id'  => 'required|exists:job_statuses,id',
             'product_id'     => 'required|exists:products,id',
             'contact_no'     => 'required|string|max:20',

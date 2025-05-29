@@ -16,6 +16,8 @@
                     <h5 class="mb-3">Service Report Details</h5>
                     <table class="table table-bordered">
                         <tbody>
+
+
                             <tr><th>Task Details</th><td>{{ $report->task->task_details ?? '-' }}</td></tr>
                             <tr><th>Description</th><td>{{ $report->description  ?? '-' }}</td></tr>
                             <tr><th>Observations</th><td>{{ $report->observations  ?? '-' }}</td></tr>
@@ -24,11 +26,13 @@
                             <tr><th>Client Representative</th><td>{{ $report->client_representative  ?? '-' }}</td></tr>
                             <tr><th>Designation</th><td>{{ $report->designation  ?? '-' }}</td></tr>
                             <tr><th>Contact Number</th><td>{{ $report->contact_number }}</td></tr>
-                            <tr><th>Technician</th><td>{{$report->technician->user->name ?? '-' }}</td></tr>
+                            <tr><th>Technician</th><td>{{$report->technician->name ?? '-' }}</td></tr>
                             <tr><th>Concluded By</th><td>{{ optional($report->concludedBy)->name  ?? '-' }}</td></tr>
                             <tr><th>Task Details</th><td>{{ optional($report->task)->task_details  ?? '-' }}</td></tr>
                             <tr><th>Task Status</th><td>{{ optional($report->task->taskStatus)->status  ?? '-' }}</td></tr>
                             <tr><th>Job Schedule No</th><td>{{ optional($report->task->jobSchedule)->job_no  ?? '-' }}</td></tr>
+                            <tr><th>Job Created By</th><td>{{ optional($report->task->jobSchedule->createdBy)->name  ?? '-' }}</td></tr>
+                            <tr><th>Job Owner</th><td>{{ optional($report->task->jobSchedule->jobOwner)->name  ?? '-' }}</td></tr>
                             <tr><th>Job Location</th><td>{{ $report->task->jobSchedule->location ?? '-' }}</td></tr>
                             <tr><th>Job Start</th><td>{{ optional($report->task->jobSchedule)->start_datetime  ?? '-' }}</td></tr>
                             <tr><th>Job End</th><td>{{ optional($report->task->jobSchedule)->end_datetime  ?? '-' }}</td></tr>                      <tr>

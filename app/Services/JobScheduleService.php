@@ -17,6 +17,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\Technician;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -99,9 +100,6 @@ class JobScheduleService implements JobScheduleServiceInterface
         // Final Job ID
         $jobId = "{$companyCode}/{$jobTypeCode}/{$year}/{$sequence}";
 
-
-
-
         $jobSchedule = new JobSchedule();
         $jobSchedule->job_no = $jobId;
         $jobSchedule->company_id = $request->company_id;
@@ -113,7 +111,7 @@ class JobScheduleService implements JobScheduleServiceInterface
         $jobSchedule->product_id = $request->product_id;
         $jobSchedule->contact_no = $request->contact_no;
         $jobSchedule->location = $request->location;
-
+        $jobSchedule->created_by     = Auth::id();
         $jobSchedule->start_datetime = parseDateTimeOrNull($request->start_date, $request->start_time);
         $jobSchedule->end_datetime = parseDateTimeOrNull($request->start_date, $request->end_time);
         $jobSchedule->closing_date = parseDateTimeOrNull($request->close_date, $request->close_time);
@@ -145,7 +143,7 @@ class JobScheduleService implements JobScheduleServiceInterface
             'companies'         => Company::pluck('company', 'id')->prepend('Select Company', ''),
             'serviceTypesGrouped' => ServiceType::all()->groupBy('parent_id'),
             'suppliers'         => Supplier::pluck('brand', 'id')->prepend('Select Brand', ''),
-            'technicians'       => Technician::with('user')->get()->pluck('user.name', 'id')->prepend('Select Technician', ''),
+            'technicians'       => Technician::with('user')->get()->pluck('user.name', 'user.id')->prepend('Select Technician', ''),
             'jobStatuses' => JobStatus::orderBy('priority')
                 ->pluck('status', 'id')
                 ->prepend('Select job Status', ''),
@@ -173,7 +171,7 @@ class JobScheduleService implements JobScheduleServiceInterface
             'data'              => $data,
             'companies'         => Company::pluck('company', 'id'),
             'suppliers'         => Supplier::pluck('brand', 'id'),
-            'technicians'       => Technician::with('user')->get()->pluck('user.name', 'id'),
+            'technicians'       => Technician::with('user')->get()->pluck('user.name', 'user.id'),
             'jobStatuses' => JobStatus::orderBy('priority')
             ->pluck('status', 'id')
             ->prepend('Select job Status', ''),
@@ -215,6 +213,7 @@ class JobScheduleService implements JobScheduleServiceInterface
         $jobSchedule->contact_no     = $data['contact_no'];
         $jobSchedule->location       = $data['location'];
         $jobSchedule->job_type       = $data['job_type_id'];
+        $jobSchedule->created_by     = Auth::id();
 
         $jobSchedule->start_datetime = parseDateTimeOrNull($data['start_date'], $data['start_time']);
         $jobSchedule->end_datetime   = parseDateTimeOrNull($data['start_date'], $data['end_time']);
@@ -283,8 +282,4 @@ class JobScheduleService implements JobScheduleServiceInterface
 
     
 
-    private function generateUniqueJobNo()
-    {
-        return 'JOB-' . strtoupper(uniqid());
-    }
 }

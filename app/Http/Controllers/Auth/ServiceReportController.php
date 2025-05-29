@@ -31,11 +31,15 @@ class ServiceReportController extends Controller
    
            $query = ServiceReport::with([
             'task.jobSchedule.jobstatus',
+            'task.jobSchedule.createdBy',
+            'task.jobSchedule.jobOwner',
             'task.jobSchedule.company',
-            'technician.user',
+            'technician',
             'concludedBy',
             'clientFeedbacks'
         ])->latest();
+
+        
         
         // Apply filters
         

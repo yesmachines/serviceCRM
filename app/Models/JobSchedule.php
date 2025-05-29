@@ -27,6 +27,7 @@ class JobSchedule extends Model
         'chargeable',
         'closing_date',
         'remarks',
+        'created_by'
     ];
     protected $dates = ['start_datetime', 'end_datetime', 'closing_date'];
 
@@ -58,7 +59,12 @@ class JobSchedule extends Model
 
     public function jobOwner()
     {
-        return $this->belongsTo(Technician::class, 'job_owner_id');
+        return $this->belongsTo(User::class, 'job_owner_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function jobStatus()

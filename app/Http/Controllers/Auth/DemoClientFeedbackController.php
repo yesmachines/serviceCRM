@@ -27,6 +27,8 @@ class DemoClientFeedbackController extends Controller
     {
         $query = DemoClientFeedback::with(
             'jobSchedule.jobStatus',
+            'jobSchedule.createdBy',
+            'jobSchedule.jobOwner',
             'jobSchedule.demoRequest.details',
             'jobSchedule.company',
             'jobSchedule.brand',

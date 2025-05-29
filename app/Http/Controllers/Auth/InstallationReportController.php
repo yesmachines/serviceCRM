@@ -29,6 +29,8 @@ class InstallationReportController extends Controller
             \Log::info('InstallationReportController@getData called');
             $query = InstallationReport::with([
                 'jobSchedule.jobStatus',
+                'jobSchedule.createdBy',
+                'jobSchedule.jobOwner',
                 'jobSchedule.company',
                 'jobSchedule.product',
                 'jobSchedule.order',

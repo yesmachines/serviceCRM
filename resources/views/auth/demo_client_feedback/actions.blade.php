@@ -48,6 +48,9 @@
                                 <td>{{ $report->jobSchedule->job_no ?? '-' }}</td>
                             </tr>
 
+                            <tr><th>Job Created By</th><td>{{ optional($report->jobSchedule->createdBy)->name  ?? '-' }}</td></tr>
+                            <tr><th>Job Owner</th><td>{{ optional($report->jobSchedule->jobOwner)->name  ?? '-' }}</td></tr>
+
                             <tr>
                                 <th>Company</th>
                                 <td>{{ $report->jobSchedule->company->company ?? '-' }}</td>
